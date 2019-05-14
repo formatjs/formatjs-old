@@ -1,0 +1,58 @@
+{
+  "name": "intl-messageformat-parser",
+  "version": "1.5.1",
+  "description": "Parses ICU Message strings into an AST via JavaScript.",
+  "keywords": [
+    "i18n",
+    "intl",
+    "internationalization",
+    "localization",
+    "globalization",
+    "messageformat",
+    "parser",
+    "plural",
+    "icu"
+  ],
+  "contributors": [
+    "Eric Ferraiuolo <eferraiuolo@gmail.com>",
+    "Long Ho <holevietlong@gmail.com>",
+    "Ryuichi Okumura <okuryu@okuryu.com>",
+    "Seth Bertalotto <seth@bertalotto.net>",
+    "Song Seunggeun <giff.song@gmail.com>",
+    "Tobias Bieniek <tobias.bieniek@gmail.com>"
+  ],
+  "author": "Eric Ferraiuolo <eferraiuolo@gmail.com>",
+  "homepage": "https://github.com/formatjs/formatjs#readme",
+  "license": "BSD-3-Clause",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/formatjs/formatjs.git"
+  },
+  "scripts": {
+    "clean": "rimraf dist lib",
+    "test": "mocha test/unit/ --reporter spec",
+    "cover": "nyc npm t",
+    "build": "npm run clean && ./build.js",
+    "benchmark": "./test/benchmark.js",
+    "prepublish": "npm run build"
+  },
+  "bugs": {
+    "url": "https://github.com/formatjs/formatjs/issues"
+  },
+  "devDependencies": {
+    "benchmark": "^2.1.4",
+    "expect.js": "^0.3.1",
+    "fs-extra": "^7.0.1",
+    "mocha": "^6.1.4",
+    "pegjs": "^0.10.0",
+    "rimraf": "^2.6.3"
+  }
+}
