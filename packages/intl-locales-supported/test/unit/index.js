@@ -1,19 +1,19 @@
 /* global beforeEach, afterEach, describe, it */
-"use strict";
+'use strict';
 
 var Intl = global.Intl;
-var IntlPolyfill = require("intl");
+var IntlPolyfill = require('intl');
 
-var expect = require("expect.js");
-var areIntlLocalesSupported = require("../../");
+var expect = require('expect.js');
+var areIntlLocalesSupported = require('../../');
 
-describe("exports", function() {
-  it("should have a default export function", function() {
-    expect(areIntlLocalesSupported).to.be.a("function");
+describe('exports', function() {
+  it('should have a default export function', function() {
+    expect(areIntlLocalesSupported).to.be.a('function');
   });
 });
 
-describe("areIntlLocalesSupported()", function() {
+describe('areIntlLocalesSupported()', function() {
   var globalIntl = null;
 
   function clearGlobalIntl() {
@@ -42,39 +42,39 @@ describe("areIntlLocalesSupported()", function() {
     copyProps(globalIntl, global.Intl);
   });
 
-  describe("missing Intl", function() {
+  describe('missing Intl', function() {
     beforeEach(function() {
       clearGlobalIntl();
     });
 
     it('should return `false` for "en"', function() {
-      expect(areIntlLocalesSupported("en")).to.be.false;
+      expect(areIntlLocalesSupported('en')).to.be.false;
     });
   });
 
-  describe("polyfill", function() {
+  describe('polyfill', function() {
     beforeEach(function() {
       clearGlobalIntl();
       copyProps(IntlPolyfill, global.Intl);
     });
 
     it('should return `true` for "en"', function() {
-      expect(areIntlLocalesSupported("en")).to.be.true;
+      expect(areIntlLocalesSupported('en')).to.be.true;
     });
 
     it('should return `true` for "fr"', function() {
-      expect(areIntlLocalesSupported("fr")).to.be.true;
+      expect(areIntlLocalesSupported('fr')).to.be.true;
     });
   });
 
   if (Intl) {
-    describe("built-in", function() {
+    describe('built-in', function() {
       it('should return `true` for "en"', function() {
-        expect(areIntlLocalesSupported("en")).to.be.true;
+        expect(areIntlLocalesSupported('en')).to.be.true;
       });
 
       it('should return `false` for "fr"', function() {
-        expect(areIntlLocalesSupported("fr")).to.be.false;
+        expect(areIntlLocalesSupported('fr')).to.be.false;
       });
     });
   }

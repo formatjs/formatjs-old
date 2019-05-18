@@ -3,10 +3,10 @@
  * Copyrights licensed under the New BSD License.
  * See the accompanying LICENSE file for terms.
  */
-"use strict";
+'use strict';
 
-var p = require("path");
-var glob = require("glob");
+var p = require('path');
+var glob = require('glob');
 
 exports.getAllLocales = getAllLocales;
 exports.getParentLocale = getParentLocale;
@@ -17,20 +17,20 @@ exports.hasOrdinalRule = hasOrdinalRule;
 
 // These are the exceptions to the default algorithm for determining a locale's
 // parent locale.
-var PARENT_LOCALES_HASH = require("cldr-core/supplemental/parentLocales.json")
+var PARENT_LOCALES_HASH = require('cldr-core/supplemental/parentLocales.json')
   .supplemental.parentLocales.parentLocale;
 
-var PLURAL_LOCALES_HASH = require("cldr-core/supplemental/plurals.json")
-  .supplemental["plurals-type-cardinal"];
+var PLURAL_LOCALES_HASH = require('cldr-core/supplemental/plurals.json')
+  .supplemental['plurals-type-cardinal'];
 
-var ORDINAL_LOCALES_HASH = require("cldr-core/supplemental/ordinals.json")
-  .supplemental["plurals-type-ordinal"];
+var ORDINAL_LOCALES_HASH = require('cldr-core/supplemental/ordinals.json')
+  .supplemental['plurals-type-ordinal'];
 
 var DATE_FIELDS_LOCALES_HASH = glob
-  .sync("*/dateFields.json", {
+  .sync('*/dateFields.json', {
     cwd: p.resolve(
-      p.dirname(require.resolve("cldr-dates-full/package.json")),
-      "./main"
+      p.dirname(require.resolve('cldr-dates-full/package.json')),
+      './main'
     )
   })
   .reduce(function(hash, filename) {
@@ -45,8 +45,8 @@ var ALL_LOCALES_HASH = Object.keys(PARENT_LOCALES_HASH)
   .concat(Object.keys(PLURAL_LOCALES_HASH))
   .concat(Object.keys(DATE_FIELDS_LOCALES_HASH))
   .map(function(locale) {
-    if (locale === "en-US-POSIX") {
-      return "en-US";
+    if (locale === 'en-US-POSIX') {
+      return 'en-US';
     }
     return locale;
   })
@@ -67,7 +67,7 @@ function getParentLocale(locale) {
 
   // If we don't know about the locale, or if it's the "root" locale, then its
   // parent should be `undefined`.
-  if (!locale || locale === "root") {
+  if (!locale || locale === 'root') {
     return;
   }
 
@@ -80,14 +80,14 @@ function getParentLocale(locale) {
 
   // Be default, the language tags are hierarchal, therefore we can identify
   // the parent locale by simply popping off the last segment.
-  var localeParts = locale.split("-");
+  var localeParts = locale.split('-');
   if (localeParts.length > 1) {
     localeParts.pop();
-    return localeParts.join("-");
+    return localeParts.join('-');
   }
 
   // When there's nothing left in the hierarchy, the parent is the "root".
-  return "root";
+  return 'root';
 }
 
 function hasDateFields(locale) {

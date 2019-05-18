@@ -3,26 +3,26 @@
  * Copyrights licensed under the New BSD License.
  * See the accompanying LICENSE file for terms.
  */
-"use strict";
+'use strict';
 
-var MakePlural = require("make-plural/make-plural");
-var UglifyJS = require("uglify-js");
+var MakePlural = require('make-plural/make-plural');
+var UglifyJS = require('uglify-js');
 
-var getParentLocale = require("./locales").getParentLocale;
-var hasPluralRule = require("./locales").hasPluralRule;
-var hasOrdinalRule = require("./locales").hasOrdinalRule;
-var normalizeLocale = require("./locales").normalizeLocale;
+var getParentLocale = require('./locales').getParentLocale;
+var hasPluralRule = require('./locales').hasPluralRule;
+var hasOrdinalRule = require('./locales').hasOrdinalRule;
+var normalizeLocale = require('./locales').normalizeLocale;
 
 module.exports = function extractPluralRules(locales) {
   // Force make-plural to use our CLDR data.
   MakePlural.load(
-    require("cldr-core/supplemental/plurals.json"),
-    require("cldr-core/supplemental/ordinals.json")
+    require('cldr-core/supplemental/plurals.json'),
+    require('cldr-core/supplemental/ordinals.json')
   );
 
   // The CLDR states that the "root" locale's data should be used to fill in
   // any missing data as its data is the default.
-  var defaultPluralFn = new MakePlural("root", { ordinals: true });
+  var defaultPluralFn = new MakePlural('root', { ordinals: true });
 
   return locales.reduce(function(pluralRules, locale) {
     locale = normalizeLocale(locale);
@@ -30,7 +30,7 @@ module.exports = function extractPluralRules(locales) {
     // The "root" locale is ignored because the built-in `Intl` libraries in
     // JavaScript have no notion of a "root" locale; instead they use the
     // IANA Language Subtag Registry.
-    if (locale === "root") {
+    if (locale === 'root') {
       return pluralRules;
     }
 
@@ -39,7 +39,7 @@ module.exports = function extractPluralRules(locales) {
     // looking when we hit the root locale, because we want to assign the
     // root's function as the `locale`'s function.
     var parentLocale = getParentLocale(locale);
-    while (!(hasPluralRule(locale) || parentLocale === "root")) {
+    while (!(hasPluralRule(locale) || parentLocale === 'root')) {
       locale = parentLocale;
       parentLocale = getParentLocale(locale);
     }
@@ -60,7 +60,7 @@ module.exports = function extractPluralRules(locales) {
       // that is then minified. The function is serialized, minified, then
       // unserialized using `eval()`.
       eval(
-        UglifyJS.minify("fn = " + fn, {
+        UglifyJS.minify('fn = ' + fn, {
           fromString: true,
           compress: false,
           mangle: false

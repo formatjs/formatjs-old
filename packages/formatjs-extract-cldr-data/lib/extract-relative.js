@@ -3,36 +3,36 @@
  * Copyrights licensed under the New BSD License.
  * See the accompanying LICENSE file for terms.
  */
-"use strict";
+'use strict';
 
-var p = require("path");
+var p = require('path');
 
-var getParentLocale = require("./locales").getParentLocale;
-var hasDateFields = require("./locales").hasDateFields;
-var normalizeLocale = require("./locales").normalizeLocale;
+var getParentLocale = require('./locales').getParentLocale;
+var hasDateFields = require('./locales').hasDateFields;
+var normalizeLocale = require('./locales').normalizeLocale;
 
 // The set of CLDR date field names that are used in FormatJS.
 var FIELD_NAMES = [
-  "year",
-  "year-short",
-  "month",
-  "month-short",
-  "week",
-  "week-short",
-  "day",
-  "day-short",
-  "hour",
-  "hour-short",
-  "minute",
-  "minute-short",
-  "second",
-  "second-short"
+  'year',
+  'year-short',
+  'month',
+  'month-short',
+  'week',
+  'week-short',
+  'day',
+  'day-short',
+  'hour',
+  'hour-short',
+  'minute',
+  'minute-short',
+  'second',
+  'second-short'
 ];
 
 module.exports = function extractRelativeFields(locales) {
   // The CLDR states that the "root" locale's data should be used to fill in
   // any missing data as its data is the default.
-  var defaultFields = loadRelativeFields("root");
+  var defaultFields = loadRelativeFields('root');
 
   var fields = {};
   var hashes = {};
@@ -73,7 +73,7 @@ module.exports = function extractRelativeFields(locales) {
     // The "root" locale is not a suitable ancestor, because there won't be
     // an entry for "root" in the final data object.
     var parentLocale = getParentLocale(locale);
-    if (!parentLocale || parentLocale === "root") {
+    if (!parentLocale || parentLocale === 'root') {
       return locale;
     }
 
@@ -112,7 +112,7 @@ module.exports = function extractRelativeFields(locales) {
     // The "root" locale is ignored because the built-in `Intl` libraries in
     // JavaScript have no notion of a "root" locale; instead they use the
     // IANA Language Subtag Registry.
-    if (locale === "root") {
+    if (locale === 'root') {
       return relativeFields;
     }
 
@@ -128,7 +128,7 @@ module.exports = function extractRelativeFields(locales) {
 };
 
 function loadRelativeFields(locale) {
-  var filename = p.join("cldr-dates-full", "main", locale, "dateFields.json");
+  var filename = p.join('cldr-dates-full', 'main', locale, 'dateFields.json');
   var fields = require(filename).main[locale].dates.fields;
 
   // Reduce the date fields data down to whitelist of fields needed in the
@@ -149,19 +149,19 @@ function transformFieldData(data) {
     var type = key.match(/^(relative|relativeTime)-type-(.+)$/) || [];
 
     switch (type[1]) {
-      case "relative":
+      case 'relative':
         data.relative || (data.relative = {});
         data.relative[type[2]] = data[key];
         delete data[key];
         return;
 
-      case "relativeTime":
+      case 'relativeTime':
         data.relativeTime || (data.relativeTime = {});
         data.relativeTime[type[2]] = Object.keys(data[key]).reduce(function(
           counts,
           count
         ) {
-          var k = count.replace("relativeTimePattern-count-", "");
+          var k = count.replace('relativeTimePattern-count-', '');
           counts[k] = data[key][count];
           return counts;
         },

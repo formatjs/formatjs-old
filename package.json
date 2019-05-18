@@ -43,5 +43,8 @@
     "dev:test"
   ],
   "author": "Seth Bertalotto <sbertal@verizonmedia.com>",
-  "license": "BSD-3-Clause"
+  "license": "BSD-3-Clause",
+  "prettier": {
+    "singleQuote": true
+  }
 }
