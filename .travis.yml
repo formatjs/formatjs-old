@@ -5,7 +5,7 @@ node_js:
   - 10
   - 12
 before_script: npm run build
-script: npm test
+script: npm run ci
 after_success:
   - npm run cover
   - npm run cover:collect
