@@ -9,11 +9,11 @@ module.exports = function (config) {
     let customLaunchers
     if (process.env.TRAVIS_PULL_REQUEST) {
         customLaunchers = {
-            sl_ie_11: {
+            sl_chrome: {
                 base: 'SauceLabs',
-                browserName: 'internet explorer',
-                version: '11'
-            }
+                browserName: 'chrome',
+                version: '74'
+            },
         }
     } else {
         customLaunchers = {
@@ -45,16 +45,6 @@ module.exports = function (config) {
         }
     }
 
-    if (process.env.TRAVIS_PULL_REQUEST) {
-        customLaunchers = {
-            sl_ie_11: {
-                base: 'SauceLabs',
-                browserName: 'internet explorer',
-                version: '11'
-            }
-        }
-    }
-
     config.set({
         basePath: '',
         frameworks: ['mocha', 'chai'],
@@ -66,6 +56,7 @@ module.exports = function (config) {
         colors: true,
         sauceLabs: {
             testName: 'intl-messageformat',
+            build: process.env.TRAVIS_BUILD_ID,
             recordScreenshots: false,
             connectOptions: {
                 port: 5757,
