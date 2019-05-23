@@ -4,11 +4,22 @@ node_js:
   - 8
   - 10
   - 12
-before_script: npm run build
-script: npm run ci
 after_success:
   - npm run cover
   - npm run cover:collect
   - cat artifacts/coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
 addons:
   sauce_connect: true
+stages:
+  - build
+  - test
+  - integration
+jobs:
+  include:
+    - stage: build
+      script: npm run build
+    - stage: test
+      script: npm t
+    - stage: integration
+      node_js: 12
+      script: npm run test:ci

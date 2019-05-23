@@ -18,7 +18,7 @@
     "lint": "eslint .",
     "prettier": "prettier --write 'packages/*/{lib,test,tests,src}/**/*.js'",
     "test": "lerna run lint --since --stream && lerna run test --since --stream",
-    "ci": "npm t && lerna run karma:ci --since --stream"
+    "test:ci": "lerna run karma:ci --since --stream"
   },
   "dependencies": {},
   "devDependencies": {
