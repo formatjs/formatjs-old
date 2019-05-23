@@ -15,13 +15,11 @@ module.exports = function (config) {
         sl_edge: {
             base: 'SauceLabs',
             browserName: 'edge',
-            platform: 'Windows 10',
             version: '16'
         },
       sl_chrome: {
         base: 'SauceLabs',
         browserName: 'chrome',
-        platform: 'Windows 10',
         version: '74'
       },
       sl_firefox: {
@@ -32,7 +30,6 @@ module.exports = function (config) {
       sl_ie_11: {
         base: 'SauceLabs',
         browserName: 'internet explorer',
-        platform: 'Windows 10',
         version: '11'
       }
     };
@@ -41,7 +38,7 @@ module.exports = function (config) {
       basePath: '',
       frameworks: ['mocha', 'chai'],
       files: [
-        'test/browser.js'
+        'tests/browser.js'
       ],
       reporters: ['progress', 'saucelabs'],
       port: 9876,
