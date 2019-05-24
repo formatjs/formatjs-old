@@ -11,7 +11,8 @@ module.exports = function (config) {
         customLaunchers = {
             sl_chrome: {
                 base: 'SauceLabs',
-                browserName: 'chrome'
+                browserName: 'internet explorer',
+                version: '11'
             },
         }
     } else {
