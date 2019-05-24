@@ -7,7 +7,7 @@ module.exports = function (config) {
     // Browsers to run on Sauce Labs
     // Check out https://saucelabs.com/platforms for all browser/OS combos
     let customLaunchers
-    if (process.env.TRAVIS_PULL_REQUEST && process.env.TRAVIS_PULL_REQUEST !== 'false') {
+    if (process.env.TRAVIS_PULL_REQUEST_SHA) {
         customLaunchers = {
             sl_chrome: {
                 base: 'SauceLabs',
