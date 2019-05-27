@@ -10,7 +10,9 @@ function onCycle(ev) {
 }
 
 function onComplete() {
-  console.log(`--- ${this.name}: Fastest is ${this.filter('fastest').map('name')} ---`);
+  console.log(
+    `--- ${this.name}: Fastest is ${this.filter('fastest').map('name')} ---`
+  );
 }
 
 new Suite('NumberFormat cache set', {
@@ -131,13 +133,15 @@ new Suite('IntlMessageFormat cache get', {
       }
     })
   )
-  .add('intl-format-cache', () =>
-    new IntlMessageFormat('message {token}', 'ar', {
-      date: {
-        verbose: {
-          month: 'long'
+  .add(
+    'not cached',
+    () =>
+      new IntlMessageFormat('message {token}', 'ar', {
+        date: {
+          verbose: {
+            month: 'long'
+          }
         }
-      }
-    })
+      })
   )
   .run();

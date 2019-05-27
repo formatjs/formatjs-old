@@ -76,7 +76,7 @@ intl-format-cache x 95,376 ops/sec ±0.43% (96 runs sampled)
 
 fast-memoize x 91,986 ops/sec ±2.50% (91 runs sampled)
 intl-format-cache x 696,471 ops/sec ±0.41% (93 runs sampled)
-intl-format-cache x 125,124 ops/sec ±11.14% (87 runs sampled)
+not cached x 125,124 ops/sec ±11.14% (87 runs sampled)
 --- IntlMessageFormat cache get: Fastest is intl-format-cache ---
 ```
 
