@@ -91,10 +91,13 @@ function mergeConfigs(
     return defaultConfig;
   }
 
-  return (Object.keys(defaultConfig) as Array<keyof Formats>).reduce((all: Formats, k: keyof Formats) => {
-      all[k] = mergeConfig(defaultConfig[k], configs[k])
-      return all
-    }, {...defaultConfig})
+  return (Object.keys(defaultConfig) as Array<keyof Formats>).reduce(
+    (all: Formats, k: keyof Formats) => {
+      all[k] = mergeConfig(defaultConfig[k], configs[k]);
+      return all;
+    },
+    { ...defaultConfig }
+  );
 }
 
 class FormatError extends Error {
