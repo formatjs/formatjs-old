@@ -52,32 +52,37 @@ console.log(nf3.format(1000)); // => "1 000"
 # Benchmark
 
 ```
-fast-memoize x 20,932 ops/sec ±1.06% (78 runs sampled)
-intl-format-cache x 22,752 ops/sec ±0.42% (95 runs sampled)
---- NumberFormat cache set: Fastest is intl-format-cache ---
+fast-memoize x 19,610 ops/sec ±1.86% (73 runs sampled)
+intl-format-cache x 18,854 ops/sec ±4.95% (81 runs sampled)
+--- NumberFormat cache set: Fastest is fast-memoize,intl-format-cache ---
 
-fast-memoize x 1,128,833 ops/sec ±0.31% (96 runs sampled)
-intl-format-cache x 1,164,874 ops/sec ±0.30% (94 runs sampled)
-not cached x 25,721 ops/sec ±0.39% (95 runs sampled)
+fast-memoize x 1,051,977 ops/sec ±1.53% (89 runs sampled)
+intl-format-cache x 1,134,171 ops/sec ±1.19% (91 runs sampled)
+not cached x 23,002 ops/sec ±2.23% (83 runs sampled)
 --- NumberFormat cache get: Fastest is intl-format-cache ---
 
-fast-memoize x 7,498 ops/sec ±35.44% (72 runs sampled)
-intl-format-cache x 13,054 ops/sec ±16.64% (84 runs sampled)
---- DateTimeFormat cache set: Fastest is intl-format-cache ---
+fast-memoize x 6,466 ops/sec ±6.56% (72 runs sampled)
+intl-format-cache x 7,384 ops/sec ±50.43% (64 runs sampled)
+--- DateTimeFormat cache set: Fastest is fast-memoize ---
 
-fast-memoize x 1,166,894 ops/sec ±0.30% (94 runs sampled)
-intl-format-cache x 1,097,319 ops/sec ±0.70% (94 runs sampled)
-not cached x 15,613 ops/sec ±2.03% (82 runs sampled)
---- DateTimeFormat cache get: Fastest is fast-memoize ---
+fast-memoize x 965,874 ops/sec ±17.87% (90 runs sampled)
+intl-format-cache x 1,048,234 ops/sec ±0.79% (89 runs sampled)
+not cached x 13,543 ops/sec ±2.61% (85 runs sampled)
+--- DateTimeFormat cache get: Fastest is intl-format-cache ---
 
-fast-memoize x 93,746 ops/sec ±0.25% (93 runs sampled)
-intl-format-cache x 95,376 ops/sec ±0.43% (96 runs sampled)
+fast-memoize x 72,531 ops/sec ±26.27% (79 runs sampled)
+intl-format-cache x 88,729 ops/sec ±0.51% (91 runs sampled)
 --- IntlMessageFormat cache set: Fastest is intl-format-cache ---
 
-fast-memoize x 91,986 ops/sec ±2.50% (91 runs sampled)
-intl-format-cache x 696,471 ops/sec ±0.41% (93 runs sampled)
-not cached x 125,124 ops/sec ±11.14% (87 runs sampled)
---- IntlMessageFormat cache get: Fastest is intl-format-cache ---
+fast-memoize x 665,420 ops/sec ±2.61% (90 runs sampled)
+intl-format-cache x 649,186 ops/sec ±2.19% (90 runs sampled)
+not cached x 127,110 ops/sec ±0.35% (91 runs sampled)
+--- IntlMessageFormat cache get: Fastest is fast-memoize ---
+
+fast-memoize x 1,294,591 ops/sec ±1.10% (94 runs sampled)
+intl-format-cache x 1,905,746 ops/sec ±0.71% (91 runs sampled)
+not cached x 152,118 ops/sec ±0.47% (94 runs sampled)
+--- IntlMessageFormat cache get simple arg: Fastest is intl-format-cache ---
 ```
 
 License
