@@ -2,7 +2,26 @@
 # yarn lockfile v1
 
 
-intl-messageformat-parser@1.6.2:
-  version "1.6.2"
-  resolved "https://registry.yarnpkg.com/intl-messageformat-parser/-/intl-messageformat-parser-1.6.2.tgz#99e2e60c6990d2bcebbff6fb374e1aa995c89a2b"
-  integrity sha512-Qwxn9zI3D6AxVn7Wqx9ntYrw+i/cp84UdTXlBvOfZqBUSWR9VAv1Q8CJDYuvzkUZwEzwTdXElsjylrtTc5aSLw==
+intl-messageformat-parser@^1.6.3:
+  version "1.6.3"
+  resolved "https://registry.yarnpkg.com/intl-messageformat-parser/-/intl-messageformat-parser-1.6.3.tgz#26e5363f013f2d54e900de0d180f8b04db0e635b"
+  integrity sha512-QslP7jJxG0VCCA2Dy8GfUECzEGEN+duCO5/N6LdOPTf/EOs5B3C6apkznzQ57dUKqtVt4TYJyIS/5Gern/y04A==
+
+intl-pluralrules@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/intl-pluralrules/-/intl-pluralrules-1.0.1.tgz#2d739aa754045e326dececa61249cc900af5b0d7"
+  integrity sha512-Y1ZUnofLtjH1qTQSH8ez05hBIi14Cc53GDtv5sv6HVYdSh4zxK/Dqw156luucmDbx+Yh+rOQ1bQTEMUKeu4dMQ==
+  dependencies:
+    make-plural "^4.3.0"
+
+make-plural@^4.3.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/make-plural/-/make-plural-4.3.0.tgz#f23de08efdb0cac2e0c9ba9f315b0dff6b4c2735"
+  integrity sha512-xTYd4JVHpSCW+aqDof6w/MebaMVNTVYBZhbB/vi513xXdiPT92JMVCo0Jq8W2UZnzYRFeVbQiQ+I25l13JuKvA==
+  optionalDependencies:
+    minimist "^1.2.0"
+
+minimist@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.0.tgz#a35008b20f41383eec1fb914f4cd5df79a264284"
+  integrity sha1-o1AIsg9BOD7sH7kU9M1d95omQoQ=
