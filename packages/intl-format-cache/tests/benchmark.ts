@@ -69,16 +69,13 @@ new Suite('DateTimeFormat cache get', {
   .add('not cached', () => new Intl.DateTimeFormat('de', { month: 'short' }))
   .run();
 
-function createIntlMessageFormat (...args: ConstructorParameters<typeof IntlMessageFormat>) {
-  return new IntlMessageFormat(...args)
-}
 new Suite('IntlMessageFormat cache set', {
   onCycle,
   onError: console.log,
   onComplete
 })
   .add('fast-memoize', () =>
-    memoize(createIntlMessageFormat)('message {token}', 'ar', {
+    memoize(IntlMessageFormat)('message {token}', 'ar', {
       date: {
         verbose: {
           month: 'long'
@@ -97,7 +94,7 @@ new Suite('IntlMessageFormat cache set', {
   )
   .run();
 
-const mfm = memoize(createIntlMessageFormat);
+const mfm = memoize(IntlMessageFormat);
 mfm('message {token}', 'ar', {
   date: {
     verbose: {
