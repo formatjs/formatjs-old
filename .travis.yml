@@ -4,6 +4,9 @@ node_js:
   - 8
   - 10
   - 12
+before_install: 
+  - nvm uninstall $TRAVIS_NODE_VERSION 
+  - nvm install -s $TRAVIS_NODE_VERSION --with-intl=full-icu --download=all
 before_script: npm run build
 script: npm t
 after_success:
