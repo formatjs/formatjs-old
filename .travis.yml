@@ -4,10 +4,8 @@ node_js:
   - 8
   - 10
   - 12
-env:
-  - NODE_ICU_DATA=./node_modules/full-icu
 before_script: npm run build
-script: npm t
+script: NODE_ICU_DATA=./node_modules/full-icu npm t
 after_success:
   - npm run cover
   - npm run cover:collect
