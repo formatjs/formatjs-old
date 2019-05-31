@@ -52,6 +52,7 @@ module.exports = function (config) {
         reporters: ['progress', 'saucelabs'],
         port: 9876,
         colors: true,
+        concurrency: 5,
         sauceLabs: {
             testName: 'formatjs',
             build: process.env.TRAVIS_BUILD_ID,
