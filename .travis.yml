@@ -6,7 +6,7 @@ node_js:
   - 12
 before_script:
   - npm run build
-script: NODE_ICU_DATA=/home/travis/build/formatjs/formatjs/node_modules/full-icu npm t
+script: NODE_ICU_DATA=$(pwd)/node_modules/full-icu npm t
 after_success:
   - npm run cover
   - npm run cover:collect
