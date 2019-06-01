@@ -28,9 +28,8 @@
     "intl-messageformat": "^3.1.4"
   },
   "scripts": {
-    "build": "npm run clean && npm run cldr && tsc",
+    "build": "npm run cldr && tsc",
     "cldr": "node scripts/cldr",
-    "clean": "rimraf dist lib",
     "prepublishOnly": "npm run build"
   },
   "homepage": "https://github.com/formatjs/formatjs",

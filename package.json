@@ -8,8 +8,9 @@
     "url": "https://github.com/formatjs/formatjs"
   },
   "scripts": {
+    "clean": "rimraf packages/*/dist packages/*/lib",
     "build:bootstrap": "lerna bootstrap --hoist --since --include-filtered-dependencies --no-ci",
-    "build:packages": "lerna run build --since --stream",
+    "build:packages": "npm run clean && lerna run clean && lerna run build --since --stream",
     "rollup": "rollup -c rollup.config.js",
     "build": "npm run build:bootstrap && npm run build:packages && npm run rollup",
     "cover:collect": "mkdir -p ./.nyc_output/ && for d in $(find packages -type d -name '.nyc_output' -maxdepth 2 -exec find '{}' -type f ';'); do (cp $d ./.nyc_output/); done; nyc report --reporter=lcov --report-dir=${COVERAGE_DIR:-artifacts/coverage}",

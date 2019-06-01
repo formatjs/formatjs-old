@@ -14,10 +14,10 @@
     "intl-messageformat-parser": "^1.6.3"
   },
   "scripts": {
-    "clean": "rimraf lib test/fixtures/**/actual.json",
+    "clean": "rimraf test/fixtures/**/actual.json",
     "test": "cross-env NODE_ENV=test jest",
     "cover": "npm t -- --coverage",
-    "build": "npm run clean && babel src --out-dir lib",
+    "build": "babel src --out-dir lib",
     "prepublishOnly": "npm run build"
   },
   "keywords": [

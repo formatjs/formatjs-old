@@ -36,8 +36,7 @@
   },
   "scripts": {
     "benchmark": "ts-node --project tests/tsconfig.json tests/benchmark",
-    "build": "npm run clean && tsc",
-    "clean": "rimraf dist lib tests/*.js tests/*.d.ts",
+    "build": "tsc",
     "prepublishOnly": "npm run build",
     "karma:local": "karma start karma.conf.js",
     "karma:ci": "karma start karma.conf-ci.js"

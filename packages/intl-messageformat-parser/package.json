@@ -5,8 +5,7 @@
   "main": "index.js",
   "module": "src/parser.js",
   "scripts": {
-    "clean": "rimraf dist lib",
-    "build": "npm run clean && ./build.js",
+    "build": "./build.js",
     "benchmark": "./test/benchmark.js",
     "prepublish": "npm run build"
   },

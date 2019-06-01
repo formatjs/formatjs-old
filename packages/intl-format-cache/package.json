@@ -8,8 +8,7 @@
   "scripts": {
     "benchmark": "ts-node --project tests/tsconfig.json tests/benchmark",
     "build": "tsc && tsc -p src/tsconfig.cjs.json",
-    "clean": "rimraf lib dist",
-    "prepublishOnly": "npm run clean && npm run build"
+    "prepublishOnly": "npm run build"
   },
   "devDependencies": {
     "intl-messageformat": "3",
