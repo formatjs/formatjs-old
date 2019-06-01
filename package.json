@@ -10,7 +10,8 @@
   "scripts": {
     "build:bootstrap": "lerna bootstrap --hoist --since --include-filtered-dependencies --no-ci",
     "build:packages": "lerna run build --since --stream",
-    "build": "npm run build:bootstrap && npm run build:packages",
+    "rollup": "rollup -c rollup.config.js",
+    "build": "npm run build:bootstrap && npm run build:packages && npm run rollup",
     "cover:collect": "mkdir -p ./.nyc_output/ && for d in $(find packages -type d -name '.nyc_output' -maxdepth 2 -exec find '{}' -type f ';'); do (cp $d ./.nyc_output/); done; nyc report --reporter=lcov --report-dir=${COVERAGE_DIR:-artifacts/coverage}",
     "cover": "lerna run cover --since",
     "dev:lint": "lerna run lint --since master --stream",
@@ -54,6 +55,7 @@
     "karma-sauce-launcher": "^2.0.2",
     "lerna": "^3.13.4",
     "mocha": "^6.1.4",
+    "mocha-lcov-reporter": "^1.3.0",
     "moment": "^2.8.2",
     "nyc": "^14.0.0",
     "pegjs": "^0.10.0",

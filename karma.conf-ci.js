@@ -4,6 +4,13 @@ module.exports = function (config) {
         process.exit(1)
     }
 
+    const FILES = [
+        'intl-format-cache',
+        'intl-locales-supported',
+        'intl-messageformat',
+        'intl-relativeformat'
+      ].map(pkg => `./tests/functional/${pkg}.js`)
+
     // Browsers to run on Sauce Labs
     // Check out https://saucelabs.com/platforms for all browser/OS combos
     let customLaunchers
@@ -45,10 +52,7 @@ module.exports = function (config) {
     config.set({
         basePath: '',
         frameworks: ['mocha', 'chai'],
-        files: [
-            'packages/intl-relativeformat/tests/browser.js',
-            'packages/intl-messageformat/tests/browser.js',
-        ],
+        files: FILES,
         reporters: ['progress', 'saucelabs'],
         port: 9876,
         colors: true,

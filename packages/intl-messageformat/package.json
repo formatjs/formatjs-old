@@ -36,8 +36,7 @@
   },
   "scripts": {
     "benchmark": "ts-node --project tests/tsconfig.json tests/benchmark",
-    "build": "npm run clean && tsc -p src && npm run rollup",
-    "rollup": "rollup -c rollup.config.js",
+    "build": "npm run clean && tsc",
     "clean": "rimraf dist lib tests/*.js tests/*.d.ts",
     "cover": "nyc npm t",
     "prepublishOnly": "npm run build",
