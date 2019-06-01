@@ -9,9 +9,7 @@
     "benchmark": "ts-node --project tests/tsconfig.json tests/benchmark",
     "build": "tsc && tsc -p src/tsconfig.cjs.json",
     "clean": "rimraf lib dist",
-    "cover": "nyc npm t",
-    "prepublishOnly": "npm run clean && npm run build",
-    "test": "TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\"}' mocha -r chai/register-expect -r ts-node/register -r source-map-support/register tests/index.ts"
+    "prepublishOnly": "npm run clean && npm run build"
   },
   "devDependencies": {
     "intl-messageformat": "3",

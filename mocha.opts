@@ -1,0 +1,5 @@
+-r ts-node/register
+-r source-map-support/register
+-r chai/register-expect
+--recursive
+packages/**/tests/index.ts

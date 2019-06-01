@@ -9,7 +9,7 @@ module.exports = function (config) {
         'intl-locales-supported',
         'intl-messageformat',
         'intl-relativeformat'
-      ].map(pkg => `./tests/functional/${pkg}.js`)
+      ].map(pkg => `./functional-tests/${pkg}.js`)
 
     // Browsers to run on Sauce Labs
     // Check out https://saucelabs.com/platforms for all browser/OS combos

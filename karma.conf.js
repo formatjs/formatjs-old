@@ -3,7 +3,7 @@ const FILES = [
   'intl-locales-supported',
   'intl-messageformat',
   'intl-relativeformat'
-].map(pkg => `./tests/functional/${pkg}.js`)
+].map(pkg => `./functional-tests/${pkg}.js`)
 module.exports = function(config) {
     config.set({
       frameworks: ['mocha', 'chai'],

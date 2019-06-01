@@ -31,13 +31,24 @@
     "build": "npm run clean && npm run cldr && tsc",
     "cldr": "node scripts/cldr",
     "clean": "rimraf dist lib",
-    "cover": "nyc -x lib/locales.js npm t",
-    "prepublishOnly": "npm run build",
-    "test": "TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\"}' mocha -r ts-node/register -r source-map-support/register -r chai/register-expect tests/index.ts --reporter spec"
+    "prepublishOnly": "npm run build"
   },
   "homepage": "https://github.com/formatjs/formatjs",
   "directories": {
     "test": "tests"
   },
-  "license": "BSD-3-Clause"
+  "license": "BSD-3-Clause",
+  "nyc": {
+    "extension": [
+      ".ts",
+      ".tsx"
+    ],
+    "exclude": [
+      "**/*.d.ts"
+    ],
+    "reporter": [
+      "lcov"
+    ],
+    "all": true  
+  }
 }
