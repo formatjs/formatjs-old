@@ -5,9 +5,11 @@
   "main": "index.js",
   "module": "src/parser.js",
   "scripts": {
+    "clean": "rimraf dist lib",
     "build": "./build.js",
     "benchmark": "./test/benchmark.js",
-    "prepublish": "npm run build"
+    "prepublish": "npm run build",
+    "test": "mocha --opts ../../mocha.opts tests/index.ts"
   },
   "contributors": [
     "Eric Ferraiuolo <eferraiuolo@gmail.com>",

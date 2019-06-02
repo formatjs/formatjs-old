@@ -28,26 +28,11 @@
     "intl-messageformat": "^3.1.4"
   },
   "scripts": {
-    "build": "npm run cldr && tsc",
+    "clean": "rimraf dist lib",
+    "build": "npm run cldr && tsc && rollup -c rollup.config.js",
     "cldr": "node scripts/cldr",
-    "prepublishOnly": "npm run build"
+    "test": "mocha --opts ../../mocha.opts tests/index.ts"
   },
   "homepage": "https://github.com/formatjs/formatjs",
-  "directories": {
-    "test": "tests"
-  },
-  "license": "BSD-3-Clause",
-  "nyc": {
-    "extension": [
-      ".ts",
-      ".tsx"
-    ],
-    "exclude": [
-      "**/*.d.ts"
-    ],
-    "reporter": [
-      "lcov"
-    ],
-    "all": true  
-  }
+  "license": "BSD-3-Clause"
 }

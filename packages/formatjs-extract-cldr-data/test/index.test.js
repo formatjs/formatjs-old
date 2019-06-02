@@ -7,7 +7,7 @@
 /* global describe, it */
 'use strict';
 
-var extractData = require('../');
+var extractData = require('..');
 
 describe('exports', function() {
   it('should have a single default export function', function() {

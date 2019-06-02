@@ -1,9 +1,6 @@
-const FILES = [
-  'intl-format-cache',
-  'intl-locales-supported',
-  'intl-messageformat',
-  'intl-relativeformat'
-].map(pkg => `./functional-tests/${pkg}.js`)
+const {sync: globSync} = require('glob')
+const FILES = globSync('./packages/*/tests/browser.js')
+
 module.exports = function(config) {
     config.set({
       frameworks: ['mocha', 'chai'],
