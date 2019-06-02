@@ -66,17 +66,15 @@ export interface ResolvedIntlRelativeTimeFormatOptions
   numberingSystem: string;
 }
 
-type Part = LiteralPart | IntegerPart;
+type Part = LiteralPart | RelativeTimeFormatNumberPart;
 
 interface LiteralPart {
   type: 'literal';
   value: string;
 }
 
-interface IntegerPart {
-  type: 'integer';
-  value: string;
-  unit: string;
+interface RelativeTimeFormatNumberPart extends Intl.NumberFormatPart {
+  unit: Unit;
 }
 
 interface IntlRelativeTimeFormat {
@@ -176,6 +174,9 @@ const RelativeTimeFormat: IntlRelativeTimeFormat = ((
   const pluralRules = new Intl.PluralRules(locales, {
     localeMatcher: options.localeMatcher
   });
+  const nf = new Intl.NumberFormat(locales, {
+    localeMatcher: options.localeMatcher
+  });
 
   function getMessage(unit: Unit) {
     // Create a new synthetic message based on the locale data from CLDR.
@@ -222,12 +223,16 @@ const RelativeTimeFormat: IntlRelativeTimeFormat = ((
 
       return getMessage(unit).format({
         '0': Math.abs(value),
-        when: value < 0 ? 'past' : 'future'
+        when: resolvePastOrFuture(value)
       });
     },
     formatToParts(value: number, unit: Unit): Part[] {
       const { style, numeric } = resolvedOptions;
-      const { relative } = findFieldData(fields, unit, style);
+      const fieldData = findFieldData(fields, unit, style);
+      if (!fieldData) {
+        throw new Error(`Unsupported unit ${unit}`);
+      }
+      const { relative, relativeTime } = fieldData;
       let result: string = '';
       // We got a match for things like yesterday
       if (
@@ -242,27 +247,21 @@ const RelativeTimeFormat: IntlRelativeTimeFormat = ((
         ];
       }
 
-      const selectFormatOpts = ((getMessage(unit).getAst()
-        .elements[0] as ArgumentElement).format as SelectFormat).options;
-      const selector = pluralRules.select(value);
-      const patternOptions = ((selectFormatOpts[value > 0 ? 0 : 1].value
-        .elements[0] as ArgumentElement).format as PluralFormat).options;
-      const patternValue = (patternOptions.find(o => o.selector === selector)!
-        .value.elements[0] as MessageTextElement).value;
-      return patternValue
-        .split(/(#)/)
+      const selector = pluralRules.select(value) as RelativeTimeOpt;
+      const futureOrPastData = relativeTime[resolvePastOrFuture(value)];
+      const msg = futureOrPastData[selector] || futureOrPastData.other;
+      const valueParts = nf.formatToParts(value).map(p => ({ ...p, unit }));
+      return msg!
+        .split(/\{0\}/)
         .filter<string>(isString)
-        .map(s =>
-          s === '#'
-            ? {
-                type: 'integer',
-                value: String(value),
-                unit
-              }
-            : {
-                type: 'literal',
-                value: s
-              }
+        .reduce(
+          (parts: Part[], str) => [
+            ...parts,
+            ...(str === '{0}'
+              ? valueParts
+              : [{ type: 'literal', value: str } as LiteralPart])
+          ],
+          []
         );
     },
     resolvedOptions(): ResolvedIntlRelativeTimeFormatOptions {
@@ -270,6 +269,16 @@ const RelativeTimeFormat: IntlRelativeTimeFormat = ((
     }
   };
 }) as any;
+
+function resolvePastOrFuture(value: number): 'past' | 'future' {
+  return Object.is(value, -0)
+    ? 'past'
+    : Object.is(value, +0)
+    ? 'future'
+    : value < 0
+    ? 'past'
+    : 'future';
+}
 
 function isString(s?: string): s is string {
   return !!s;

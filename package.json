@@ -19,7 +19,7 @@
     "karma:local": "karma start karma.conf.js",
     "lint": "eslint .",
     "prepublishOnly": "npm run build",
-    "prettier": "prettier --write 'packages/*/{lib,test,tests,src}/**/*.ts' '{src,scripts,test,tests}/*.js'",
+    "prettier": "prettier --write 'packages/*/{test,tests,src}/**/*.ts' '{src,scripts,test,tests}/*.js'",
     "test": "lerna run lint --since --stream && TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\"}' lerna run test --since --stream"
   },
   "dependencies": {},
@@ -67,6 +67,7 @@
     "rollup-plugin-typescript": "^1.0.1",
     "rollup-plugin-uglify": "^6.0.2",
     "source-map-support": "^0.5.12",
+    "test262-harness": "^6.3.1",
     "ts-node": "^8.1.0",
     "tslib": "^1.9.3",
     "typescript": "^3.4.5"

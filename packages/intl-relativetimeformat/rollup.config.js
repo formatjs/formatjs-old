@@ -1,6 +1,6 @@
 import { uglify } from 'rollup-plugin-uglify';
 import resolve from 'rollup-plugin-node-resolve';
-// import testRollupConfig from '../../rollup.config'
+import testRollupConfig from '../../rollup.config'
 
 const resolveConfig = resolve({
   mainFields: ['module', 'main']
@@ -8,7 +8,7 @@ const resolveConfig = resolve({
 const uglifyConfig = uglify();
 export default [
   {
-    input: './lib/main.js',
+    input: './lib/index.js',
     output: {
       sourcemap: true,
       file: 'dist/intl-relativetimeformat.js',
@@ -18,7 +18,7 @@ export default [
     plugins: [resolveConfig]
   },
   {
-    input: './lib/main.js',
+    input: './lib/index.js',
     output: {
       sourcemap: true,
       file: 'dist/intl-relativetimeformat.min.js',
@@ -47,5 +47,5 @@ export default [
     },
     plugins: [resolveConfig, uglifyConfig]
   },
-  // ...testRollupConfig
+  ...testRollupConfig
 ];

@@ -4,4 +4,3 @@ node_modules/
 tests/browser.*
 src/locales.ts
 src/en.ts
-!dist
