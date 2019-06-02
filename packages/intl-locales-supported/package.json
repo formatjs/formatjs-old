@@ -23,7 +23,7 @@
   "homepage": "https://github.com/formatjs/formatjs",
   "scripts": {
     "clean": "rimraf dist lib",
-    "build": "tsc && rollup -c rollup.config.js",
+    "build": "tsc",
     "test": "mocha --opts ../../mocha.opts tests/index.ts"
   }
 }
