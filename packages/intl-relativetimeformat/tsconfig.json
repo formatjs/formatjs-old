@@ -1,0 +1,13 @@
+{
+    "extends": "../../tsconfig.json",
+    "compilerOptions": {
+        "outDir": "lib",
+        "rootDir": "src",
+        "baseUrl": ".",
+        "paths": {
+            "intl-messageformat": ["../intl-messageformat"],
+            "intl-messageformat-parser": ["../intl-messageformat-parser"]
+        }
+    },
+    "include": ["src/*.ts"]
+}
