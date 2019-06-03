@@ -47,6 +47,11 @@ If you want to polyfill all locales (e.g for Node):
 import 'intl-relativetimeformat/polyfill-locales'
 ```
 
+Tests
+---
+
+The majority of our tests come from [tc39/test262](https://github.com/tc39/test262/tree/master/test/intl402/RelativeTimeFormat).
+
 License
 -------
 

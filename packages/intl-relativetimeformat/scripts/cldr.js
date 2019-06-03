@@ -31,6 +31,7 @@ Object.keys(allLocaleFiles).forEach(function(lang) {
     destFile,	
     `/* @generated */	
 // prettier-ignore
+const IntlRelativeTimeFormat = require('../../');
 IntlRelativeTimeFormat.__addLocaleData(${allLocaleFiles[lang]})`	
   );	
 });	
@@ -40,7 +41,7 @@ outputFileSync(
   resolve(__dirname, '../src/locales.ts'),	
   `/* @generated */	
 // prettier-ignore  
-import IntlRelativeTimeFormat from ".";\n
+import IntlRelativeTimeFormat from "./core";\n
 IntlRelativeTimeFormat.__addLocaleData(${Object.keys(allLocaleFiles)	
   .map(lang => allLocaleFiles[lang])	
   .join(',\n')});	

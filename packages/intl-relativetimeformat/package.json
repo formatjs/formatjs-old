@@ -22,9 +22,9 @@
   "devDependencies": {
     "formatjs-extract-cldr-data": "^8.0.0"
   },
-  "main": "lib/index.js",
+  "main": "index.js",
   "module": "lib/index.js",
-  "typings": "lib/index.js",
+  "typings": "lib/index.d.ts",
   "scripts": {
     "clean": "rimraf dist lib",
     "build": "npm run cldr && tsc && rollup -c rollup.config.js",

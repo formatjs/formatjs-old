@@ -1,5 +1,5 @@
 import IntlRelativeTimeFormat from '../../src/locales';
-import { Unit } from '../../src/types';
+import { Unit } from '../../src';
 import { expect as chaiExpect } from 'chai';
 declare var expect: typeof chaiExpect;
 
