@@ -72,19 +72,26 @@ describe('Data shape', function() {
       it('should contain all fields', function() {
         var fields = [
           'year',
-          'year-short',
-          'month',
-          'month-short',
-          'week',
-          'week-short',
-          'day',
-          'day-short',
-          'hour',
-          'hour-short',
-          'minute',
-          'minute-short',
-          'second',
-          'second-short'
+  'year-short',
+  'year-narrow',
+  'month',
+  'month-short',
+  'month-narrow',
+  'week',
+  'week-short',
+  'week-narrow',
+  'day',
+  'day-short',
+  'day-narrow',
+  'hour',
+  'hour-short',
+  'hour-narrow',
+  'minute',
+  'minute-short',
+  'minute-narrow',
+  'second',
+  'second-short',
+  'second-narrow'
         ];
         expect(Object.keys(data.en.fields)).toEqual(fields);
       });
@@ -231,15 +238,12 @@ describe('extractData()', function() {
     });
 
     it('should de-duplicate data with suitable ancestors', function() {
-      var locales = ['es-AR', 'es-MX', 'es-VE'];
+      var locales = ['es-MX', 'es-VE'];
 
       var data = extractData({
         locales: locales,
         relativeFields: true
       });
-
-      expect(Object.keys(data['es-AR'])).toContain('parentLocale');
-      expect(Object.keys(data['es-AR'])).not.toContain('fields');
 
       expect(Object.keys(data['es-MX'])).toContain('parentLocale', 'fields');
 
