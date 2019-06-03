@@ -59,14 +59,14 @@ export interface ResolvedIntlRelativeTimeFormatOptions
   numberingSystem: string;
 }
 
-type Part = LiteralPart | RelativeTimeFormatNumberPart;
+export type Part = LiteralPart | RelativeTimeFormatNumberPart;
 
-interface LiteralPart {
+export interface LiteralPart {
   type: 'literal';
   value: string;
 }
 
-interface RelativeTimeFormatNumberPart extends Intl.NumberFormatPart {
+export interface RelativeTimeFormatNumberPart extends Intl.NumberFormatPart {
   unit: FormattableUnit;
 }
 
@@ -296,9 +296,11 @@ RelativeTimeFormat.prototype.formatToParts = function formatToParts(
   const selector = this._pluralRules.select(value) as RelativeTimeOpt;
   const futureOrPastData = relativeTime[resolvePastOrFuture(value)];
   const msg = futureOrPastData[selector] || futureOrPastData.other;
-  const valueParts = this._nf.formatToParts(value).map(p => ({ ...p, unit }));
+  const valueParts = this._nf
+    .formatToParts(Math.abs(value))
+    .map(p => ({ ...p, unit }));
   return msg!
-    .split(/\{0\}/)
+    .split(/(\{0\})/)
     .filter<string>(isString)
     .reduce(
       (parts: Part[], str) => [

@@ -1,1 +1,2 @@
-import './prototype';
+import './prototype/format';
+import './prototype/formatToParts';

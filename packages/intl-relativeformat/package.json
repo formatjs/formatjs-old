@@ -23,10 +23,10 @@
     "url": "git@github.com:formatjs/formatjs.git"
   },
   "main": "index.js",
-  "module": "lib/main.js",
-  "typings": "lib/main.js",
+  "module": "lib/index.js",
+  "typings": "lib/index.d.ts",
   "devDependencies": {
-    "intl-relativetimeformat": "1.0.0"
+    "intl-relativetimeformat": "1"
   },
   "scripts": {
     "clean": "rimraf dist lib",
