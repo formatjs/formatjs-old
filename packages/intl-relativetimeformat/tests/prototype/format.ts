@@ -22,6 +22,13 @@ function always(s: string) {
   };
 }
 
+function isIE11(): boolean {
+  return (
+    typeof window !== 'undefined' &&
+    !!~window.navigator.userAgent.indexOf('MSIE 11')
+  );
+}
+
 function verifyProperty(obj: any, property: string, desc: PropertyDescriptor) {
   const ownDesc = Object.getOwnPropertyDescriptor(obj, property);
   (Object.keys(desc) as Array<keyof PropertyDescriptor>).forEach(d =>
@@ -55,7 +62,9 @@ describe('intl-relativetimeformat', function() {
       expect(() => fn.call(null)).to.throw(TypeError, 'null');
       expect(() => fn.call(true)).to.throw(TypeError, 'true');
       expect(() => fn.call('')).to.throw(TypeError);
-      expect(() => fn.call(Symbol())).to.throw(TypeError, 'Symbol()');
+      if (typeof Symbol !== 'undefined') {
+        expect(() => fn.call(Symbol())).to.throw(TypeError, 'Symbol()');
+      }
       expect(() => fn.call(1)).to.throw(TypeError, '1');
       expect(() => fn.call({})).to.throw(TypeError, 'object');
       expect(() => fn.call(IntlRelativeTimeFormat)).to.throw(
@@ -118,8 +127,13 @@ describe('intl-relativetimeformat', function() {
               String(value)
             );
           }
-          const symbol: any = Symbol();
-          expect(() => rtf.format(0, symbol)).to.throw(RangeError, 'Symbol()');
+          if (typeof Symbol !== 'undefined') {
+            const symbol: any = Symbol();
+            expect(() => rtf.format(0, symbol)).to.throw(
+              RangeError,
+              'Symbol()'
+            );
+          }
         });
       });
       describe('unit-plural', function() {
@@ -257,17 +271,20 @@ describe('intl-relativetimeformat', function() {
           value: 2,
           writable: false,
           enumerable: false,
-          configurable: true
+          configurable: !isIE11()
         });
       });
-      it('name', function() {
-        verifyProperty(IntlRelativeTimeFormat.prototype.format, 'name', {
-          value: 'format',
-          writable: false,
-          enumerable: false,
-          configurable: true
+      if (!isIE11()) {
+        it('name', function() {
+          verifyProperty(IntlRelativeTimeFormat.prototype.format, 'name', {
+            value: 'format',
+            writable: false,
+            enumerable: false,
+            configurable: true
+          });
         });
-      });
+      }
+
       describe('pl-pl-style-short', function() {
         const units = {
           second: always('sek.'),
