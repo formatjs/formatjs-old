@@ -187,6 +187,20 @@ const DEFAULT_OPTIONS: IntlRelativeTimeFormatOptions = {
   numeric: 'always'
 };
 
+function objectIs(x: any, y: any) {
+  if (Object.is) {
+    return Object.is(x, y);
+  }
+  // SameValue algorithm
+  if (x === y) {
+    // Steps 1-5, 7-10
+    // Steps 6.b-6.e: +0 != -0
+    return x !== 0 || 1 / x === 1 / y;
+  }
+  // Step 6.a: NaN == NaN
+  return x !== x && y !== y;
+}
+
 function RelativeTimeFormat(
   this: IntlRelativeTimeFormat,
   locales?: string | string[],
@@ -258,7 +272,7 @@ Object.defineProperty(RelativeTimeFormat.prototype, 'format', {
       return result;
     }
     const absValue = Math.abs(value);
-    // TODO: No need to Math.abs for Intl.PluralRules once 
+    // TODO: No need to Math.abs for Intl.PluralRules once
     // https://github.com/eemeli/intl-pluralrules/pull/6 is merged
     const selector = this._pluralRules.select(absValue) as RelativeTimeOpt;
     const futureOrPastData = relativeTime[resolvePastOrFuture(value)];
@@ -326,9 +340,9 @@ RelativeTimeFormat.prototype.resolvedOptions = function resolvedOptions(
 };
 
 function resolvePastOrFuture(value: number): 'past' | 'future' {
-  return Object.is(value, -0)
+  return objectIs(value, -0)
     ? 'past'
-    : Object.is(value, +0)
+    : objectIs(value, +0)
     ? 'future'
     : value < 0
     ? 'past'

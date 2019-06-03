@@ -160,7 +160,9 @@
                 var diffReport = diff(now, date);
                 var units = resolvedOptions.units || selectUnits(diffReport);
                 var diffInUnits = diffReport[units];
-                var style = units.endsWith('-short') ? 'narrow' : 'long';
+                var style = units.substring(units.length - 6, units.length) === '-short'
+                    ? 'narrow'
+                    : 'long';
                 var rtfUnit = units.replace('-short', '');
                 return new Intl.RelativeTimeFormat(locales, {
                     numeric: numeric,
