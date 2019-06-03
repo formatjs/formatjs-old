@@ -8,8 +8,8 @@
     "url": "https://github.com/formatjs/formatjs"
   },
   "scripts": {
-    "build:bootstrap": "lerna bootstrap --hoist --since --include-filtered-dependencies --no-ci",
-    "build:packages": "lerna run clean --since --stream && lerna run build --since --stream",
+    "build:bootstrap": "lerna bootstrap --hoist --include-filtered-dependencies --no-ci",
+    "build:packages": "lerna run clean --stream && lerna run build --stream",
     "build": "npm run build:bootstrap && npm run prettier && npm run build:packages",
     "cover:collect": "mkdir -p ./.nyc_output/ && for d in $(find packages -type d -name '.nyc_output' -maxdepth 2 -exec find '{}' -type f ';'); do (cp $d ./.nyc_output/); done; nyc report --reporter=lcov --report-dir=${COVERAGE_DIR:-artifacts/coverage}",
     "cover": "lerna run cover --since",
@@ -20,7 +20,7 @@
     "lint": "eslint .",
     "prepublishOnly": "npm run build",
     "prettier": "prettier --write 'packages/*/{test,tests,src}/**/*.ts' '{src,scripts,test,tests}/*.js'",
-    "test": "lerna run lint --since --stream && TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\"}' lerna run test --since --stream"
+    "test": "lerna run lint --stream && TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\"}' lerna run test --stream"
   },
   "dependencies": {},
   "devDependencies": {
