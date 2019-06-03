@@ -285,7 +285,7 @@ describe('intl-relativetimeformat', function() {
             one: 'tydz.'
           },
           month: always('mies.'),
-          // quarter: always('kw.'),
+          quarter: always('kw.'),
           year: {
             many: 'lat',
             few: 'lata',
@@ -354,7 +354,7 @@ describe('intl-relativetimeformat', function() {
             one: 'tydz.'
           },
           month: always('mies.'),
-          // quarter: always('kw.'),
+          quarter: always('kw.'),
           year: {
             many: 'lat',
             few: 'lata',
@@ -437,11 +437,11 @@ describe('intl-relativetimeformat', function() {
             few: 'miesiące',
             one: 'miesiąc'
           },
-          // quarter: {
-          //   many: 'kwartałów',
-          //   few: 'kwartały',
-          //   one: 'kwartał'
-          // },
+          quarter: {
+            many: 'kwartałów',
+            few: 'kwartały',
+            one: 'kwartał'
+          },
           year: {
             many: 'lat',
             few: 'lata',

@@ -4,7 +4,7 @@
  * See the accompanying LICENSE file for terms.
  */
 
-import 'intl-relativetimeformat/lib/polyfill';
+import 'intl-relativetimeformat/polyfill-locales';
 import IntlRelativeFormat, { IntlRelativeFormatOptions } from '../src';
 import { expect as chaiExpect } from 'chai';
 import { LocaleData, STYLE, SUPPORTED_FIELD } from '../src/types';
@@ -40,14 +40,6 @@ describe('IntlRelativeFormat', function() {
   it('should work w/o new', function() {
     const rf = IntlRelativeFormat();
     expect(rf.resolvedOptions().locale).to.equal('en');
-  });
-
-  // STATIC
-
-  describe('.__addLocaleData( [obj] )', function() {
-    it('should respond to .__addLocaleData()', function() {
-      expect(IntlRelativeFormat.__addLocaleData).to.be.a('function');
-    });
   });
 
   // INSTANCE METHODS
@@ -109,12 +101,10 @@ describe('IntlRelativeFormat', function() {
       });
 
       it('should be a fallback value when data is missing', function() {
-        IRFLocaleData.fr = localeData.fr;
-
         var rf = new IntlRelativeFormat('fr-FR');
         expect(rf.resolvedOptions().locale).to.equal('fr');
 
-        rf = new IntlRelativeFormat('pt');
+        rf = new IntlRelativeFormat('foo');
         expect(rf.resolvedOptions().locale).to.equal('en');
       });
     });
@@ -219,7 +209,6 @@ describe('IntlRelativeFormat', function() {
           'in 43,200 min.'
         );
       });
-
       it('should validate the specified units', function() {
         function createInstance(options: IntlRelativeFormatOptions) {
           return function() {

@@ -171,6 +171,12 @@ function findFieldData(
   if (style === 'long') {
     return fields[unit as 'day'];
   }
+  if (style === 'narrow') {
+    return (
+      fields[`${unit}-narrow` as 'day-narrow'] ||
+      fields[`${unit}-short` as 'day-short']
+    );
+  }
   return fields[`${unit}-short` as 'day-short'];
 }
 
@@ -228,34 +234,38 @@ Object.defineProperty(RelativeTimeFormat, 'prototype', {
   enumerable: false,
   configurable: false
 });
+Object.defineProperty(RelativeTimeFormat.prototype, 'format', {
+  value: function format(
+    this: IntlRelativeTimeFormat,
+    value: number,
+    unit: FormattableUnit
+  ): string {
+    validateInstance(this, 'format');
+    validateUnit(unit);
+    const resolvedUnit = (unit.endsWith('s')
+      ? unit.slice(0, unit.length - 1)
+      : unit) as Unit;
+    const { style, numeric } = this._resolvedOptions;
+    const fieldData = findFieldData(this._fields, resolvedUnit, style);
+    if (!fieldData) {
+      throw new Error(`Unsupported unit ${unit}`);
+    }
+    const { relative, relativeTime } = fieldData;
+    let result: string = '';
+    // We got a match for things like yesterday
+    if (numeric === 'auto' && (result = relative[String(value) as '0'] || '')) {
+      return result;
+    }
 
-RelativeTimeFormat.prototype.format = function format(
-  this: IntlRelativeTimeFormat,
-  value: number,
-  unit: FormattableUnit
-): string {
-  validateInstance(this, 'format');
-  validateUnit(unit);
-  const resolvedUnit = (unit.endsWith('s')
-    ? unit.slice(0, unit.length - 1)
-    : unit) as Unit;
-  const { style, numeric } = this._resolvedOptions;
-  const fieldData = findFieldData(this._fields, resolvedUnit, style);
-  if (!fieldData) {
-    throw new Error(`Unsupported unit ${unit}`);
-  }
-  const { relative, relativeTime } = fieldData;
-  let result: string = '';
-  // We got a match for things like yesterday
-  if (numeric === 'auto' && (result = relative[String(value) as '0'] || '')) {
-    return result;
-  }
-
-  const selector = this._pluralRules.select(value) as RelativeTimeOpt;
-  const futureOrPastData = relativeTime[resolvePastOrFuture(value)];
-  const msg = futureOrPastData[selector] || futureOrPastData.other;
-  return msg!.replace(/\{0\}/, this._nf.format(Math.abs(value)));
-};
+    const selector = this._pluralRules.select(value) as RelativeTimeOpt;
+    const futureOrPastData = relativeTime[resolvePastOrFuture(value)];
+    const msg = futureOrPastData[selector] || futureOrPastData.other;
+    return msg!.replace(/\{0\}/, this._nf.format(Math.abs(value)));
+  },
+  writable: true,
+  enumerable: false,
+  configurable: true
+});
 RelativeTimeFormat.prototype.formatToParts = function formatToParts(
   this: IntlRelativeTimeFormat,
   value: number,

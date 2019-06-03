@@ -25,7 +25,7 @@ Usage
 To use the polyfill, just import it to make sure that a fully functional Intl.RelativeTimeFormat is available in your environment:
 
 ```
-import 'intl-relativetimeformat/lib/polyfill'
+import 'intl-relativetimeformat/polyfill'
 ```
 
 If Intl.RelativeTimeFormat already exists, the polyfill will not be loaded.
@@ -38,8 +38,13 @@ import IntlRelativeTimeFormat from 'intl-relativetimeformat'
 
 By default, this library comes with `en` data. To load additional locale, you can include them on demand:
 ```
-import 'intl-relativetimeformat/lib/polyfill'
+import 'intl-relativetimeformat/polyfill'
 import 'intl-relativetimeformat/dist/locale-data/de'
+```
+
+If you want to polyfill all locales (e.g for Node):
+```
+import 'intl-relativetimeformat/polyfill-locales'
 ```
 
 License
