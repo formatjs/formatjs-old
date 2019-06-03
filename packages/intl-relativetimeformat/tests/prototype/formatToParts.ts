@@ -5,8 +5,13 @@ declare var expect: typeof chaiExpect;
 function verifyFormatParts(actual: Part[], expected: Part[], message: string) {
   expect(actual).to.eql(expected, message);
 }
+let test: any = describe;
+// We rely on Intl.NumberFormat.prototype.formatToParts
+if (typeof Intl.NumberFormat.prototype.formatToParts === 'undefined') {
+  test = describe.skip;
+}
 
-describe('formatToParts', function() {
+test('formatToParts', function() {
   describe('pl-pl-style-long', function() {
     function regular(s: string) {
       return {

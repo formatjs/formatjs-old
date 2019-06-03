@@ -223,7 +223,7 @@ function validateInstance(instance: any, method: string) {
 }
 
 function validateUnit(unit: any) {
-  if (!VALID_UNITS.includes(unit)) {
+  if (!~VALID_UNITS.indexOf(unit)) {
     throw new RangeError(
       `Invalid unit argument for format() '${String(unit)}'`
     );
@@ -243,7 +243,7 @@ Object.defineProperty(RelativeTimeFormat.prototype, 'format', {
   ): string {
     validateInstance(this, 'format');
     validateUnit(unit);
-    const resolvedUnit = (unit.endsWith('s')
+    const resolvedUnit = (unit[unit.length - 1] === 's'
       ? unit.slice(0, unit.length - 1)
       : unit) as Unit;
     const { style, numeric } = this._resolvedOptions;
@@ -258,6 +258,8 @@ Object.defineProperty(RelativeTimeFormat.prototype, 'format', {
       return result;
     }
     const absValue = Math.abs(value);
+    // TODO: No need to Math.abs for Intl.PluralRules once 
+    // https://github.com/eemeli/intl-pluralrules/pull/6 is merged
     const selector = this._pluralRules.select(absValue) as RelativeTimeOpt;
     const futureOrPastData = relativeTime[resolvePastOrFuture(value)];
     const msg = futureOrPastData[selector] || futureOrPastData.other;
@@ -274,7 +276,7 @@ RelativeTimeFormat.prototype.formatToParts = function formatToParts(
 ): Part[] {
   validateInstance(this, 'format');
   validateUnit(unit);
-  const resolvedUnit = (unit.endsWith('s')
+  const resolvedUnit = (unit[unit.length - 1] === 's'
     ? unit.slice(0, unit.length - 1)
     : unit) as Unit;
   const { style, numeric } = this._resolvedOptions;
