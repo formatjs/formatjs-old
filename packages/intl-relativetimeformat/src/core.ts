@@ -86,6 +86,7 @@ export interface IntlRelativeTimeFormat {
     locales: string | string[],
     opts?: Pick<IntlRelativeTimeFormatOptions, 'localeMatcher'>
   ): string[];
+  polyfilled: true
 
   /**
    * PRIVATE METHODS/PROPERTIES
@@ -312,6 +313,8 @@ RelativeTimeFormat.prototype.formatToParts = function formatToParts(
       []
     );
 };
+
+RelativeTimeFormat.prototype.polyfilled = true
 
 RelativeTimeFormat.prototype.resolvedOptions = function resolvedOptions(
   this: IntlRelativeTimeFormat

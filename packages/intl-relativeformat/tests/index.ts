@@ -32,6 +32,8 @@ function expectNoNumberInOutput(output: string) {
   expect(/\d+/.test(output)).to.be.false;
 }
 
+const isPolyfilledIntlRelativeTimeFormat = 'polyfilled' in Intl.RelativeTimeFormat
+
 describe('IntlRelativeFormat', function() {
   it('should be a function', function() {
     expect(IntlRelativeFormat).to.be.a('function');
@@ -39,7 +41,8 @@ describe('IntlRelativeFormat', function() {
 
   it('should work w/o new', function() {
     const rf = IntlRelativeFormat();
-    expect(rf.resolvedOptions().locale).to.equal('en');
+      expect(rf.resolvedOptions().locale).to.equal(isPolyfilledIntlRelativeTimeFormat ? 'en' : 'en-US');
+    
   });
 
   // INSTANCE METHODS
@@ -85,9 +88,9 @@ describe('IntlRelativeFormat', function() {
         transferLocaleData(localeData, IRFLocaleData);
       });
 
-      it('should default to "en"', function() {
+      it('should default to default locale of Intl.RelativeTimeFormat', function() {
         var rf = new IntlRelativeFormat();
-        expect(rf.resolvedOptions().locale).to.equal('en');
+        expect(rf.resolvedOptions().locale).to.equal(isPolyfilledIntlRelativeTimeFormat ? 'en' : 'en-US');
       });
 
       it('should normalize the casing', function() {
@@ -102,10 +105,10 @@ describe('IntlRelativeFormat', function() {
 
       it('should be a fallback value when data is missing', function() {
         var rf = new IntlRelativeFormat('fr-FR');
-        expect(rf.resolvedOptions().locale).to.equal('fr');
-
+        expect(rf.resolvedOptions().locale).to.equal(isPolyfilledIntlRelativeTimeFormat ? 'fr' : 'fr-FR');
+        
         rf = new IntlRelativeFormat('foo');
-        expect(rf.resolvedOptions().locale).to.equal('en');
+        expect(rf.resolvedOptions().locale).to.equal(isPolyfilledIntlRelativeTimeFormat ? 'en' : 'en-US');
       });
     });
 
@@ -197,7 +200,10 @@ describe('IntlRelativeFormat', function() {
           units: 'minute-short' as SUPPORTED_FIELD
         });
 
-        expect(rf.format(Date.now())).to.equal('this minute');
+        // Node 12 has an old version of CLDR that 
+        // does not resolve correctly to `this minute
+        expect(rf.format(Date.now())).to.equal(isPolyfilledIntlRelativeTimeFormat ? 'this minute' : 'in 0 min.');
+        
         expect(rf.format(past(24 * 60 * 60 * 1000))).to.equal('1,440 min. ago');
         expect(rf.format(past(30 * 24 * 60 * 60 * 1000))).to.equal(
           '43,200 min. ago'
