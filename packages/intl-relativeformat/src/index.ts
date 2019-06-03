@@ -6,10 +6,17 @@ See the accompanying LICENSE file for terms.
 
 /* jslint esnext: true */
 
-import IntlMessageFormat from 'intl-messageformat';
+import {
+  IntlRelativeTimeFormat,
+  FormattableUnit
+} from 'intl-relativetimeformat';
 import diff from './diff';
 import { SUPPORTED_FIELD, STYLE, LocaleData } from './types';
-
+declare global {
+  namespace Intl {
+    var RelativeTimeFormat: IntlRelativeTimeFormat;
+  }
+}
 // -----------------------------------------------------------------------------
 
 const SUPPORTED_FIELDS = [
@@ -56,10 +63,9 @@ interface IntlRelativeFormat {
     style: STYLE;
     units?: SUPPORTED_FIELD;
   };
-  _compileMessage(units: SUPPORTED_FIELD): typeof IntlMessageFormat;
 }
 
-function isValidUnits(units?: SUPPORTED_FIELD) {
+function isValidUnits(units?: SUPPORTED_FIELD): units is SUPPORTED_FIELD {
   if (!units || ~SUPPORTED_FIELDS.indexOf(units)) {
     return true;
   }
@@ -83,71 +89,10 @@ function isValidUnits(units?: SUPPORTED_FIELD) {
   );
 }
 
-function resolveLocale(locales: string | string[] = []) {
-  if (typeof locales === 'string') {
-    locales = [locales];
-  }
-
-  // Create a copy of the array so we can push on the default locale.
-  locales = (locales || []).concat(RelativeFormat.defaultLocale);
-
-  var localeData = RelativeFormat.__localeData__;
-  var i, len, localeParts, data;
-
-  // Using the set of locales + the default locale, we look for the first one
-  // which that has been registered. When data does not exist for a locale, we
-  // traverse its ancestors to find something that's been registered within
-  // its hierarchy of locales. Since we lack the proper `parentLocale` data
-  // here, we must take a naive approach to traversal.
-  for (i = 0, len = locales.length; i < len; i += 1) {
-    localeParts = locales[i].toLowerCase().split('-');
-
-    while (localeParts.length) {
-      data = localeData[localeParts.join('-')];
-      if (data) {
-        // Return the normalized locale string; e.g., we return "en-US",
-        // instead of "en-us".
-        return data.locale;
-      }
-
-      localeParts.pop();
-    }
-  }
-
-  var defaultLocale = locales.pop();
-  throw new Error(
-    'No locale data has been added to IntlRelativeFormat for: ' +
-      locales.join(', ') +
-      ', or the default locale: ' +
-      defaultLocale
-  );
-}
-
-function findFields(locale: string) {
-  const localeData = RelativeFormat.__localeData__;
-  let data: LocaleData | undefined = localeData[locale.toLowerCase()];
-
-  // The locale data is de-duplicated, so we have to traverse the locale's
-  // hierarchy until we find `fields` to return.
-  while (data) {
-    if (data.fields) {
-      return data.fields;
-    }
-
-    data = !!data.parentLocale
-      ? localeData[data.parentLocale.toLowerCase()]
-      : undefined;
-  }
-
-  throw new Error(
-    'Locale data added to IntlRelativeFormat is missing `fields` for :' + locale
-  );
-}
-
 function resolveStyle(style?: IntlRelativeFormatOptions['style']) {
   // Default to "best fit" style.
   if (!style) {
-    return 'best fit';
+    return STYLE.bestFit;
   }
 
   if (style === 'best fit' || style === 'numeric') {
@@ -177,63 +122,14 @@ const RelativeFormat: IntlRelativeFormat = ((
   locales?: string | string[],
   options: IntlRelativeFormatOptions = {}
 ) => {
-  // Make a copy of `locales` if it's an array, so that it doesn't change
-  // since it's used lazily.
-  if (Array.isArray(locales)) {
-    locales = [...locales];
-  }
-
-  const locale = resolveLocale(locales);
   const resolvedOptions = {
     style: resolveStyle(options.style),
     units: isValidUnits(options.units) && options.units
   };
-  const fields = findFields(locale);
-  const messages: Record<string, typeof IntlMessageFormat> = {};
-
-  function getRelativeUnits(difference: string, units: SUPPORTED_FIELD) {
-    var field = fields[units];
-
-    if (field.relative) {
-      return field.relative[difference];
-    }
-  }
-
-  function getMessage(units: SUPPORTED_FIELD) {
-    // Create a new synthetic message based on the locale data from CLDR.
-    if (!messages[units]) {
-      messages[units] = compileMessage(units);
-    }
-
-    return messages[units];
-  }
-
-  function compileMessage(units: SUPPORTED_FIELD) {
-    const { relativeTime } = fields[units];
-    const future = Object.keys(relativeTime.future).reduce(
-      (future: string, i) =>
-        future + ` ${i} {${relativeTime.future[i].replace('{0}', '#')}}`,
-      ''
-    );
-    const past = Object.keys(relativeTime.past).reduce(
-      (past: string, i) =>
-        past + ` ${i} {${relativeTime.past[i].replace('{0}', '#')}}`,
-      ''
-    );
-
-    const message =
-      '{when, select, future {{0, plural, ' +
-      future +
-      '}}' +
-      'past {{0, plural, ' +
-      past +
-      '}}}';
-
-    // Create the synthetic IntlMessageFormat instance using the original
-    // locales value specified by the user when constructing the the parent
-    // IntlRelativeFormat instance.
-    return new IntlMessageFormat(message, locales);
-  }
+  const numeric = resolvedOptions.style === 'best fit' ? 'auto' : 'always';
+  const rtf = new Intl.RelativeTimeFormat(locales, {
+    numeric
+  });
 
   return {
     format(date?: Date | number, options?: { now?: number | Date | null }) {
@@ -267,43 +163,22 @@ const RelativeFormat: IntlRelativeFormat = ((
       var diffReport = diff(now, date);
       var units = resolvedOptions.units || selectUnits(diffReport);
       var diffInUnits = diffReport[units];
-
-      if (resolvedOptions.style !== STYLE.numeric) {
-        var relativeUnits = getRelativeUnits(diffInUnits + '', units);
-        if (relativeUnits) {
-          return relativeUnits;
-        }
-      }
-
-      return getMessage(units).format({
-        '0': Math.abs(diffInUnits),
-        when: diffInUnits < 0 ? 'past' : 'future'
-      });
+      const style = units.endsWith('-short') ? 'narrow' : 'long';
+      const rtfUnit = units.replace('-short', '') as FormattableUnit;
+      return new Intl.RelativeTimeFormat(locales, {
+        numeric,
+        style
+      }).format(diffInUnits, rtfUnit);
     },
     resolvedOptions() {
       return {
-        locale,
+        locale: rtf.resolvedOptions().locale,
         style: resolvedOptions.style,
         units: resolvedOptions.units
       };
-    },
-    _compileMessage: compileMessage
+    }
   };
 }) as any;
-
-RelativeFormat.__localeData__ = {};
-RelativeFormat.__addLocaleData = (...data: LocaleData[]) => {
-  for (const datum of data) {
-    if (!(datum && datum.locale)) {
-      throw new Error(
-        'Locale data provided to IntlRelativeFormat is missing a ' +
-          '`locale` property value'
-      );
-    }
-
-    RelativeFormat.__localeData__[datum.locale.toLowerCase()] = datum;
-  }
-};
 
 // Define public `defaultLocale` property which can be set by the developer, or
 // it will be set when the first RelativeFormat instance is created by

@@ -30,6 +30,7 @@ Object.keys(allLocaleFiles).forEach(function(lang) {
   outputFileSync(	
     destFile,	
     `/* @generated */	
+// prettier-ignore
 IntlRelativeTimeFormat.__addLocaleData(${allLocaleFiles[lang]})`	
   );	
 });	
@@ -38,7 +39,8 @@ IntlRelativeTimeFormat.__addLocaleData(${allLocaleFiles[lang]})`
 outputFileSync(	
   resolve(__dirname, '../src/locales.ts'),	
   `/* @generated */	
-import IntlRelativeTimeFormat from "./core";\n
+// prettier-ignore  
+import IntlRelativeTimeFormat from ".";\n
 IntlRelativeTimeFormat.__addLocaleData(${Object.keys(allLocaleFiles)	
   .map(lang => allLocaleFiles[lang])	
   .join(',\n')});	
@@ -51,6 +53,7 @@ const en = extractLocales(['en']);
 outputFileSync(	
   resolve(__dirname, '../src/en.ts'),	
   `/* @generated */	
+// prettier-ignore  
 export default ${en.en};	
 `	
 );

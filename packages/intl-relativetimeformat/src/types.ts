@@ -1,18 +1,28 @@
 export type Field =
   | 'second'
   | 'second-short'
+  | 'second-narrow'
   | 'minute'
   | 'minute-short'
+  | 'minute-narrow'
   | 'hour'
   | 'hour-short'
+  | 'hour-narrow'
   | 'day'
   | 'day-short'
+  | 'day-narrow'
   | 'week'
   | 'week-short'
+  | 'week-narrow'
   | 'month'
   | 'month-short'
+  | 'month-narrow'
+  | 'quarter'
+  | 'quarter-short'
+  | 'quarter-narrow'
   | 'year'
-  | 'year-short';
+  | 'year-short'
+  | 'year-narrow';
 
 export type Unit =
   | 'second'
@@ -23,6 +33,18 @@ export type Unit =
   | 'month'
   | 'quarter'
   | 'year';
+
+export type Units =
+  | 'seconds'
+  | 'minutes'
+  | 'hours'
+  | 'days'
+  | 'weeks'
+  | 'months'
+  | 'quarters'
+  | 'years';
+
+export type FormattableUnit = Unit | Units;
 
 export type RelativeTimeOpt = 'zero' | 'one' | 'two' | 'few' | 'many' | 'other';
 

@@ -4,10 +4,10 @@
  * See the accompanying LICENSE file for terms.
  */
 
-import IntlRelativeFormat from '../src/locales';
+import 'intl-relativetimeformat/lib/polyfill';
+import IntlRelativeFormat, { IntlRelativeFormatOptions } from '../src';
 import { expect as chaiExpect } from 'chai';
 import { LocaleData, STYLE, SUPPORTED_FIELD } from '../src/types';
-import { IntlRelativeFormatOptions } from '../src/core';
 declare global {
   var expect: typeof chaiExpect;
 }
