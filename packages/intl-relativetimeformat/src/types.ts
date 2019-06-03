@@ -45,7 +45,24 @@ export type Units =
   | 'years';
 
 export type FormattableUnit = Unit | Units;
-
+export const VALID_UNITS = [
+  'second',
+  'minute',
+  'hour',
+  'day',
+  'week',
+  'month',
+  'quarter',
+  'year',
+  'seconds',
+  'minutes',
+  'hours',
+  'days',
+  'weeks',
+  'months',
+  'quarters',
+  'years'
+];
 export type RelativeTimeOpt = 'zero' | 'one' | 'two' | 'few' | 'many' | 'other';
 
 export interface LocaleData {

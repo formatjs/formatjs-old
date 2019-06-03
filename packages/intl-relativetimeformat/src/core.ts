@@ -10,7 +10,8 @@ import {
   Unit,
   LocaleFieldsData,
   RelativeTimeOpt,
-  FormattableUnit
+  FormattableUnit,
+  VALID_UNITS
 } from './types';
 
 // -- RelativeTimeFormat -----------------------------------------------------------
@@ -112,14 +113,53 @@ function findFields(locale: string) {
       return data.fields;
     }
 
-    data = !!data.parentLocale
+    data = data.parentLocale
       ? localeData[data.parentLocale.toLowerCase()]
       : undefined;
   }
 
   throw new Error(
-    'Locale data added to IntlRelativeTimeFormat is missing `fields` for :' +
-      locale
+    `Locale data added to IntlRelativeTimeFormat is missing 'fields' for "${locale}"`
+  );
+}
+
+function resolveLocale(locales: string | string[] = []) {
+  if (typeof locales === 'string') {
+    locales = [locales];
+  }
+
+  // Create a copy of the array so we can push on the default locale.
+  locales = (locales || []).concat('en');
+
+  var localeData = RelativeTimeFormat.__localeData__;
+  var i, len, localeParts, data;
+
+  // Using the set of locales + the default locale, we look for the first one
+  // which that has been registered. When data does not exist for a locale, we
+  // traverse its ancestors to find something that's been registered within
+  // its hierarchy of locales. Since we lack the proper `parentLocale` data
+  // here, we must take a naive approach to traversal.
+  for (i = 0, len = locales.length; i < len; i += 1) {
+    localeParts = locales[i].toLowerCase().split('-');
+
+    while (localeParts.length) {
+      data = localeData[localeParts.join('-')];
+      if (data) {
+        // Return the normalized locale string; e.g., we return "en-US",
+        // instead of "en-us".
+        return data.locale;
+      }
+
+      localeParts.pop();
+    }
+  }
+
+  var defaultLocale = locales.pop();
+  throw new Error(
+    'No locale data has been added to IntlRelativeTimeFormat for: ' +
+      locales.join(', ') +
+      ', or the default locale: ' +
+      defaultLocale
   );
 }
 
@@ -153,7 +193,7 @@ function RelativeTimeFormat(
     localeMatcher: options.localeMatcher
   });
   const { numberingSystem } = this._nf.resolvedOptions();
-  const { locale } = this._pluralRules.resolvedOptions();
+  const locale = resolveLocale(locales);
   this._resolvedOptions = {
     locale,
     style: options.style,
@@ -165,12 +205,20 @@ function RelativeTimeFormat(
 
 const IntlRelativeTimeFormatFn = RelativeTimeFormat as IntlRelativeTimeFormat;
 
-function verifyInstance(instance: any, method: string) {
+function validateInstance(instance: any, method: string) {
   if (!(instance instanceof IntlRelativeTimeFormatFn)) {
     throw new TypeError(
       `Method Intl.RelativeTimeFormat.prototype.${method} called on incompatible receiver ${String(
         instance
       )}`
+    );
+  }
+}
+
+function validateUnit(unit: any) {
+  if (!VALID_UNITS.includes(unit)) {
+    throw new RangeError(
+      `Invalid unit argument for format() '${String(unit)}'`
     );
   }
 }
@@ -186,7 +234,8 @@ RelativeTimeFormat.prototype.format = function format(
   value: number,
   unit: FormattableUnit
 ): string {
-  verifyInstance(this, 'format');
+  validateInstance(this, 'format');
+  validateUnit(unit);
   const resolvedUnit = (unit.endsWith('s')
     ? unit.slice(0, unit.length - 1)
     : unit) as Unit;
@@ -212,7 +261,8 @@ RelativeTimeFormat.prototype.formatToParts = function formatToParts(
   value: number,
   unit: FormattableUnit
 ): Part[] {
-  verifyInstance(this, 'format');
+  validateInstance(this, 'format');
+  validateUnit(unit);
   const resolvedUnit = (unit.endsWith('s')
     ? unit.slice(0, unit.length - 1)
     : unit) as Unit;
@@ -254,7 +304,7 @@ RelativeTimeFormat.prototype.formatToParts = function formatToParts(
 RelativeTimeFormat.prototype.resolvedOptions = function resolvedOptions(
   this: IntlRelativeTimeFormat
 ): ResolvedIntlRelativeTimeFormatOptions {
-  verifyInstance(this, 'resolvedOptions');
+  validateInstance(this, 'resolvedOptions');
   return this._resolvedOptions;
 };
 
@@ -279,7 +329,7 @@ RelativeTimeFormat.supportedLocalesOf = (
   return Intl.PluralRules.supportedLocalesOf(locales, opts);
 };
 
-RelativeTimeFormat.__localeData__ = {};
+RelativeTimeFormat.__localeData__ = {} as Record<string, LocaleData>;
 RelativeTimeFormat.__addLocaleData = (...data: LocaleData[]) => {
   for (const datum of data) {
     if (!(datum && datum.locale)) {

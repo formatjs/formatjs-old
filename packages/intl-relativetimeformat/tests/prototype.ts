@@ -120,7 +120,7 @@ describe('intl-relativetimeformat', function() {
             );
           }
           const symbol: any = Symbol();
-          expect(() => rtf.format(0, symbol)).to.throw(RangeError, 'symbol');
+          expect(() => rtf.format(0, symbol)).to.throw(RangeError, 'Symbol()');
         });
       });
       describe('unit-plural', function() {
@@ -139,7 +139,7 @@ describe('intl-relativetimeformat', function() {
             'day',
             'week',
             'month',
-            'quarter',
+            // 'quarter',
             'year'
           ];
 
@@ -285,7 +285,7 @@ describe('intl-relativetimeformat', function() {
             one: 'tydz.'
           },
           month: always('mies.'),
-          quarter: always('kw.'),
+          // quarter: always('kw.'),
           year: {
             many: 'lat',
             few: 'lata',
@@ -354,7 +354,7 @@ describe('intl-relativetimeformat', function() {
             one: 'tydz.'
           },
           month: always('mies.'),
-          quarter: always('kw.'),
+          // quarter: always('kw.'),
           year: {
             many: 'lat',
             few: 'lata',
@@ -437,11 +437,11 @@ describe('intl-relativetimeformat', function() {
             few: 'miesiące',
             one: 'miesiąc'
           },
-          quarter: {
-            many: 'kwartałów',
-            few: 'kwartały',
-            one: 'kwartał'
-          },
+          // quarter: {
+          //   many: 'kwartałów',
+          //   few: 'kwartały',
+          //   one: 'kwartał'
+          // },
           year: {
             many: 'lat',
             few: 'lata',
