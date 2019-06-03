@@ -23,10 +23,7 @@ function always(s: string) {
 }
 
 function isIE11(): boolean {
-  return (
-    typeof window !== 'undefined' &&
-    !!~window.navigator.userAgent.indexOf('MSIE 11')
-  );
+  return typeof Symbol === 'undefined'
 }
 
 function verifyProperty(obj: any, property: string, desc: PropertyDescriptor) {
