@@ -18,7 +18,6 @@ describe('exports', function() {
 
 describe('Data shape', function() {
   var data = extractData({
-    pluralRules: true,
     relativeFields: true
   });
 
@@ -45,11 +44,6 @@ describe('Data shape', function() {
       expect(data.en).not.toHaveProperty('parentLocale');
       expect(data['en-US']).toHaveProperty('parentLocale');
       expect(data['en-US'].parentLocale).toBe('en');
-    });
-
-    it('should have a `pluralRuleFunction`', function() {
-      expect(data.en).toHaveProperty('pluralRuleFunction');
-      expect(typeof data.en.pluralRuleFunction).toBe('function');
     });
 
     it('should have a `fields` object property', function() {
@@ -163,7 +157,7 @@ describe('extractData()', function() {
   describe('Options', function() {
     describe('locales', function() {
       it('should default to all available locales', function() {
-        var data = extractData({ pluralRules: true });
+        var data = extractData();
         expect(Object.keys(data).length).toBeGreaterThan(0);
       });
 
@@ -183,7 +177,6 @@ describe('extractData()', function() {
       it('should always contribute an entry for all specified `locales`', function() {
         var data = extractData({
           locales: ['en-US', 'zh-Hans-SG'],
-          pluralRules: true,
           relativeFields: true
         });
 
@@ -193,7 +186,6 @@ describe('extractData()', function() {
       it('should recursively expand `locales` to their roots', function() {
         var data = extractData({
           locales: ['en-US', 'zh-Hans-SG'],
-          pluralRules: true,
           relativeFields: true
         });
 
@@ -203,22 +195,9 @@ describe('extractData()', function() {
       it('should accept `locales` of any case and normalize them', function() {
         expect(Object.keys(
           extractData({
-            locales: ['en-us', 'ZH-HANT-HK'],
-            pluralRules: true
+            locales: ['en-us', 'ZH-HANT-HK']
           })
         )).toContain('en-US', 'zh-Hant-HK');
-      });
-    });
-
-    describe('pluralRules', function() {
-      it('should contribute a `pluralRuleFunction` function property', function() {
-        var data = extractData({
-          locales: ['en'],
-          pluralRules: true
-        });
-
-        expect(data.en).toHaveProperty('pluralRuleFunction');
-        expect(typeof data.en.pluralRuleFunction).toBe('function');
       });
     });
 
@@ -256,38 +235,29 @@ describe('extractData()', function() {
 
       var data = extractData({
         locales: locales,
-        pluralRules: true,
         relativeFields: true
       });
 
       expect(Object.keys(data['es-AR'])).toContain('parentLocale');
-      expect(Object.keys(data['es-AR'])).not.toContain('pluralRuleFunction', 'fields');
+      expect(Object.keys(data['es-AR'])).not.toContain('fields');
 
       expect(Object.keys(data['es-MX'])).toContain('parentLocale', 'fields');
-      expect(Object.keys(data['es-MX'])).not.toContain('pluralRuleFunction');
 
       expect(Object.keys(data['es-VE'])).toContain('parentLocale');
-      expect(Object.keys(data['es-VE'])).not.toContain('pluralRuleFunction', 'fields');
+      expect(Object.keys(data['es-VE'])).not.toContain('fields');
 
       locales.forEach(function(locale) {
-        var pluralRuleFunction;
         var fields;
 
         // Traverse locale hierarchy for `locale` looking for the first
-        // occurrence of `pluralRuleFunction` and `fields`;
+        // occurrence of `fields`;
         while (locale) {
-          if (!pluralRuleFunction) {
-            pluralRuleFunction = data[locale].pluralRuleFunction;
-          }
-
           if (!fields) {
             fields = data[locale].fields;
           }
 
           locale = data[locale].parentLocale;
         }
-
-        expect(typeof pluralRuleFunction).toBe('function');
         expect(typeof fields).toBe('object');
       });
     });
