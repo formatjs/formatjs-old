@@ -160,7 +160,7 @@ describe('intl-relativetimeformat', function() {
         });
 
         units.forEach(unit =>
-          it(`should work with "${unit}"`, function() {
+          it(unit, function() {
             expect(rtf.format(1000, unit)).to.equal(`in 1,000 ${unit}s`);
             expect(rtf.format(10, unit)).to.equal(`in 10 ${unit}s`);
             expect(rtf.format(2, unit)).to.equal(`in 2 ${unit}s`);
@@ -222,7 +222,7 @@ describe('intl-relativetimeformat', function() {
           }
         };
         units.forEach(unit =>
-          it(`should work with "${unit}"`, function() {
+          it(unit, function() {
             const expected =
               unit in exceptions
                 ? [

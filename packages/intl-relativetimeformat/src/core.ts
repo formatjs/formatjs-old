@@ -86,7 +86,7 @@ export interface IntlRelativeTimeFormat {
     locales: string | string[],
     opts?: Pick<IntlRelativeTimeFormatOptions, 'localeMatcher'>
   ): string[];
-  polyfilled: true
+  polyfilled: true;
 
   /**
    * PRIVATE METHODS/PROPERTIES
@@ -257,11 +257,11 @@ Object.defineProperty(RelativeTimeFormat.prototype, 'format', {
     if (numeric === 'auto' && (result = relative[String(value) as '0'] || '')) {
       return result;
     }
-
-    const selector = this._pluralRules.select(value) as RelativeTimeOpt;
+    const absValue = Math.abs(value);
+    const selector = this._pluralRules.select(absValue) as RelativeTimeOpt;
     const futureOrPastData = relativeTime[resolvePastOrFuture(value)];
     const msg = futureOrPastData[selector] || futureOrPastData.other;
-    return msg!.replace(/\{0\}/, this._nf.format(Math.abs(value)));
+    return msg!.replace(/\{0\}/, this._nf.format(absValue));
   },
   writable: true,
   enumerable: false,
@@ -314,7 +314,7 @@ RelativeTimeFormat.prototype.formatToParts = function formatToParts(
     );
 };
 
-RelativeTimeFormat.prototype.polyfilled = true
+RelativeTimeFormat.prototype.polyfilled = true;
 
 RelativeTimeFormat.prototype.resolvedOptions = function resolvedOptions(
   this: IntlRelativeTimeFormat
