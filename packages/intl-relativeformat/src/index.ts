@@ -163,7 +163,7 @@ const RelativeFormat: IntlRelativeFormat = ((
       var diffReport = diff(now, date);
       var units = resolvedOptions.units || selectUnits(diffReport);
       var diffInUnits = diffReport[units];
-      const style = units.endsWith('-short') ? 'narrow' : 'long';
+      const style = units.substring(units.length - 6, units.length) === '-short' ? 'narrow' : 'long';
       const rtfUnit = units.replace('-short', '') as FormattableUnit;
       return new Intl.RelativeTimeFormat(locales, {
         numeric,
