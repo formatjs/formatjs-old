@@ -29,7 +29,8 @@
     "clean": "rimraf dist lib",
     "build": "npm run cldr && tsc && tsc -p tsconfig.cjs.json && rollup -c rollup.config.js",
     "cldr": "node scripts/cldr",
-    "test": "mocha --opts ../../mocha.opts tests/index.ts"
+    "test": "mocha --opts ../../mocha.opts tests/index.ts",
+    "test262": "test262-harness --prelude ./dist/polyfill-with-locales.js \"../../test262/test/intl402/RelativeTimeFormat/**/*.js\""
   },
   "homepage": "https://github.com/formatjs/formatjs",
   "license": "BSD-3-Clause"
