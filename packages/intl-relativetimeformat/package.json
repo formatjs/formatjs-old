@@ -30,7 +30,7 @@
     "build": "npm run cldr && tsc && tsc -p tsconfig.cjs.json && rollup -c rollup.config.js",
     "cldr": "node scripts/cldr",
     "test": "mocha --opts ../../mocha.opts tests/index.ts",
-    "test262": "test262-harness --prelude ./dist/polyfill-with-locales.js \"../../test262/test/intl402/RelativeTimeFormat/**/*.js\""
+    "test262": "test262-harness --reporter-keys file,attrs,result -t 4 --prelude ./dist/polyfill-with-locales.js -r json \"../../test262/test/intl402/RelativeTimeFormat/**/*.js\" > test262.json"
   },
   "homepage": "https://github.com/formatjs/formatjs",
   "license": "BSD-3-Clause"
