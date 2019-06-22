@@ -125,7 +125,7 @@ function findFields(locale: string) {
 }
 
 function resolveLocale(locales: string | string[] = []) {
-  if (typeof locales === 'string') {
+  if (!Array.isArray(locales)) {
     locales = [locales];
   }
 
@@ -203,8 +203,7 @@ function objectIs(x: any, y: any) {
 
 function RelativeTimeFormat(
   this: IntlRelativeTimeFormat,
-  locales?: string | string[],
-  opts?: IntlRelativeTimeFormatOptions
+  ...[locales, opts]: [string | string[], IntlRelativeTimeFormatOptions]
 ) {
   const options = { ...DEFAULT_OPTIONS, ...(opts || {}) };
   this._nf = new Intl.NumberFormat(locales, {
