@@ -191,12 +191,28 @@ function validateInstance(instance: any, method: string) {
   }
 }
 
-function validateUnit(unit: any) {
-  if (!~VALID_UNITS.indexOf(unit)) {
+function validateUnit(unit: any): Unit {
+  // `unit + ''` to guard against `Symbol()`
+  if (!~VALID_UNITS.indexOf(unit + '')) {
     throw new RangeError(
       `Invalid unit argument for format() '${String(unit)}'`
     );
   }
+  const resolvedUnit = (unit[unit.length - 1] === 's'
+    ? unit.slice(0, unit.length - 1)
+    : unit) as Unit;
+  return resolvedUnit;
+}
+
+function validateValue(value: number | string, method = 'format') {
+  const parsedValue =
+    typeof value === 'string' ? new Number(value).valueOf() : value;
+  if (!isFinite(parsedValue)) {
+    throw new RangeError(
+      `Value need to be finite number for Intl.RelativeTimeFormat.prototype.${method}()`
+    );
+  }
+  return parsedValue;
 }
 
 function isString(s?: string): s is string {
@@ -206,8 +222,10 @@ function isString(s?: string): s is string {
 export default class RelativeTimeFormat {
   private _nf: Intl.NumberFormat;
   private _pl: Intl.PluralRules;
-  private _resolvedOptions: ResolvedIntlRelativeTimeFormatOptions;
   private _fields: LocaleFieldsData;
+  private _opts?: IntlRelativeTimeFormatOptions;
+  private _locales?: string | string[];
+  private _locale: string;
   constructor(
     locales?: string | string[],
     opts?: IntlRelativeTimeFormatOptions
@@ -222,32 +240,27 @@ export default class RelativeTimeFormat {
     } catch (e) {
       // new.target is not supported
     }
+    this._opts = opts;
+    this._locales = locales;
+    this._locale = resolveLocale(locales);
+    const localeMatcher =
+      (this._opts && this._opts.localeMatcher) || 'best fit';
 
-    const options = { ...DEFAULT_OPTIONS, ...(opts || {}) };
     this._nf = new Intl.NumberFormat(locales, {
-      localeMatcher: options.localeMatcher
+      localeMatcher
     });
+
     this._pl = new Intl.PluralRules(locales, {
-      localeMatcher: options.localeMatcher
+      localeMatcher
     });
-    const { numberingSystem } = this._nf.resolvedOptions();
-    const locale = resolveLocale(locales);
-    this._resolvedOptions = {
-      locale,
-      style: options.style,
-      numeric: options.numeric,
-      numberingSystem
-    };
-    this._fields = findFields(locale);
+
+    this._fields = findFields(this._locale);
   }
   format(value: number | string, unit: FormattableUnit): string {
     validateInstance(this, 'format');
-    validateUnit(unit);
-    const parsedValue = typeof value === 'string' ? new Number(value) : value
-    const resolvedUnit = (unit[unit.length - 1] === 's'
-      ? unit.slice(0, unit.length - 1)
-      : unit) as Unit;
-    const { style, numeric } = this._resolvedOptions;
+    const resolvedUnit = validateUnit(unit);
+    const parsedValue = validateValue(value);
+    const { style, numeric } = this.resolvedOptions();
     const fieldData = findFieldData(this._fields, resolvedUnit, style);
     if (!fieldData) {
       throw new Error(`Unsupported unit ${unit}`);
@@ -255,7 +268,10 @@ export default class RelativeTimeFormat {
     const { relative, relativeTime } = fieldData;
     let result: string = '';
     // We got a match for things like yesterday
-    if (numeric === 'auto' && (result = relative[String(parsedValue) as '0'] || '')) {
+    if (
+      numeric === 'auto' &&
+      (result = relative[String(parsedValue) as '0'] || '')
+    ) {
       return result;
     }
 
@@ -266,12 +282,9 @@ export default class RelativeTimeFormat {
   }
   formatToParts(value: number | string, unit: FormattableUnit): Part[] {
     validateInstance(this, 'format');
-    validateUnit(unit);
-    const parsedValue = typeof value === 'string' ? new Number(value) : value
-    const resolvedUnit = (unit[unit.length - 1] === 's'
-      ? unit.slice(0, unit.length - 1)
-      : unit) as Unit;
-    const { style, numeric } = this._resolvedOptions;
+    const resolvedUnit = validateUnit(unit);
+    const parsedValue = validateValue(value, 'formatToParts');
+    const { style, numeric } = this.resolvedOptions();
     const fieldData = findFieldData(this._fields, resolvedUnit, style);
     if (!fieldData) {
       throw new Error(`Unsupported unit ${unit}`);
@@ -279,7 +292,10 @@ export default class RelativeTimeFormat {
     const { relative, relativeTime } = fieldData;
     let result: string = '';
     // We got a match for things like yesterday
-    if (numeric === 'auto' && (result = relative[String(parsedValue) as '0'] || '')) {
+    if (
+      numeric === 'auto' &&
+      (result = relative[String(parsedValue) as '0'] || '')
+    ) {
       return [
         {
           type: 'literal',
@@ -293,7 +309,7 @@ export default class RelativeTimeFormat {
     const msg = futureOrPastData[selector] || futureOrPastData.other;
     const valueParts = this._nf
       .formatToParts(Math.abs(parsedValue))
-      .map(p => ({ ...p, unit }));
+      .map(p => ({ ...p, unit: resolvedUnit }));
     return msg!
       .split(/(\{0\})/)
       .filter<string>(isString)
@@ -310,7 +326,18 @@ export default class RelativeTimeFormat {
 
   resolvedOptions(): ResolvedIntlRelativeTimeFormatOptions {
     validateInstance(this, 'resolvedOptions');
-    return {...this._resolvedOptions};
+
+    const style = (this._opts && this._opts.style) || 'long';
+    const numeric = (this._opts && this._opts.numeric) || 'always';
+
+    const { numberingSystem } = this._nf.resolvedOptions();
+
+    return {
+      locale: this._locale,
+      style,
+      numeric,
+      numberingSystem
+    };
   }
 
   toString() {

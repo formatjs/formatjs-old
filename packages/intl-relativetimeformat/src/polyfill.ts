@@ -19,7 +19,20 @@ export default function polyfill(
   });
 
   Object.defineProperty(Intl.RelativeTimeFormat, 'length', {
-    value: 0,
+    value: 0, // no param is required
+    writable: false,
+    enumerable: false,
+    configurable: true
+  });
+
+  Object.defineProperty(RelativeTimeFormat, 'supportedLocalesOf', {
+    writable: true,
+    enumerable: false,
+    configurable: true
+  });
+
+  Object.defineProperty(RelativeTimeFormat.supportedLocalesOf, 'length', {
+    value: 1, // only 1st param is required
     writable: false,
     enumerable: false,
     configurable: true
@@ -59,6 +72,7 @@ export default function polyfill(
     configurable: false
   });
 
+  // This is bc transpilation process sets class properties to anonymous function
   Object.defineProperty(RelativeTimeFormat.prototype.resolvedOptions, 'name', {
     value: 'resolvedOptions'
   });
@@ -69,5 +83,9 @@ export default function polyfill(
 
   Object.defineProperty(RelativeTimeFormat.prototype.formatToParts, 'name', {
     value: 'formatToParts'
+  });
+
+  Object.defineProperty(RelativeTimeFormat.supportedLocalesOf, 'name', {
+    value: 'supportedLocalesOf'
   });
 }
