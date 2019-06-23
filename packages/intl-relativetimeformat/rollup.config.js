@@ -52,16 +52,12 @@ export default [
     plugins: [resolveConfig, uglifyConfig]
   },
   {
-    input: './lib/locales.js',
+    input: './lib/polyfill-locales.js',
     output: {
       sourcemap: true,
       file: 'dist/polyfill-with-locales.js',
-      format: 'iife',
-      exports: 'named',
-      name: 'IntlRelativeTimeFormat',
-      footer: 'Intl.RelativeTimeFormat = IntlRelativeTimeFormat.default'
+      format: 'iife'
     },
     plugins: [resolveConfig]
-  },
-  ...testRollupConfig
+  }
 ];
