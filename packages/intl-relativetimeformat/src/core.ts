@@ -151,12 +151,6 @@ function findFieldData(
   return fields[`${unit}-short` as 'day-short'];
 }
 
-const DEFAULT_OPTIONS: IntlRelativeTimeFormatOptions = {
-  localeMatcher: 'best fit',
-  style: 'long',
-  numeric: 'always'
-};
-
 function objectIs(x: any, y: any) {
   if (Object.is) {
     return Object.is(x, y);
@@ -219,12 +213,47 @@ function isString(s?: string): s is string {
   return !!s;
 }
 
+function toObject<T>(arg: T): T extends null ? never : T extends undefined ? never : T {
+  if (arg == null) {
+    throw new TypeError('undefined/null cannot be converted to object')
+  }
+  return Object(arg)
+}
+
+/**
+ * https://tc39.es/ecma402/#sec-getoption
+ * @param opts 
+ * @param prop 
+ * @param type 
+ * @param values 
+ * @param fallback 
+ */
+function getOption<T extends object, K extends keyof T>(opts: T, prop: K, type: 'string' | 'boolean', values: T[K][] | undefined, fallback: T[K]): T[K] {
+  const descriptor = Object.getOwnPropertyDescriptor(opts, prop)
+  let value = descriptor ? descriptor.value : undefined
+  if (value !== undefined) {
+    if (type !== 'boolean' && type !== 'string') {
+      throw new TypeError('invalid type')
+    }
+    if (type === 'boolean') {
+      value = Boolean(value)
+    }
+    if (type === 'string') {
+      value = String(value)
+    }
+    if (values !== undefined && !~values.indexOf(value)) {
+      throw new RangeError(`${value} in not within ${values}`)
+    }
+    return value
+  }
+  return fallback
+}
+
 export default class RelativeTimeFormat {
   private _nf: Intl.NumberFormat;
   private _pl: Intl.PluralRules;
   private _fields: LocaleFieldsData;
-  private _opts?: IntlRelativeTimeFormatOptions;
-  private _locales?: string | string[];
+  private _opts: IntlRelativeTimeFormatOptions;
   private _locale: string;
   constructor(
     locales?: string | string[],
@@ -240,11 +269,9 @@ export default class RelativeTimeFormat {
     } catch (e) {
       // new.target is not supported
     }
-    this._opts = opts;
-    this._locales = locales;
+    this._opts = opts === undefined ? Object.create(null) : toObject(opts);
     this._locale = resolveLocale(locales);
-    const localeMatcher =
-      (this._opts && this._opts.localeMatcher) || 'best fit';
+    const localeMatcher = getOption(this._opts, 'localeMatcher', 'string', ['best fit', 'lookup'], 'best fit')
 
     // Guard against global Object.defineProperty(Object.prototype)
     const nfOpts = Object.create(null);
@@ -325,26 +352,7 @@ export default class RelativeTimeFormat {
 
   resolvedOptions(): ResolvedIntlRelativeTimeFormatOptions {
     validateInstance(this, 'resolvedOptions');
-    let style: ResolvedIntlRelativeTimeFormatOptions['style'] = 'long';
-    let numeric: ResolvedIntlRelativeTimeFormatOptions['numeric'] = 'always';
-    const { _opts } = this;
-    if (_opts !== undefined) {
-      const styleDescriptor = Object.getOwnPropertyDescriptor(
-        this._opts,
-        'style'
-      );
-      if (styleDescriptor) {
-        style = styleDescriptor.value;
-      }
-      const numericDescriptor = Object.getOwnPropertyDescriptor(
-        this._opts,
-        'numeric'
-      );
-      if (numericDescriptor) {
-        numeric = numericDescriptor.value;
-      }
-    }
-
+    
     const { numberingSystem } = this._nf.resolvedOptions();
     // test262/test/intl402/RelativeTimeFormat/prototype/resolvedOptions/type.js
     const opts = Object.create(Object.prototype);
@@ -356,13 +364,13 @@ export default class RelativeTimeFormat {
         configurable: true
       },
       style: {
-        value: style,
+        value: getOption(this._opts, 'style', 'string', ['long', 'narrow', 'short'], 'long'),
         writable: true,
         enumerable: true,
         configurable: true
       },
       numeric: {
-        value: numeric,
+        value: getOption(this._opts, 'numeric', 'string', ['always', 'auto'], 'always'),
         writable: true,
         enumerable: true,
         configurable: true
