@@ -4,7 +4,6 @@
  * See the accompanying LICENSE file for terms.
  */
 // Bug where this polyfill doesn't handle negative number correctly
-const pluralRulesPolyfilled = typeof Intl.PluralRules === 'undefined';
 import 'intl-pluralrules';
 import '@formatjs/intl-relativetimeformat/polyfill-locales';
 import IntlRelativeFormat, { IntlRelativeFormatOptions } from '../src';
@@ -13,6 +12,8 @@ import { LocaleData, STYLE, SUPPORTED_FIELD } from '../src/types';
 declare global {
   var expect: typeof chaiExpect;
 }
+
+const pluralRulesPolyfilledWithAbsBug = new Intl.PluralRules().select(-1) === 'other'
 
 function past(v?: number) {
   return Date.now() - (v || 0);
@@ -272,7 +273,7 @@ describe('IntlRelativeFormat', function() {
       it('should return 1 second past', function() {
         var output = rf.format(past(1000));
         expect(output).to.equal(
-          pluralRulesPolyfilled ? 'hace 1 segundos' : 'hace 1 segundo'
+          pluralRulesPolyfilledWithAbsBug ? 'hace 1 segundos' : 'hace 1 segundo'
         );
       });
 
@@ -307,7 +308,7 @@ describe('IntlRelativeFormat', function() {
           now: new Date(now)
         });
         expect(output).to.equal(
-          pluralRulesPolyfilled ? 'hace 1 minutos' : 'hace 1 minuto'
+          pluralRulesPolyfilledWithAbsBug ? 'hace 1 minutos' : 'hace 1 minuto'
         );
       });
     });
@@ -323,7 +324,7 @@ describe('IntlRelativeFormat', function() {
       it('should return 1 second past', function() {
         var output = rf.format(past(1000));
         expect(output).to.equal(
-          pluralRulesPolyfilled ? '1 seconds ago' : '1 second ago'
+          pluralRulesPolyfilledWithAbsBug ? '1 seconds ago' : '1 second ago'
         );
       });
 
@@ -340,7 +341,7 @@ describe('IntlRelativeFormat', function() {
       it('should return 1 hour past', function() {
         var output = rf.format(past(60 * 60 * 1000));
         expect(output).to.equal(
-          pluralRulesPolyfilled ? '1 hours ago' : '1 hour ago'
+          pluralRulesPolyfilledWithAbsBug ? '1 hours ago' : '1 hour ago'
         );
       });
 
@@ -430,7 +431,7 @@ describe('IntlRelativeFormat', function() {
           now: new Date(now)
         });
         expect(output).to.equal(
-          pluralRulesPolyfilled ? '1 minutes ago' : '1 minute ago'
+          pluralRulesPolyfilledWithAbsBug ? '1 minutes ago' : '1 minute ago'
         );
       });
     });

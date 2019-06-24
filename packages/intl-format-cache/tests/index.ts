@@ -1,11 +1,13 @@
-// Bug where this polyfill doesn't handle negative number correctly
-const pluralRulesPolyfilled = typeof Intl.PluralRules === 'undefined';
+
 import 'intl-pluralrules';
 import '@formatjs/intl-relativetimeformat/polyfill-locales';
 import memoizeFormatConstructor from '../src';
 import IntlMessageFormat from 'intl-messageformat';
 import IntlRelativeFormat from 'intl-relativeformat';
 import { expect as chaiExpect } from 'chai';
+
+// Bug where this polyfill doesn't handle negative number correctly
+const pluralRulesPolyfilledWithAbsBug = new Intl.PluralRules().select(-1) === 'other'
 
 declare var expect: typeof chaiExpect;
 
@@ -67,7 +69,7 @@ describe('intl-format-cache', function() {
 
       expect(rf.resolvedOptions().locale).to.equal('en');
       expect(rf.format(0, { now: 1000 })).to.equal(
-        pluralRulesPolyfilled ? '1 seconds ago' : '1 second ago'
+        pluralRulesPolyfilledWithAbsBug ? '1 seconds ago' : '1 second ago'
       );
 
       expect(getRelativeFormat('en')).to.equal(rf);
