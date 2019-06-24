@@ -245,14 +245,13 @@ export default class RelativeTimeFormat {
     this._locale = resolveLocale(locales);
     const localeMatcher =
       (this._opts && this._opts.localeMatcher) || 'best fit';
+    
+    // Guard against global Object.defineProperty(Object.prototype)
+    const nfOpts = Object.create(null)
+    nfOpts.localeMatcher = localeMatcher
 
-    this._nf = new Intl.NumberFormat(locales, {
-      localeMatcher
-    });
-
-    this._pl = new Intl.PluralRules(locales, {
-      localeMatcher
-    });
+    this._nf = new Intl.NumberFormat(locales, nfOpts);
+    this._pl = new Intl.PluralRules(locales, nfOpts);
 
     this._fields = findFields(this._locale);
   }
@@ -326,18 +325,28 @@ export default class RelativeTimeFormat {
 
   resolvedOptions(): ResolvedIntlRelativeTimeFormatOptions {
     validateInstance(this, 'resolvedOptions');
-
-    const style = (this._opts && this._opts.style) || 'long';
-    const numeric = (this._opts && this._opts.numeric) || 'always';
+    let style: ResolvedIntlRelativeTimeFormatOptions['style'] = 'long'
+    let numeric: ResolvedIntlRelativeTimeFormatOptions['numeric'] = 'always'
+    const {_opts} = this
+    if (_opts !== undefined) {
+      const styleDescriptor = Object.getOwnPropertyDescriptor(this._opts, 'style')
+      if (styleDescriptor) {
+        style = styleDescriptor.value  
+      }
+      const numericDescriptor = Object.getOwnPropertyDescriptor(this._opts, 'numeric')
+      if (numericDescriptor) {
+        numeric = numericDescriptor.value  
+      }
+    }
 
     const { numberingSystem } = this._nf.resolvedOptions();
-
-    return {
-      locale: this._locale,
-      style,
-      numeric,
-      numberingSystem
-    };
+    // Guard against global Object.prototype manipulations
+    const opts = Object.create(null)
+    opts.locale = this._locale
+    opts.style = style || 'long'
+    opts.numeric = numeric || 'always'
+    opts.numberingSystem = numberingSystem
+    return opts
   }
 
   toString() {
