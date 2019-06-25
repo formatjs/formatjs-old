@@ -1,10 +1,76 @@
+# THIS PACKAGE HAS BEEN DEPRECATED
+
+# Migration Guide
+This package has deviated from the [`Intl.RelativeTimeFormat` spec](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RelativeTimeFormat) rather heavily. Therefore, we've deprecated this package and add [`@formatjs/intl-relativetimeformat](https://www.npmjs.com/package/@formatjs/intl-relativetimeformat) as the spec-compliant polyfill.
+
+1. All `units` (such as `day-short`) should be migrated similarly to:
+
+```ts
+new IntlRelativeFormat('en', { units: 'second-short' }).format(Date.now() - 1000)
+// will be
+new Intl.RelativeTimeFormat('en', { style: 'short' }).format(-1, 'second')
+
+new IntlRelativeFormat('en', { units: 'day-narrow' }).format(Date.now() - 48 * 3600 * 1000) 
+// will be
+new Intl.RelativeTimeFormat('en', { style: 'narrow' }).format(-2, 'day')
+```
+
+2. `style: numeric` will become `numeric: always` per spec (which is also the default)
+
+
+```ts
+new IntlRelativeFormat('en', { units: 'second-short', style: 'numeric' }).format(Date.now() - 1000)
+// will be
+new Intl.RelativeTimeFormat('en', { style: 'short' }).format(-1, 'second')
+```
+
+```ts
+new IntlRelativeFormat('en', { units: 'day-narrow', style: 'numeric' }).format(Date.now() - 48 * 3600 * 1000) 
+// will be
+new Intl.RelativeTimeFormat('en', { style: 'narrow' }).format(-2, 'day')
+```
+
+3. `style: 'best fit'` is a little trickier but we have released `@formatjs/intl-utils` to ease the transition:
+
+```ts
+new IntlRelativeFormat('en', { style: 'best fit' }).format(Date.now() - 1000)
+// will be
+import {selectUnit} from '@formatjs/intl-utils'
+const diff = selectUnit(Date.now() - 1000)
+new Intl.RelativeTimeFormat('en', { numeric: 'auto' }).format(diff.value, diff.unit)
+```
+```ts
+new IntlRelativeFormat('en', { style: 'best fit' }).format(Date.now() - 48 * 3600 * 1000) 
+// will be
+import {selectUnit} from '@formatjs/intl-utils'
+const diff = selectUnit(Date.now() - 48 * 3600 * 1000)
+new Intl.RelativeTimeFormat('en', { numeric: 'auto' }).format(diff.value, diff.unit)
+```
+
+4. If you were using `options.now` in `format`, you can use `formatjs/intl-utils` to transition as well
+
+```ts
+new IntlRelativeFormat('en', { style: 'best fit' }).format(Date.now() - 1000, { now: Date.now() + 1000})
+// will be
+import {selectUnit} from '@formatjs/intl-utils'
+const diff = selectUnit(Date.now() - 1000, Date.now() + 1000)
+new Intl.RelativeTimeFormat('en', { numeric: 'auto' }).format(diff.value, diff.unit)
+```
+```ts
+new IntlRelativeFormat('en', { style: 'best fit' }).format(Date.now() - 48 * 3600 * 1000, { now: Date.now() + 1000}) 
+// will be
+import {selectUnit} from '@formatjs/intl-utils'
+const diff = selectUnit(Date.now() - 48 * 3600 * 1000, Date.now() + 1000)
+new Intl.RelativeTimeFormat('en', { numeric: 'auto' }).format(diff.value, diff.unit)
+```
+
+
 Intl RelativeFormat
 ===================
 
 Formats JavaScript dates to relative time strings (e.g., "3 hours ago").
 
 [![npm Version][npm-badge]][npm]
-
 
 Overview
 --------

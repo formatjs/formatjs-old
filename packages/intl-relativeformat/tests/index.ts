@@ -13,7 +13,8 @@ declare global {
   var expect: typeof chaiExpect;
 }
 
-const pluralRulesPolyfilledWithAbsBug = new Intl.PluralRules().select(-1) === 'other'
+const pluralRulesPolyfilledWithAbsBug =
+  new Intl.PluralRules().select(-1) === 'other';
 
 function past(v?: number) {
   return Date.now() - (v || 0);

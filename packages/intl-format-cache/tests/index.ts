@@ -1,4 +1,3 @@
-
 import 'intl-pluralrules';
 import '@formatjs/intl-relativetimeformat/polyfill-locales';
 import memoizeFormatConstructor from '../src';
@@ -7,7 +6,8 @@ import IntlRelativeFormat from 'intl-relativeformat';
 import { expect as chaiExpect } from 'chai';
 
 // Bug where this polyfill doesn't handle negative number correctly
-const pluralRulesPolyfilledWithAbsBug = new Intl.PluralRules().select(-1) === 'other'
+const pluralRulesPolyfilledWithAbsBug =
+  new Intl.PluralRules().select(-1) === 'other';
 
 declare var expect: typeof chaiExpect;
 
