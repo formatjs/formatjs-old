@@ -157,7 +157,6 @@ char
     "'" sequence:apostrophe { return sequence; }
     / [^{}\\\0-\x1F\x7f \t\n\r]
     / '\\\\' { return '\\'; }
-    / "''" { return '\''; }
     / '\\#'  { return '\\#'; }
     / '\\{'  { return '\u007B'; }
     / '\\}'  { return '\u007D'; }
