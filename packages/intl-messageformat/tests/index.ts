@@ -6,7 +6,7 @@
 'use strict';
 import 'intl-pluralrules';
 import IntlMessageFormat from '../src';
-import IntlMessageFormatCore from '../src/core';
+import IntlMessageFormatCore, { createDefaultFormatters } from '../src/core';
 import parser from 'intl-messageformat-parser';
 import { expect as chaiExpect } from 'chai';
 
@@ -17,14 +17,26 @@ describe('IntlMessageFormat', function() {
     expect(IntlMessageFormat).to.be.a('function');
   });
 
-  it('should work w/o new', function() {
-    var mf = IntlMessageFormat('My name is {FIRST} {LAST}.');
+  it('should accept formatters', function() {
+    var mf = new IntlMessageFormat(
+      'My name is {FIRST} {LAST}, age {age, number}, time {time, time}, date {date, date}.',
+      'en',
+      undefined,
+      {
+        formatters: createDefaultFormatters()
+      }
+    );
     var output = mf.format({
       FIRST: 'Anthony',
-      LAST: 'Pipkin'
+      LAST: 'Pipkin',
+      age: 8,
+      time: 12 * 3600 * 1e3,
+      date: 12 * 3600 * 1e3
     });
 
-    expect(output).to.equal('My name is Anthony Pipkin.');
+    expect(output).to.equal(
+      'My name is Anthony Pipkin, age 8, time 1/1/1970, date 1/1/1970.'
+    );
   });
 
   // INSTANCE METHODS
