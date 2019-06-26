@@ -99,7 +99,7 @@ function resolveLocale(locales: Array<string | undefined>) {
   let resolvedLocales: string[] = [
     ...(Array.isArray(locales) ? locales : [locales]),
     // default locale
-    'en'
+    DEFAULT_LOCALE
   ].filter<string>((s): s is string => typeof s === 'string')
 
   var localeData = RelativeTimeFormat.__localeData__;
@@ -261,6 +261,8 @@ function intersection(arr1: Array<string | undefined>, arr2: Array<string | unde
   return arr1.filter(s => arr2.includes(s as string))
 }
 
+const DEFAULT_LOCALE = new Intl.NumberFormat().resolvedOptions().locale 
+
 export default class RelativeTimeFormat {
   private readonly _nf: Intl.NumberFormat;
   private readonly _pl: Intl.PluralRules;
@@ -284,7 +286,7 @@ export default class RelativeTimeFormat {
     }
     const opts = options === undefined ? Object.create(null) : toObject(options);
     if (locales === undefined) {
-      this._locale = 'en'
+      this._locale = DEFAULT_LOCALE
     } else {
       this._locale = resolveLocale(intersection(
         Intl.NumberFormat.supportedLocalesOf(locales),

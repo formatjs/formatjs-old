@@ -33,7 +33,7 @@ function expectNoNumberInOutput(output: string) {
 }
 
 const isPolyfilledIntlRelativeTimeFormat =
-  'polyfilled' in Intl.RelativeTimeFormat.prototype;
+  'polyfilled' in Intl.RelativeTimeFormat;
 
 describe('IntlRelativeFormat', function() {
   it('should be a function', function() {
@@ -42,8 +42,7 @@ describe('IntlRelativeFormat', function() {
 
   it('should work w/o new', function() {
     const rf = IntlRelativeFormat();
-    expect(rf.resolvedOptions().locale).to.equal(
-      isPolyfilledIntlRelativeTimeFormat ? 'en' : 'en-US'
+    expect(rf.resolvedOptions().locale).to.equal('en-US'
     );
   });
 
@@ -92,8 +91,7 @@ describe('IntlRelativeFormat', function() {
 
       it('should default to default locale of Intl.RelativeTimeFormat', function() {
         var rf = new IntlRelativeFormat();
-        expect(rf.resolvedOptions().locale).to.equal(
-          isPolyfilledIntlRelativeTimeFormat ? 'en' : 'en-US'
+        expect(rf.resolvedOptions().locale).to.equal('en-US'
         );
       });
 
@@ -114,8 +112,7 @@ describe('IntlRelativeFormat', function() {
         );
 
         rf = new IntlRelativeFormat('foo');
-        expect(rf.resolvedOptions().locale).to.equal(
-          isPolyfilledIntlRelativeTimeFormat ? 'en' : 'en-US'
+        expect(rf.resolvedOptions().locale).to.equal('en-US'
         );
       });
     });
