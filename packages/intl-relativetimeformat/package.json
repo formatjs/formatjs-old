@@ -27,7 +27,8 @@
   "typings": "lib/index.d.ts",
   "scripts": {
     "clean": "rimraf dist lib",
-    "build": "npm run cldr && tsc && tsc -p tsconfig.cjs.json && rollup -c rollup.config.js",
+    "compile": "tsc && tsc -p tsconfig.cjs.json && rollup -c rollup.config.js",
+    "build": "npm run cldr && npm run compile",
     "cldr": "node scripts/cldr",
     "test": "TS_NODE_PROJECT=tsconfig.cjs.json ts-node tests/runner"
   },

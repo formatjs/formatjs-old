@@ -7,50 +7,50 @@ const resolveConfig = resolve({
 });
 const uglifyConfig = uglify();
 export default [
-  {
-    input: './lib/index.js',
-    output: {
-      sourcemap: true,
-      file: 'dist/umd/intl-relativetimeformat.js',
-      format: 'umd',
-      exports: 'named',
-      name: 'IntlRelativeTimeFormat'
-    },
-    plugins: [resolveConfig]
-  },
-  {
-    input: './lib/index.js',
-    output: {
-      sourcemap: true,
-      file: 'dist/umd/intl-relativetimeformat.min.js',
-      format: 'umd',
-      exports: 'named',
-      name: 'IntlRelativeTimeFormat'
-    },
-    plugins: [resolveConfig, uglifyConfig]
-  },
-  {
-    input: './lib/locales.js',
-    output: {
-      sourcemap: true,
-      file: 'dist/umd/intl-relativetimeformat-with-locales.js',
-      format: 'umd',
-      exports: 'named',
-      name: 'IntlRelativeTimeFormat'
-    },
-    plugins: [resolveConfig]
-  },
-  {
-    input: './lib/locales.js',
-    output: {
-      sourcemap: true,
-      file: 'dist/umd/intl-relativetimeformat-with-locales.min.js',
-      format: 'umd',
-      exports: 'named',
-      name: 'IntlRelativeTimeFormat'
-    },
-    plugins: [resolveConfig, uglifyConfig]
-  },
+  // {
+  //   input: './lib/index.js',
+  //   output: {
+  //     sourcemap: true,
+  //     file: 'dist/umd/intl-relativetimeformat.js',
+  //     format: 'umd',
+  //     exports: 'named',
+  //     name: 'IntlRelativeTimeFormat'
+  //   },
+  //   plugins: [resolveConfig]
+  // },
+  // {
+  //   input: './lib/index.js',
+  //   output: {
+  //     sourcemap: true,
+  //     file: 'dist/umd/intl-relativetimeformat.min.js',
+  //     format: 'umd',
+  //     exports: 'named',
+  //     name: 'IntlRelativeTimeFormat'
+  //   },
+  //   plugins: [resolveConfig, uglifyConfig]
+  // },
+  // {
+  //   input: './lib/locales.js',
+  //   output: {
+  //     sourcemap: true,
+  //     file: 'dist/umd/intl-relativetimeformat-with-locales.js',
+  //     format: 'umd',
+  //     exports: 'named',
+  //     name: 'IntlRelativeTimeFormat'
+  //   },
+  //   plugins: [resolveConfig]
+  // },
+  // {
+  //   input: './lib/locales.js',
+  //   output: {
+  //     sourcemap: true,
+  //     file: 'dist/umd/intl-relativetimeformat-with-locales.min.js',
+  //     format: 'umd',
+  //     exports: 'named',
+  //     name: 'IntlRelativeTimeFormat'
+  //   },
+  //   plugins: [resolveConfig, uglifyConfig]
+  // },
   {
     input: './lib/polyfill-locales.js',
     output: {

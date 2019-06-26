@@ -1,6 +1,7 @@
 import { spawnSync } from 'child_process';
 import { resolve } from 'path';
 import { cpus } from 'os';
+import {sync as globSync } from 'glob'
 
 interface TestResult {
   file: string;
@@ -17,16 +18,19 @@ interface TestResult {
     message?: string;
   };
 }
+const PATTERN = resolve(__dirname, '../../../test262/test/intl402/RelativeTimeFormat/**/*.js')
+// const testsFiles = globSync(PATTERN).filter(fn => fn.includes('newtarget-undefined'))
 const args = [
   '--reporter-keys',
   'file,attrs,result',
   '-t',
-  String(cpus().length),
+  String(cpus().length - 1),
   '--prelude',
   './dist/polyfill-with-locales.js',
   '-r',
   'json',
-  resolve(__dirname, '../../../test262/test/intl402/RelativeTimeFormat/**/*.js')
+  PATTERN
+  // ...testsFiles,
 ];
 console.log(`Running "test262-harness ${args.join(' ')}"`);
 const result = spawnSync('test262-harness', args, {
@@ -43,7 +47,7 @@ json.forEach(t => {
   } else {
     console.log('\n\n');
     console.log(`🗴 ${t.attrs.description}`);
-    console.log(`\t ${t.result.message}`);
+    console.log('\t', t.result.message);
     console.log('\t', resolve(__dirname, '..', t.file));
     console.log('\n\n');
   }
@@ -56,5 +60,5 @@ if (failedTests.length) {
   process.exit(1);
 }
 console.log(
-  `Tests: ${json.length - failedTests.length} passed, ${json.length} total`
+  `Tests: ${json.length} passed, ${json.length} total`
 );
