@@ -249,7 +249,7 @@ function getOption<T extends object, K extends keyof T>(
     if (type === 'string') {
       value = new String(value);
     }
-    if (values !== undefined && !values.find(val => val == value)) {
+    if (values !== undefined && !values.filter(val => val == value).length) {
       throw new RangeError(`${value} in not within ${values}`);
     }
     return value;
