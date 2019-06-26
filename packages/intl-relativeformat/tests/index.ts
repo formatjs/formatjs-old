@@ -271,7 +271,9 @@ describe('IntlRelativeFormat', function() {
 
       it('should return 1 second past', function() {
         var output = rf.format(past(1000));
-        expect(output).to.equal(pluralRulesPolyfilled ? 'hace 1 segundos' : 'hace 1 segundo');
+        expect(output).to.equal(
+          pluralRulesPolyfilled ? 'hace 1 segundos' : 'hace 1 segundo'
+        );
       });
 
       it('should return 10 second past', function() {
@@ -304,7 +306,9 @@ describe('IntlRelativeFormat', function() {
         var output = rf.format(new Date(now - 60 * 1000), {
           now: new Date(now)
         });
-        expect(output).to.equal(pluralRulesPolyfilled ? 'hace 1 minutos' : 'hace 1 minuto');
+        expect(output).to.equal(
+          pluralRulesPolyfilled ? 'hace 1 minutos' : 'hace 1 minuto'
+        );
       });
     });
 
@@ -318,7 +322,9 @@ describe('IntlRelativeFormat', function() {
 
       it('should return 1 second past', function() {
         var output = rf.format(past(1000));
-        expect(output).to.equal(pluralRulesPolyfilled ? '1 seconds ago' : '1 second ago');
+        expect(output).to.equal(
+          pluralRulesPolyfilled ? '1 seconds ago' : '1 second ago'
+        );
       });
 
       it('should return 10 second past', function() {
@@ -333,7 +339,9 @@ describe('IntlRelativeFormat', function() {
 
       it('should return 1 hour past', function() {
         var output = rf.format(past(60 * 60 * 1000));
-        expect(output).to.equal(pluralRulesPolyfilled ? '1 hours ago' : '1 hour ago');
+        expect(output).to.equal(
+          pluralRulesPolyfilled ? '1 hours ago' : '1 hour ago'
+        );
       });
 
       it('should return 2 hours past', function() {
@@ -421,7 +429,9 @@ describe('IntlRelativeFormat', function() {
         var output = rf.format(new Date(now - 60 * 1000), {
           now: new Date(now)
         });
-        expect(output).to.equal(pluralRulesPolyfilled ? '1 minutes ago' : '1 minute ago');
+        expect(output).to.equal(
+          pluralRulesPolyfilled ? '1 minutes ago' : '1 minute ago'
+        );
       });
     });
 

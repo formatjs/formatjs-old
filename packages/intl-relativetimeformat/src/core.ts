@@ -261,7 +261,7 @@ function intersection(
   arr1: Array<string | undefined>,
   arr2: Array<string | undefined>
 ): Array<string | undefined> {
-  return arr1.filter(s => arr2.includes(s as string));
+  return arr1.filter(s => ~arr2.indexOf(s as string));
 }
 
 const DEFAULT_LOCALE = new Intl.NumberFormat().resolvedOptions().locale;
@@ -276,7 +276,10 @@ export default class RelativeTimeFormat {
   private readonly _localeMatcher: IntlRelativeTimeFormatOptions['localeMatcher'];
   private readonly _numberingSystem: string;
   constructor(
-    ...[locales, options]: [string | string[] | undefined, IntlRelativeTimeFormatOptions | undefined]
+    ...[locales, options]: [
+      string | string[] | undefined,
+      IntlRelativeTimeFormatOptions | undefined
+    ]
   ) {
     // test262/test/intl402/RelativeTimeFormat/constructor/constructor/newtarget-undefined.js
     // Cannot use `new.target` bc of IE11 & TS transpiles it to something else
@@ -433,7 +436,9 @@ export default class RelativeTimeFormat {
 
   public static supportedLocalesOf = (
     locales: string | string[],
-    ...[opts]: [Pick<IntlRelativeTimeFormatOptions, 'localeMatcher'> | undefined]
+    ...[opts]: [
+      Pick<IntlRelativeTimeFormatOptions, 'localeMatcher'> | undefined
+    ]
   ) => {
     // test262/test/intl402/RelativeTimeFormat/constructor/supportedLocalesOf/options-toobject.js
     let localeMatcher: IntlRelativeTimeFormatOptions['localeMatcher'] =

@@ -66,7 +66,9 @@ describe('intl-format-cache', function() {
       var rf = getRelativeFormat('en');
 
       expect(rf.resolvedOptions().locale).to.equal('en');
-      expect(rf.format(0, { now: 1000 })).to.equal(pluralRulesPolyfilled ? '1 seconds ago' : '1 second ago');
+      expect(rf.format(0, { now: 1000 })).to.equal(
+        pluralRulesPolyfilled ? '1 seconds ago' : '1 second ago'
+      );
 
       expect(getRelativeFormat('en')).to.equal(rf);
       expect(getRelativeFormat('en', { units: 'hour' as any })).not.to.equal(
