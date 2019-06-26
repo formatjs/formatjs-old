@@ -276,8 +276,7 @@ export default class RelativeTimeFormat {
   private readonly _localeMatcher: IntlRelativeTimeFormatOptions['localeMatcher'];
   private readonly _numberingSystem: string;
   constructor(
-    locales?: string | string[],
-    options?: IntlRelativeTimeFormatOptions
+    ...[locales, options]: [string | string[] | undefined, IntlRelativeTimeFormatOptions | undefined]
   ) {
     // test262/test/intl402/RelativeTimeFormat/constructor/constructor/newtarget-undefined.js
     // Cannot use `new.target` bc of IE11 & TS transpiles it to something else
@@ -434,7 +433,7 @@ export default class RelativeTimeFormat {
 
   public static supportedLocalesOf = (
     locales: string | string[],
-    opts?: Pick<IntlRelativeTimeFormatOptions, 'localeMatcher'>
+    ...[opts]: [Pick<IntlRelativeTimeFormatOptions, 'localeMatcher'> | undefined]
   ) => {
     // test262/test/intl402/RelativeTimeFormat/constructor/supportedLocalesOf/options-toobject.js
     let localeMatcher: IntlRelativeTimeFormatOptions['localeMatcher'] =
