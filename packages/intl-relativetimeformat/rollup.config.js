@@ -1,6 +1,5 @@
 import { uglify } from 'rollup-plugin-uglify';
 import resolve from 'rollup-plugin-node-resolve';
-import testRollupConfig from '../../rollup.config'
 
 const resolveConfig = resolve({
   mainFields: ['module', 'main']
