@@ -4,12 +4,14 @@ import { cpus } from 'os';
 // import {sync as globSync } from 'glob'
 
 if (process.version.startsWith('v8')) {
-  console.log('Node 8 does not have Intl.PluralRules and intl-pluralrules is not test262-compliant')
-  process.exit(0)
+  console.log(
+    'Node 8 does not have Intl.PluralRules and intl-pluralrules is not test262-compliant'
+  );
+  process.exit(0);
 }
 if (process.version.startsWith('v12')) {
-  console.log('Node 12 has native Intl.RelativeTimeFormat')
-  process.exit(0)
+  console.log('Node 12 has native Intl.RelativeTimeFormat');
+  process.exit(0);
 }
 
 interface TestResult {
@@ -27,7 +29,10 @@ interface TestResult {
     message?: string;
   };
 }
-const PATTERN = resolve(__dirname, '../../../test262/test/intl402/RelativeTimeFormat/**/*.js')
+const PATTERN = resolve(
+  __dirname,
+  '../../../test262/test/intl402/RelativeTimeFormat/**/*.js'
+);
 // const testsFiles = globSync(PATTERN).filter(fn => fn.includes('newtarget-undefined'))
 const args = [
   '--reporter-keys',
@@ -68,6 +73,4 @@ if (failedTests.length) {
   );
   process.exit(1);
 }
-console.log(
-  `Tests: ${json.length} passed, ${json.length} total`
-);
+console.log(`Tests: ${json.length} passed, ${json.length} total`);

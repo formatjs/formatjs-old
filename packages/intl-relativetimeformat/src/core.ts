@@ -100,7 +100,7 @@ function resolveLocale(locales: Array<string | undefined>) {
     ...(Array.isArray(locales) ? locales : [locales]),
     // default locale
     DEFAULT_LOCALE
-  ].filter<string>((s): s is string => typeof s === 'string')
+  ].filter<string>((s): s is string => typeof s === 'string');
 
   var localeData = RelativeTimeFormat.__localeData__;
   var i, len, localeParts, data;
@@ -238,7 +238,7 @@ function getOption<T extends object, K extends keyof T>(
   fallback?: T[K]
 ): T[K] | undefined {
   // const descriptor = Object.getOwnPropertyDescriptor(opts, prop);
-  let value: any = opts[prop]
+  let value: any = opts[prop];
   if (value !== undefined) {
     if (type !== 'boolean' && type !== 'string') {
       throw new TypeError('invalid type');
@@ -257,43 +257,48 @@ function getOption<T extends object, K extends keyof T>(
   return fallback;
 }
 
-function intersection(arr1: Array<string | undefined>, arr2: Array<string | undefined>): Array<string | undefined> {
-  return arr1.filter(s => arr2.includes(s as string))
+function intersection(
+  arr1: Array<string | undefined>,
+  arr2: Array<string | undefined>
+): Array<string | undefined> {
+  return arr1.filter(s => arr2.includes(s as string));
 }
 
-const DEFAULT_LOCALE = new Intl.NumberFormat().resolvedOptions().locale 
+const DEFAULT_LOCALE = new Intl.NumberFormat().resolvedOptions().locale;
 
 export default class RelativeTimeFormat {
   private readonly _nf: Intl.NumberFormat;
   private readonly _pl: Intl.PluralRules;
   private readonly _fields: LocaleFieldsData;
   private readonly _locale: string;
-  private readonly _style: IntlRelativeTimeFormatOptions['style']
-  private readonly _numeric: IntlRelativeTimeFormatOptions['numeric']
-  private readonly _localeMatcher: IntlRelativeTimeFormatOptions['localeMatcher']
-  private readonly _numberingSystem: string
+  private readonly _style: IntlRelativeTimeFormatOptions['style'];
+  private readonly _numeric: IntlRelativeTimeFormatOptions['numeric'];
+  private readonly _localeMatcher: IntlRelativeTimeFormatOptions['localeMatcher'];
+  private readonly _numberingSystem: string;
   constructor(
     locales?: string | string[],
     options?: IntlRelativeTimeFormatOptions
   ) {
     // test262/test/intl402/RelativeTimeFormat/constructor/constructor/newtarget-undefined.js
     // Cannot use `new.target` bc of IE11 & TS transpiles it to something else
-    const newTarget = this && this instanceof RelativeTimeFormat ? this.constructor : void 0
+    const newTarget =
+      this && this instanceof RelativeTimeFormat ? this.constructor : void 0;
     if (!newTarget) {
-      throw new TypeError(
-        "Intl.RelativeTimeFormat must be called with 'new'"
+      throw new TypeError("Intl.RelativeTimeFormat must be called with 'new'");
+    }
+    const opts =
+      options === undefined ? Object.create(null) : toObject(options);
+    if (locales === undefined) {
+      this._locale = DEFAULT_LOCALE;
+    } else {
+      this._locale = resolveLocale(
+        intersection(
+          Intl.NumberFormat.supportedLocalesOf(locales),
+          Intl.PluralRules.supportedLocalesOf(locales)
+        )
       );
     }
-    const opts = options === undefined ? Object.create(null) : toObject(options);
-    if (locales === undefined) {
-      this._locale = DEFAULT_LOCALE
-    } else {
-      this._locale = resolveLocale(intersection(
-        Intl.NumberFormat.supportedLocalesOf(locales),
-        Intl.PluralRules.supportedLocalesOf(locales)
-      ))
-    }
-    
+
     this._localeMatcher = getOption(
       opts,
       'localeMatcher',
@@ -307,16 +312,16 @@ export default class RelativeTimeFormat {
       'string',
       ['long', 'narrow', 'short'],
       'long'
-    )
+    );
     this._numeric = getOption(
       opts,
       'numeric',
       'string',
       ['always', 'auto'],
       'always'
-    )
+    );
     this._fields = findFields(this._locale);
-    
+
     this._nf = new Intl.NumberFormat(this._locale);
     this._pl = new Intl.PluralRules(this._locale);
     this._numberingSystem = this._nf.resolvedOptions().numberingSystem;
@@ -432,10 +437,11 @@ export default class RelativeTimeFormat {
     opts?: Pick<IntlRelativeTimeFormatOptions, 'localeMatcher'>
   ) => {
     // test262/test/intl402/RelativeTimeFormat/constructor/supportedLocalesOf/options-toobject.js
-    let localeMatcher: IntlRelativeTimeFormatOptions['localeMatcher'] = 'best fit'
+    let localeMatcher: IntlRelativeTimeFormatOptions['localeMatcher'] =
+      'best fit';
     // test262/test/intl402/RelativeTimeFormat/constructor/supportedLocalesOf/options-null.js
     if (opts === null) {
-      throw new TypeError('opts cannot be null')
+      throw new TypeError('opts cannot be null');
     }
     if (opts) {
       localeMatcher = getOption(
@@ -444,13 +450,15 @@ export default class RelativeTimeFormat {
         'string',
         ['best fit', 'lookup'],
         'best fit'
-      )
+      );
     }
     // test262/test/intl402/RelativeTimeFormat/constructor/supportedLocalesOf/result-type.js
-    return [...intersection(
-      Intl.NumberFormat.supportedLocalesOf(locales, {localeMatcher}),
-      Intl.PluralRules.supportedLocalesOf(locales, {localeMatcher})
-    )]
+    return [
+      ...intersection(
+        Intl.NumberFormat.supportedLocalesOf(locales, { localeMatcher }),
+        Intl.PluralRules.supportedLocalesOf(locales, { localeMatcher })
+      )
+    ];
   };
 
   static __localeData__ = {} as Record<string, LocaleData>;
