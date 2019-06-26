@@ -95,48 +95,12 @@ function findFields(locale: string) {
   );
 }
 
-function toLength(v: any): number {
-  const len = Number(v)
-  if (len < +0) {
-    return 0
-  }
-  return Math.min(len, Number.MAX_SAFE_INTEGER)
-}
-
-/**
- * https://tc39.es/ecma402/#sec-canonicalizelocalelist
- * @param locales Locales
- */
-function canonicalizeLocaleList(locales?: string[] | string | object) {
-  if (locales === undefined) {
-    return []
-  }
-  const seen = []
-  let o: any
-  if (typeof locales === 'string') {
-    o = [locales]
-  } else {
-    o = toObject(locales)
-  }
-  const len = toLength(o.length)
-  for (let k = 0; k < len; k++) {
-    const pk = String(k)
-    if (o.hasOwnProperty(pk)) {
-      if (typeof o[k] !== 'string' && typeof o[k] !== 'object') {
-        throw new TypeError('locale has to be string or object with length')
-      }
-      seen.push(String(o[pk]))
-    }
-  }
-  return seen
-}
-
-function resolveLocale(locales: string | string[] = []) {
+function resolveLocale(locales: Array<string | undefined>) {
   let resolvedLocales: string[] = [
     ...(Array.isArray(locales) ? locales : [locales]),
     // default locale
     'en'
-  ]
+  ].filter<string>((s): s is string => typeof s === 'string')
 
   var localeData = RelativeTimeFormat.__localeData__;
   var i, len, localeParts, data;
@@ -293,6 +257,10 @@ function getOption<T extends object, K extends keyof T>(
   return fallback;
 }
 
+function intersection(arr1: Array<string | undefined>, arr2: Array<string | undefined>): Array<string | undefined> {
+  return arr1.filter(s => arr2.includes(s as string))
+}
+
 export default class RelativeTimeFormat {
   private readonly _nf: Intl.NumberFormat;
   private readonly _pl: Intl.PluralRules;
@@ -303,10 +271,11 @@ export default class RelativeTimeFormat {
   private readonly _localeMatcher: IntlRelativeTimeFormatOptions['localeMatcher']
   private readonly _numberingSystem: string
   constructor(
-    locales?: string | string[] | object,
+    locales?: string | string[],
     options?: IntlRelativeTimeFormatOptions
   ) {
     // test262/test/intl402/RelativeTimeFormat/constructor/constructor/newtarget-undefined.js
+    // Cannot use `new.target` bc of IE11 & TS transpiles it to something else
     const newTarget = this && this instanceof RelativeTimeFormat ? this.constructor : void 0
     if (!newTarget) {
       throw new TypeError(
@@ -314,7 +283,15 @@ export default class RelativeTimeFormat {
       );
     }
     const opts = options === undefined ? Object.create(null) : toObject(options);
-    this._locale = resolveLocale(canonicalizeLocaleList(locales));
+    if (locales === undefined) {
+      this._locale = 'en'
+    } else {
+      this._locale = resolveLocale(intersection(
+        Intl.NumberFormat.supportedLocalesOf(locales),
+        Intl.PluralRules.supportedLocalesOf(locales)
+      ))
+    }
+    
     this._localeMatcher = getOption(
       opts,
       'localeMatcher',
@@ -452,8 +429,26 @@ export default class RelativeTimeFormat {
     locales: string | string[],
     opts?: Pick<IntlRelativeTimeFormatOptions, 'localeMatcher'>
   ) => {
+    // test262/test/intl402/RelativeTimeFormat/constructor/supportedLocalesOf/options-toobject.js
+    let localeMatcher: IntlRelativeTimeFormatOptions['localeMatcher'] = 'best fit'
+    // test262/test/intl402/RelativeTimeFormat/constructor/supportedLocalesOf/options-null.js
+    if (opts === null) {
+      throw new TypeError('opts cannot be null')
+    }
+    if (opts) {
+      localeMatcher = getOption(
+        opts,
+        'localeMatcher',
+        'string',
+        ['best fit', 'lookup'],
+        'best fit'
+      )
+    }
     // test262/test/intl402/RelativeTimeFormat/constructor/supportedLocalesOf/result-type.js
-    return [...Intl.PluralRules.supportedLocalesOf(locales, opts)];
+    return [...intersection(
+      Intl.NumberFormat.supportedLocalesOf(locales, {localeMatcher}),
+      Intl.PluralRules.supportedLocalesOf(locales, {localeMatcher})
+    )]
   };
 
   static __localeData__ = {} as Record<string, LocaleData>;
