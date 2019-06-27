@@ -34,5 +34,6 @@
     "test": "mocha --opts ../../mocha.opts tests/index.ts"
   },
   "homepage": "https://github.com/formatjs/formatjs",
-  "license": "BSD-3-Clause"
+  "license": "BSD-3-Clause",
+  "deprecated": true
 }

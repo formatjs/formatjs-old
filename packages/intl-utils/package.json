@@ -27,9 +27,9 @@
   },
   "scripts": {
     "clean": "rimraf dist lib",
-    "build": "tsc && tsc -p tsconfig.cjs.json && rollup -c rollup.config.js",
+    "build": "tsc && tsc -p tsconfig.cjs.json",
     "test": "mocha --opts ../../mocha.opts tests/index.ts"
   },
   "homepage": "https://github.com/formatjs/formatjs",
-  "license": "BSD-3-Clause"
+  "license": "MIT"
 }
