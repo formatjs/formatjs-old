@@ -26,17 +26,17 @@ describe('IntlMessageFormat', function() {
         formatters: createDefaultFormatters()
       }
     );
+    const ts = 12 * 3600 * 1e3;
     var output = mf.format({
       FIRST: 'Anthony',
       LAST: 'Pipkin',
       age: 8,
-      time: 12 * 3600 * 1e3,
-      date: 12 * 3600 * 1e3
+      time: ts,
+      date: ts
     });
 
-    expect(output).to.equal(
-      'My name is Anthony Pipkin, age 8, time 1/1/1970, date 1/1/1970.'
-    );
+    expect(output).to.include('My name is Anthony Pipkin, age 8');
+    expect(output).to.include(new Intl.DateTimeFormat().format(ts));
   });
 
   // INSTANCE METHODS

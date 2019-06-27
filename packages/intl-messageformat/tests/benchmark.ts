@@ -88,6 +88,20 @@ new Suite()
       guest: 'bar'
     })
   )
+  .add('complex preparsed msg w/ new formatters format', () =>
+    new IntlMessageFormat(preparsedMsg, 'en-US', undefined, {
+      formatters: {
+        getNumberFormat: formatters.getNumberFormat,
+        getDateTimeFormat: formatters.getDateTimeFormat,
+        getPluralRules: formatters.getPluralRules
+      }
+    }).format({
+      gender_of_host: 'male',
+      num_guests: 2,
+      host: 'foo',
+      guest: 'bar'
+    })
+  )
   .on('cycle', function(event: Event) {
     console.log(String(event.target));
   })
