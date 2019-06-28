@@ -39,7 +39,7 @@ messageTextElement
     = messageText:messageText {
         return {
             type : 'messageTextElement',
-            value: messageText,
+            value: messageText.replace(/[']{2}/g, "'"),
             location: location()
         };
     }
@@ -52,7 +52,7 @@ argumentElement
     = '{' _ id:argument _ format:(',' _ elementFormat)? _ '}' {
         return {
             type  : 'argumentElement',
-            id    : id,
+            id    : id.replace(/[']{2}/g, "'"),
             format: format && format[2],
             location: location()
         };
