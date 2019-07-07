@@ -25,11 +25,18 @@ export function normalizeHashtagInPlural(els: MessageFormatElement[]) {
       const opt = el.options[id];
       // If we got a match, we have to split this
       // and inject a NumberElement in the middle
-      const matchingLiteralElIndex = opt.value.findIndex(
-        el => isLiteralElement(el) && PLURAL_HASHTAG_REGEX.test(el.value)
-      );
-      if (~matchingLiteralElIndex) {
-        const literalEl = opt.value[matchingLiteralElIndex] as LiteralElement;
+      let matchingLiteralElIndex = -1;
+      let literalEl: LiteralElement | undefined = undefined;
+      for (let i = 0; i < opt.value.length; i++) {
+        const el = opt.value[i] as LiteralElement;
+        if (isLiteralElement(el) && PLURAL_HASHTAG_REGEX.test(el.value)) {
+          matchingLiteralElIndex = i;
+          literalEl = el;
+          break;
+        }
+      }
+
+      if (literalEl) {
         const newValue = literalEl.value.replace(
           PLURAL_HASHTAG_REGEX,
           `$1{${el.value}, number}`
