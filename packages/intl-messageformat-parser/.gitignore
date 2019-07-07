@@ -1,2 +1,2 @@
 lib/
-src/parser.js
+src/parser.ts
