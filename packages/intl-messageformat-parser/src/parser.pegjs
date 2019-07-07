@@ -5,8 +5,8 @@ See the accompanying LICENSE file for terms.
 */
 
 /*
-`TYPE` comes from `types.ts`
-*/
+ * IMPORTANT: `TYPE` comes from `types.ts`
+ */
 
 {
     function insertLocation () {

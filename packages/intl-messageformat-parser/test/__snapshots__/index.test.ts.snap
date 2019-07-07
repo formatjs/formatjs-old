@@ -105,6 +105,91 @@ Array [
 ]
 `;
 
+exports[`parse() nested plural 1`] = `
+Array [
+  Object {
+    "type": 0,
+    "value": "Foo ",
+  },
+  Object {
+    "offset": 0,
+    "options": Array [
+      Object {
+        "id": "=0",
+        "value": Array [
+          Object {
+            "style": null,
+            "type": 2,
+            "value": "var1",
+          },
+          Object {
+            "type": 0,
+            "value": " var1",
+          },
+        ],
+      },
+      Object {
+        "id": "other",
+        "value": Array [
+          Object {
+            "offset": 0,
+            "options": Array [
+              Object {
+                "id": "=0",
+                "value": Array [
+                  Object {
+                    "style": null,
+                    "type": 2,
+                    "value": "var2",
+                  },
+                  Object {
+                    "type": 0,
+                    "value": " var2",
+                  },
+                ],
+              },
+              Object {
+                "id": "other",
+                "value": Array [
+                  Object {
+                    "style": null,
+                    "type": 2,
+                    "value": "var2",
+                  },
+                  Object {
+                    "type": 0,
+                    "value": " var2-other",
+                  },
+                ],
+              },
+            ],
+            "pluralType": "cardinal",
+            "type": 6,
+            "value": "var2",
+          },
+          Object {
+            "type": 0,
+            "value": " ",
+          },
+          Object {
+            "style": null,
+            "type": 2,
+            "value": "var1",
+          },
+          Object {
+            "type": 0,
+            "value": " other",
+          },
+        ],
+      },
+    ],
+    "pluralType": "cardinal",
+    "type": 6,
+    "value": "var1",
+  },
+]
+`;
+
 exports[`parse() parse("{floor, selectordinal, =0{ground} one{#st} two{#nd} few{#rd} other{#th}} floor") 1`] = `
 Array [
   Object {
@@ -123,8 +208,13 @@ Array [
         "id": "one",
         "value": Array [
           Object {
+            "style": null,
+            "type": 2,
+            "value": "floor",
+          },
+          Object {
             "type": 0,
-            "value": "#st",
+            "value": "st",
           },
         ],
       },
@@ -132,8 +222,13 @@ Array [
         "id": "two",
         "value": Array [
           Object {
+            "style": null,
+            "type": 2,
+            "value": "floor",
+          },
+          Object {
             "type": 0,
-            "value": "#nd",
+            "value": "nd",
           },
         ],
       },
@@ -141,8 +236,13 @@ Array [
         "id": "few",
         "value": Array [
           Object {
+            "style": null,
+            "type": 2,
+            "value": "floor",
+          },
+          Object {
             "type": 0,
-            "value": "#rd",
+            "value": "rd",
           },
         ],
       },
@@ -150,8 +250,13 @@ Array [
         "id": "other",
         "value": Array [
           Object {
+            "style": null,
+            "type": 2,
+            "value": "floor",
+          },
+          Object {
             "type": 0,
-            "value": "#th",
+            "value": "th",
           },
         ],
       },
@@ -242,8 +347,13 @@ Array [
         "id": "other",
         "value": Array [
           Object {
+            "style": null,
+            "type": 2,
+            "value": "numPhotos",
+          },
+          Object {
             "type": 0,
-            "value": "# photos",
+            "value": " photos",
           },
         ],
       },
@@ -452,6 +562,91 @@ Array [
 ]
 `;
 
+exports[`parse({ captureLocation: true }) nested plural 1`] = `
+Array [
+  Object {
+    "type": 0,
+    "value": "Foo ",
+  },
+  Object {
+    "offset": 0,
+    "options": Array [
+      Object {
+        "id": "=0",
+        "value": Array [
+          Object {
+            "style": null,
+            "type": 2,
+            "value": "var1",
+          },
+          Object {
+            "type": 0,
+            "value": " var1",
+          },
+        ],
+      },
+      Object {
+        "id": "other",
+        "value": Array [
+          Object {
+            "offset": 0,
+            "options": Array [
+              Object {
+                "id": "=0",
+                "value": Array [
+                  Object {
+                    "style": null,
+                    "type": 2,
+                    "value": "var2",
+                  },
+                  Object {
+                    "type": 0,
+                    "value": " var2",
+                  },
+                ],
+              },
+              Object {
+                "id": "other",
+                "value": Array [
+                  Object {
+                    "style": null,
+                    "type": 2,
+                    "value": "var2",
+                  },
+                  Object {
+                    "type": 0,
+                    "value": " var2-other",
+                  },
+                ],
+              },
+            ],
+            "pluralType": "cardinal",
+            "type": 6,
+            "value": "var2",
+          },
+          Object {
+            "type": 0,
+            "value": " ",
+          },
+          Object {
+            "style": null,
+            "type": 2,
+            "value": "var1",
+          },
+          Object {
+            "type": 0,
+            "value": " other",
+          },
+        ],
+      },
+    ],
+    "pluralType": "cardinal",
+    "type": 6,
+    "value": "var1",
+  },
+]
+`;
+
 exports[`parse({ captureLocation: true }) parse("{floor, selectordinal, =0{ground} one{#st} two{#nd} few{#rd} other{#th}} floor") 1`] = `
 Array [
   Object {
@@ -470,8 +665,13 @@ Array [
         "id": "one",
         "value": Array [
           Object {
+            "style": null,
+            "type": 2,
+            "value": "floor",
+          },
+          Object {
             "type": 0,
-            "value": "#st",
+            "value": "st",
           },
         ],
       },
@@ -479,8 +679,13 @@ Array [
         "id": "two",
         "value": Array [
           Object {
+            "style": null,
+            "type": 2,
+            "value": "floor",
+          },
+          Object {
             "type": 0,
-            "value": "#nd",
+            "value": "nd",
           },
         ],
       },
@@ -488,8 +693,13 @@ Array [
         "id": "few",
         "value": Array [
           Object {
+            "style": null,
+            "type": 2,
+            "value": "floor",
+          },
+          Object {
             "type": 0,
-            "value": "#rd",
+            "value": "rd",
           },
         ],
       },
@@ -497,8 +707,13 @@ Array [
         "id": "other",
         "value": Array [
           Object {
+            "style": null,
+            "type": 2,
+            "value": "floor",
+          },
+          Object {
             "type": 0,
-            "value": "#th",
+            "value": "th",
           },
         ],
       },
@@ -589,8 +804,13 @@ Array [
         "id": "other",
         "value": Array [
           Object {
+            "style": null,
+            "type": 2,
+            "value": "numPhotos",
+          },
+          Object {
             "type": 0,
-            "value": "# photos",
+            "value": " photos",
           },
         ],
       },

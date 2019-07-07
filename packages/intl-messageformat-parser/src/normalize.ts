@@ -1,0 +1,32 @@
+import { MessageFormatElement, isPluralElement, isLiteralElement, LiteralElement } from "./types";
+import { parse } from "./parser";
+
+const PLURAL_HASHTAG_REGEX = /(^|[^\\])#/g
+
+/**
+ * Whether to convert `#` in plural rule options
+ * to `{var, number}`
+ * @param el AST Element
+ * @param pluralStack current plural stack
+ */
+export function normalizeHashtagInPlural(els: MessageFormatElement[]) {
+    els.forEach(el => {
+        // If we're encountering a plural el
+        if (!isPluralElement(el)) {
+            return
+        }
+        // Go down the options and search for # in any literal element
+        el.options.forEach((opt) => {
+            // If we got a match, we have to split this
+            // and inject a NumberElement in the middle
+            const matchingLiteralElIndex = opt.value.findIndex(el => isLiteralElement(el) && PLURAL_HASHTAG_REGEX.test(el.value))
+            if (~matchingLiteralElIndex) {
+                const literalEl = (opt.value[matchingLiteralElIndex] as LiteralElement)
+                const newValue = literalEl.value.replace(PLURAL_HASHTAG_REGEX, `$1{${el.value}, number}`)
+                const newEls = parse(newValue)
+                opt.value.splice(matchingLiteralElIndex, 1, ...newEls)
+            }
+            normalizeHashtagInPlural(opt.value)
+        })
+    })
+}

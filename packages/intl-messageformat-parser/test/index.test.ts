@@ -1,6 +1,6 @@
-import { parse, IParseOptions } from '../src';
+import { parse, ParseOptions } from '../src';
 
-function allTests (opts?: IParseOptions) {
+function allTests (opts?: ParseOptions) {
   it('parse("Hello, World!")', function() {
     expect(parse('Hello, World!', opts)).toMatchSnapshot();
   });
@@ -16,6 +16,12 @@ function allTests (opts?: IParseOptions) {
   it('parse("{numPhotos, plural, =0{no photos} =1{one photo} other{# photos}}")', function() {
     expect(
       parse('{numPhotos, plural, =0{no photos} =1{one photo} other{# photos}}', opts)
+    ).toMatchSnapshot();
+  });
+
+  it('nested plural', function() {
+    expect(
+      parse('Foo {var1, plural, =0{# var1} other{{var2, plural, =0{# var2} other{# var2-other}} # other}}', opts)
     ).toMatchSnapshot();
   });
 

@@ -5,12 +5,17 @@ See the accompanying LICENSE file for terms.
 */
 
 import {
-  MessageFormatPattern,
-  MessageTextElement,
   ArgumentElement,
-  PluralFormat as ParserPluralFormat,
-  SelectFormat as ParserSelectFormat
+  parse,
+  TYPE,
+  LiteralElement,
+  PluralElement,
+  SelectElement,
+  DateElement,
+  TimeElement
 } from 'intl-messageformat-parser';
+
+type AST = ReturnType<typeof parse>
 
 export interface Formats {
   number: Record<string, Intl.NumberFormatOptions>;
@@ -37,6 +42,23 @@ export type Pattern =
   | SelectFormat
   | StringFormat;
 
+const PLURAL_HASHTAG_REGEX = /(^|[^\\])#/g
+
+function normalizeHashtagInPluralText (ast: AST, pluralStack: PluralElement[] = []) {
+  ast.forEach((el, i) => {
+    if (pluralStack.length && el.type === TYPE.literal && PLURAL_HASHTAG_REGEX.test(el.value)) {
+      const currentPlural = pluralStack[pluralStack.length - 1];
+      ast[i]
+      el.value = parse(el.value.replace(PLURAL_HASHTAG_REGEX, `{${currentPlural.value}, number}`))
+    } 
+    if (el.type === TYPE.plural) {
+      pluralStack.push(el)
+    } else {
+      pluralStack.pop()
+    }
+  })
+}
+
 export default class Compiler {
   private locales: string | string[] = [];
   private formats: Formats = {
@@ -45,8 +67,8 @@ export default class Compiler {
     time: {}
   };
   private pluralNumberFormat: Intl.NumberFormat | null = null;
-  private currentPlural: ArgumentElement | null | undefined = null;
-  private pluralStack: Array<ArgumentElement | null | undefined> = [];
+  private currentPlural: PluralElement | null | undefined = null;
+  private pluralStack: Array<PluralElement | null | undefined> = [];
   private formatters: Formatters;
 
   constructor(
@@ -59,7 +81,7 @@ export default class Compiler {
     this.formatters = formatters;
   }
 
-  compile(ast: MessageFormatPattern): Pattern[] {
+  compile(ast: ReturnType<typeof parse>): Pattern[] {
     this.pluralStack = [];
     this.currentPlural = null;
     this.pluralNumberFormat = null;
@@ -67,29 +89,19 @@ export default class Compiler {
     return this.compileMessage(ast);
   }
 
-  compileMessage(ast: MessageFormatPattern) {
-    if (!(ast && ast.type === 'messageFormatPattern')) {
-      throw new Error('Message AST is not of type: "messageFormatPattern"');
+  compileMessage(ast: AST) {
+    if (!Array.isArray(ast)) {
+      throw new Error('Invalid AST');
     }
-    const { elements } = ast;
-    const pattern = elements
-      .filter<MessageTextElement | ArgumentElement>(
-        (el): el is MessageTextElement | ArgumentElement =>
-          el.type === 'messageTextElement' || el.type === 'argumentElement'
-      )
+    return ast
       .map(el =>
-        el.type === 'messageTextElement'
+        el.type === TYPE.literal
           ? this.compileMessageText(el)
           : this.compileArgument(el)
       );
-    if (pattern.length !== elements.length) {
-      throw new Error('Message element does not have a valid type');
-    }
-
-    return pattern;
   }
 
-  compileMessageText(element: MessageTextElement) {
+  compileMessageText(element: LiteralElement) {
     // When this `element` is part of plural sub-pattern and its value contains
     // an unescaped '#', use a `PluralOffsetString` helper to properly output
     // the number with the correct offset in the string.
@@ -101,8 +113,8 @@ export default class Compiler {
       }
 
       return new PluralOffsetString(
-        this.currentPlural.id,
-        (this.currentPlural.format as ParserPluralFormat).offset,
+        this.currentPlural.value,
+        this.currentPlural.offset,
         this.pluralNumberFormat,
         element.value
       );
@@ -112,8 +124,8 @@ export default class Compiler {
     return element.value.replace(/\\#/g, '#');
   }
 
-  compileArgument(element: ArgumentElement) {
-    const { format, id } = element;
+  compileArgument(element: ArgumentElement | DateElement | TimeElement | PluralElement | SelectElement) {
+    const { value } = element;
     const { formatters } = this;
 
     if (!format) {

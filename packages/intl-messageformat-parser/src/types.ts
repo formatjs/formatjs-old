@@ -42,14 +42,14 @@ export interface Location {
 export interface BaseElement<T extends TYPE> {
   type: T;
   value: string;
-  location: Location;
+  location?: Location;
 }
 
 export type LiteralElement = BaseElement<TYPE.literal>;
 export type ArgumentElement = BaseElement<TYPE.argument>;
 
 export interface SimpleFormatElement<T extends TYPE> extends BaseElement<T> {
-  style: string;
+  style?: string;
 }
 
 export type NumberElement = SimpleFormatElement<TYPE.number>;
@@ -58,11 +58,23 @@ export type TimeElement = SimpleFormatElement<TYPE.time>;
 
 export interface SelectOption {
   id: string;
-  value: MessageFormatElement;
+  value: MessageFormatElement[];
   location?: Location;
 }
 
-export type PluralOption = SelectOption;
+export type ValidPluralRule = 'zero'
+|'one'
+| 'two'
+| 'few'
+| 'many'
+| 'other'
+| string
+
+export interface PluralOption {
+  id: ValidPluralRule
+  value: MessageFormatElement[];
+  location?: Location;
+}
 
 export interface SelectElement extends BaseElement<TYPE.select> {
   options: SelectOption[];
@@ -110,4 +122,33 @@ export function isSelectElement(el: MessageFormatElement): el is SelectElement {
 }
 export function isPluralElement(el: MessageFormatElement): el is PluralElement {
   return el.type === TYPE.plural;
+}
+
+export function createLiteralElement(value: string): LiteralElement {
+  return {
+    type: TYPE.literal,
+    value
+  }
+}
+
+export function createNumberElement(value: string, style?: string): NumberElement {
+  return {
+    type: TYPE.number,
+    value,
+    style
+  }
+}
+
+export interface Options {
+  /**
+   * Whether to convert `#` in plural rule options
+   * to `{var, number}`
+   * Default is true
+   */
+  normalizeHashtagInPlural?: boolean
+  /**
+   * Capture location info in AST
+   * Default is false
+   */
+  captureLocation?: boolean
 }
