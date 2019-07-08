@@ -75,7 +75,13 @@ pluralElement
             pluralType: pluralType === 'plural' ? 'cardinal' : 'ordinal',
             value,
             offset : offset ? offset[2] : 0,
-            options,
+            options: options.reduce((all, {id, value, location}) => {
+                all[id] = {
+                    value,
+                    location
+                }
+                return all
+            }, {}),
             ...insertLocation()
         };
     }
@@ -85,7 +91,13 @@ selectElement
         return {
             type   : TYPE.select,
             value,
-            options: options,
+            options: options.reduce((all, {id, value, location}) => {
+                all[id] = {
+                    value,
+                    location
+                }
+                return all
+            }, {}),
             ...insertLocation()
         };
     }

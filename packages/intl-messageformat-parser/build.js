@@ -20,8 +20,7 @@ import {
     TimeElement, 
     SelectElement, 
     PluralElement,
-    SelectOption,
-    PluralOption,
+    PluralOrSelectOption,
     TYPE
 } from './types'`
     },
@@ -43,8 +42,8 @@ import {
         argumentElement: 'ArgumentElement',
         selectElement: 'SelectElement',
         pluralElement: 'PluralElement',
-        selectOption: 'SelectOption',
-        pluralOption: 'PluralOption',
+        selectOption: 'PluralOrSelectOption',
+        pluralOption: 'PluralOrSelectOption',
         simpleFormatElement: `
 | NumberElement 
 | DateElement 

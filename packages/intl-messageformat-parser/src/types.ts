@@ -62,26 +62,26 @@ export interface SelectOption {
   location?: Location;
 }
 
-export type ValidPluralRule = 'zero'
-|'one'
-| 'two'
-| 'few'
-| 'many'
-| 'other'
-| string
+export type ValidPluralRule =
+  | 'zero'
+  | 'one'
+  | 'two'
+  | 'few'
+  | 'many'
+  | 'other'
+  | string;
 
-export interface PluralOption {
-  id: ValidPluralRule
+export interface PluralOrSelectOption {
   value: MessageFormatElement[];
   location?: Location;
 }
 
 export interface SelectElement extends BaseElement<TYPE.select> {
-  options: SelectOption[];
+  options: Record<string, PluralOrSelectOption>;
 }
 
 export interface PluralElement extends BaseElement<TYPE.plural> {
-  options: PluralOption[];
+  options: Record<ValidPluralRule, PluralOrSelectOption>;
   offset: number;
   pluralType: Intl.PluralRulesOptions['type'];
 }
@@ -128,15 +128,18 @@ export function createLiteralElement(value: string): LiteralElement {
   return {
     type: TYPE.literal,
     value
-  }
+  };
 }
 
-export function createNumberElement(value: string, style?: string): NumberElement {
+export function createNumberElement(
+  value: string,
+  style?: string
+): NumberElement {
   return {
     type: TYPE.number,
     value,
     style
-  }
+  };
 }
 
 export interface Options {
@@ -145,10 +148,10 @@ export interface Options {
    * to `{var, number}`
    * Default is true
    */
-  normalizeHashtagInPlural?: boolean
+  normalizeHashtagInPlural?: boolean;
   /**
    * Capture location info in AST
    * Default is false
    */
-  captureLocation?: boolean
+  captureLocation?: boolean;
 }

@@ -6,9 +6,13 @@
 'use strict';
 import 'intl-pluralrules';
 import IntlMessageFormat from '../src';
-import { IntlMessageFormat as IntlMessageFormatCore, createDefaultFormatters } from '../src/core';
-import {parse} from 'intl-messageformat-parser';
+import {
+  IntlMessageFormat as IntlMessageFormatCore,
+  createDefaultFormatters
+} from '../src/core';
+import { parse } from 'intl-messageformat-parser';
 import { expect as chaiExpect } from 'chai';
+import memoizeFormatConstructor from 'intl-format-cache';
 
 declare var expect: typeof chaiExpect;
 
@@ -598,5 +602,19 @@ describe('IntlMessageFormat', function() {
         expect(m).to.equal('One company published new books.');
       });
     });
+  });
+});
+
+describe('intl-format-cache', function() {
+  var getMessageFormat = memoizeFormatConstructor(IntlMessageFormat);
+
+  it('memoizes IntlMessageFormat', function() {
+    var mf = getMessageFormat('foo', 'en');
+
+    expect(mf.resolvedOptions().locale).to.equal('en');
+    expect(mf.format()).to.equal('foo');
+
+    expect(getMessageFormat('foo', 'en')).to.equal(mf);
+    expect(getMessageFormat('bar', 'en')).not.to.equal(mf);
   });
 });

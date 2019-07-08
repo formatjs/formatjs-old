@@ -1,6 +1,6 @@
 import { parse, ParseOptions } from '../src';
 
-function allTests (opts?: ParseOptions) {
+function allTests(opts?: ParseOptions) {
   it('parse("Hello, World!")', function() {
     expect(parse('Hello, World!', opts)).toMatchSnapshot();
   });
@@ -9,19 +9,33 @@ function allTests (opts?: ParseOptions) {
     expect(parse('Hello, {name}!', opts)).toMatchSnapshot();
   });
 
+  it('simple formats', function() {
+    expect(
+      parse(
+        'My name is {FIRST} {LAST}, age {age, number}, time {time, time}, date {date, date}.'
+      )
+    ).toMatchSnapshot();
+  });
+
   it('parse("{num, number, percent}")', function() {
-    expect(parse('{num, number, percent}',opts)).toMatchSnapshot();
+    expect(parse('{num, number, percent}', opts)).toMatchSnapshot();
   });
 
   it('parse("{numPhotos, plural, =0{no photos} =1{one photo} other{# photos}}")', function() {
     expect(
-      parse('{numPhotos, plural, =0{no photos} =1{one photo} other{# photos}}', opts)
+      parse(
+        '{numPhotos, plural, =0{no photos} =1{one photo} other{# photos}}',
+        opts
+      )
     ).toMatchSnapshot();
   });
 
   it('nested plural', function() {
     expect(
-      parse('Foo {var1, plural, =0{# var1} other{{var2, plural, =0{# var2} other{# var2-other}} # other}}', opts)
+      parse(
+        'Foo {var1, plural, =0{# var1} other{{var2, plural, =0{# var2} other{# var2-other}} # other}}',
+        opts
+      )
     ).toMatchSnapshot();
   });
 
@@ -50,7 +64,10 @@ function allTests (opts?: ParseOptions) {
     });
     it('should capture whitespace in nested pattern', function() {
       expect(
-        parse('{c, plural, =1 { {text} project} other { {text} projects}}', opts)
+        parse(
+          '{c, plural, =1 { {text} project} other { {text} projects}}',
+          opts
+        )
       ).toMatchSnapshot();
     });
   });
@@ -84,9 +101,9 @@ function allTests (opts?: ParseOptions) {
 }
 
 describe('parse()', function() {
-  allTests()
+  allTests();
 });
 
 describe('parse({ captureLocation: true })', function() {
-  allTests()
+  allTests();
 });

@@ -4,13 +4,29 @@ Copyrights licensed under the New BSD License.
 See the accompanying LICENSE file for terms.
 */
 
-import { parse, isArgumentElement, MessageFormatElement, isLiteralElement, isDateElement, isTimeElement, isNumberElement, isSelectElement, isPluralElement } from 'intl-messageformat-parser';
-
+import {
+  parse,
+  isArgumentElement,
+  MessageFormatElement,
+  isLiteralElement,
+  isDateElement,
+  isTimeElement,
+  isNumberElement,
+  isSelectElement,
+  isPluralElement
+} from 'intl-messageformat-parser';
+import memoizeIntlConstructor from 'intl-format-cache';
 
 export interface Formats {
   number: Record<string, Intl.NumberFormatOptions>;
   date: Record<string, Intl.DateTimeFormatOptions>;
   time: Record<string, Intl.DateTimeFormatOptions>;
+}
+
+export interface FormatterCache {
+  number: Record<string, Intl.NumberFormat>;
+  dateTime: Record<string, Intl.DateTimeFormat>;
+  pluralRules: Record<string, Intl.PluralRules>;
 }
 
 export interface Formatters {
@@ -42,6 +58,46 @@ function resolveLocale(locales: string | string[]): string {
   }
 }
 
+function prewarmFormatters(
+  els: MessageFormatElement[],
+  locales: string | string[],
+  formatters: Formatters,
+  formats: Formats
+) {
+  els
+    .filter(el => !isArgumentElement(el) && !isLiteralElement(el))
+    .forEach(el => {
+      // Recursively format plural and select parts' option — which can be a
+      // nested pattern structure. The choosing of the option to use is
+      // abstracted-by and delegated-to the part helper object.
+      if (isDateElement(el)) {
+        const style = el.style ? formats.date[el.style] : undefined;
+        return formatters.getDateTimeFormat(locales, style);
+      }
+      if (isTimeElement(el)) {
+        const style = el.style ? formats.time[el.style] : undefined;
+        return formatters.getDateTimeFormat(locales, style);
+      }
+      if (isNumberElement(el)) {
+        const style = el.style ? formats.number[el.style] : undefined;
+        return formatters.getNumberFormat(locales, style);
+      }
+      if (isSelectElement(el)) {
+        return Object.keys(el.options).forEach(id =>
+          prewarmFormatters(el.options[id].value, locales, formatters, formats)
+        );
+      }
+      if (isPluralElement(el)) {
+        formatters.getPluralRules(locales, { type: el.pluralType });
+        return Object.keys(el.options).forEach(id =>
+          prewarmFormatters(el.options[id].value, locales, formatters, formats)
+        );
+      }
+    });
+}
+
+const ESCAPE_HASH_REGEX = /\\#/g;
+
 function formatPatterns(
   els: MessageFormatElement[],
   locales: string | string[],
@@ -51,23 +107,30 @@ function formatPatterns(
   // For debugging
   originalMessage?: string
 ): string {
+  // Hot path for straight simple msg translations
+  if (els.length === 1 && isLiteralElement(els[0])) {
+    return els[0].value;
+  }
   let result = '';
   for (const el of els) {
-    // Exist early for string parts.
+    // Exit early for string parts.
     if (isLiteralElement(el)) {
-      result += el.value;
+      result += el.value.replace(ESCAPE_HASH_REGEX, '#');
       continue;
     }
     const { value: varName } = el;
 
     // Enforce that all required values are provided by the caller.
     if (!(values && varName in values)) {
-      throw new FormatError(`The intl string context variable '${varName}' was not provided to the string '${originalMessage}'`);
+      throw new FormatError(
+        `The intl string context variable '${varName}' was not provided to the string '${originalMessage}'`
+      );
     }
 
     const value = values[varName];
     if (isArgumentElement(el)) {
-      result += typeof value === 'string' || typeof value === 'number' ? value : ''
+      result +=
+        typeof value === 'string' || typeof value === 'number' ? value : '';
       continue;
     }
 
@@ -75,45 +138,57 @@ function formatPatterns(
     // nested pattern structure. The choosing of the option to use is
     // abstracted-by and delegated-to the part helper object.
     if (isDateElement(el)) {
-      const style = el.style ? formats.date[el.style] : undefined
-      result += formatters.getDateTimeFormat(locales, style).format(value as number)
+      const style = el.style ? formats.date[el.style] : undefined;
+      result += formatters
+        .getDateTimeFormat(locales, style)
+        .format(value as number);
       continue;
     }
-    
     if (isTimeElement(el)) {
-      const style = el.style ? formats.time[el.style] : undefined
-      result += formatters.getDateTimeFormat(locales, style).format(value as number)
+      const style = el.style ? formats.time[el.style] : undefined;
+      result += formatters
+        .getDateTimeFormat(locales, style)
+        .format(value as number);
       continue;
     }
-    
     if (isNumberElement(el)) {
-      const style = el.style ? formats.number[el.style] : undefined
-      result += formatters.getNumberFormat(locales, style).format(value as number)
-      continue;
-    } 
-    
-    if (isSelectElement(el)) {
-      const opt = el.options.find(opt => opt.id === value) || el.options.find(opt => opt.id === 'other')
-      if (!opt) {
-        throw new RangeError(`Invalid values for "${el.value}": "${value}". Options are "${el.options.map(opt => opt.id).join('", "')}"`)
-      }
-      result += formatPatterns(opt.value, locales, formatters, formats, values)
-      continue;
-    } 
-
-    if (isPluralElement(el)) {
-      const rule = formatters.getPluralRules(locales, { type: el.pluralType }).select((value as number) - (el.offset || 0))
-      const opt = el.options.find(opt => opt.id === `=${value}` || opt.id === rule) || el.options.find(opt => opt.id === 'other')
-      if (!opt) {
-        throw new RangeError(`Invalid values for "${el.value}": "${value}". Options are "${el.options.map(opt => opt.id).join('", "')}"`)
-      }
-      result += formatPatterns(opt.value, locales, formatters, formats, values)
+      const style = el.style ? formats.number[el.style] : undefined;
+      result += formatters
+        .getNumberFormat(locales, style)
+        .format(value as number);
       continue;
     }
-
-    throw new Error(`Unsupported Message Format AST Element ${JSON.stringify(el)}`)
+    if (isSelectElement(el)) {
+      const opt = el.options[value as string] || el.options.other;
+      if (!opt) {
+        throw new RangeError(
+          `Invalid values for "${
+            el.value
+          }": "${value}". Options are "${Object.keys(el.options).join('", "')}"`
+        );
+      }
+      result += formatPatterns(opt.value, locales, formatters, formats, values);
+      continue;
+    }
+    if (isPluralElement(el)) {
+      let opt = el.options[`=${value}`];
+      if (!opt) {
+        const rule = formatters
+          .getPluralRules(locales, { type: el.pluralType })
+          .select((value as number) - (el.offset || 0));
+        opt = el.options[rule] || el.options.other;
+      }
+      if (!opt) {
+        throw new RangeError(
+          `Invalid values for "${
+            el.value
+          }": "${value}". Options are "${Object.keys(el.options).join('", "')}"`
+        );
+      }
+      result += formatPatterns(opt.value, locales, formatters, formats, values);
+      continue;
+    }
   }
-
   return result;
 }
 
@@ -163,26 +238,34 @@ export interface Options {
   formatters?: Formatters;
 }
 
-export function createDefaultFormatters(): Formatters {
+export function createDefaultFormatters(
+  cache: FormatterCache = {
+    number: {},
+    dateTime: {},
+    pluralRules: {}
+  }
+): Formatters {
   return {
-    getNumberFormat(...args) {
-      return new Intl.NumberFormat(...args);
-    },
-    getDateTimeFormat(...args) {
-      return new Intl.DateTimeFormat(...args);
-    },
-    getPluralRules(...args) {
-      return new Intl.PluralRules(...args);
-    }
+    getNumberFormat: memoizeIntlConstructor(Intl.NumberFormat, cache.number),
+    getDateTimeFormat: memoizeIntlConstructor(
+      Intl.DateTimeFormat,
+      cache.dateTime
+    ),
+    getPluralRules: memoizeIntlConstructor(Intl.PluralRules, cache.pluralRules)
   };
 }
 
 export class IntlMessageFormat {
   private readonly ast: MessageFormatElement[];
   private readonly locale: string;
-  private readonly formatters: Formatters
-  private readonly formats: Formats
-  private readonly message: string | undefined
+  private readonly formatters: Formatters;
+  private readonly formats: Formats;
+  private readonly message: string | undefined;
+  private readonly formatterCache: FormatterCache = {
+    number: {},
+    dateTime: {},
+    pluralRules: {}
+  };
   constructor(
     message: string | MessageFormatElement[],
     locales: string | string[] = IntlMessageFormat.defaultLocale,
@@ -190,7 +273,7 @@ export class IntlMessageFormat {
     opts?: Options
   ) {
     if (typeof message === 'string') {
-      this.message = message
+      this.message = message;
       if (!IntlMessageFormat.__parse) {
         throw new TypeError(
           'IntlMessageFormat.__parse must be set to process `message` of type `string`'
@@ -213,13 +296,22 @@ export class IntlMessageFormat {
     // Defined first because it's used to build the format pattern.
     this.locale = resolveLocale(locales || []);
 
-    this.formatters = (opts && opts.formatters) || createDefaultFormatters();
+    this.formatters =
+      (opts && opts.formatters) || createDefaultFormatters(this.formatterCache);
+    prewarmFormatters(this.ast, this.locale, this.formatters, this.formats);
   }
 
   format = (
     values?: Record<string, string | number | boolean | null | undefined>
   ) => {
-    return formatPatterns(this.ast, this.locale, this.formatters, this.formats, values, this.message);
+    return formatPatterns(
+      this.ast,
+      this.locale,
+      this.formatters,
+      this.formats,
+      values,
+      this.message
+    );
   };
   resolvedOptions() {
     return { locale: this.locale };

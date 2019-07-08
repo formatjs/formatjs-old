@@ -54,66 +54,67 @@ This parser will produce this AST:
 
 ```json
 [
-   {
-      "type":0,
-      "value":"On "
-   },
-   {
-      "type":3,
-      "style":"short",
-      "value":"takenDate"
-   },
-   {
-      "type":0,
-      "value":" "
-   },
-   {
-      "type":1,
-      "value":"name"
-   },
-   {
-      "type":0,
-      "value":" took "
-   },
-   {
-      "type":6,
-      "pluralType":"cardinal",
-      "value":"numPhotos",
-      "offset":0,
-      "options":[
-         {
-            "id":"=0",
-            "value":[
-               {
-                  "type":0,
-                  "value":"no photos."
-               }
-            ]
-         },
-         {
-            "id":"=1",
-            "value":[
-               {
-                  "type":0,
-                  "value":"one photo."
-               }
-            ]
-         },
-         {
-            "id":"other",
-            "value":[
-               {
-                  "type":0,
-                  "value":"# photos."
-               }
-            ]
-         }
-      ]
-   }
+  {
+    "type": 0,
+    "value": "On "
+  },
+  {
+    "type": 3,
+    "style": "short",
+    "value": "takenDate"
+  },
+  {
+    "type": 0,
+    "value": " "
+  },
+  {
+    "type": 1,
+    "value": "name"
+  },
+  {
+    "type": 0,
+    "value": " took "
+  },
+  {
+    "type": 6,
+    "pluralType": "cardinal",
+    "value": "numPhotos",
+    "offset": 0,
+    "options": [
+      {
+        "id": "=0",
+        "value": [
+          {
+            "type": 0,
+            "value": "no photos."
+          }
+        ]
+      },
+      {
+        "id": "=1",
+        "value": [
+          {
+            "type": 0,
+            "value": "one photo."
+          }
+        ]
+      },
+      {
+        "id": "other",
+        "value": [
+          {
+            "type": 0,
+            "value": "# photos."
+          }
+        ]
+      }
+    ]
+  }
 ]
 ```
 
 ## Benchmarks
+
 ```
 complex_msg AST length 2053
 normal_msg AST length 410

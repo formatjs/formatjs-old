@@ -113,9 +113,9 @@ Array [
   },
   Object {
     "offset": 0,
-    "options": Array [
-      Object {
-        "id": "=0",
+    "options": Object {
+      "=0": Object {
+        "location": undefined,
         "value": Array [
           Object {
             "style": null,
@@ -128,14 +128,14 @@ Array [
           },
         ],
       },
-      Object {
-        "id": "other",
+      "other": Object {
+        "location": undefined,
         "value": Array [
           Object {
             "offset": 0,
-            "options": Array [
-              Object {
-                "id": "=0",
+            "options": Object {
+              "=0": Object {
+                "location": undefined,
                 "value": Array [
                   Object {
                     "style": null,
@@ -148,8 +148,8 @@ Array [
                   },
                 ],
               },
-              Object {
-                "id": "other",
+              "other": Object {
+                "location": undefined,
                 "value": Array [
                   Object {
                     "style": null,
@@ -162,7 +162,7 @@ Array [
                   },
                 ],
               },
-            ],
+            },
             "pluralType": "cardinal",
             "type": 6,
             "value": "var2",
@@ -182,7 +182,7 @@ Array [
           },
         ],
       },
-    ],
+    },
     "pluralType": "cardinal",
     "type": 6,
     "value": "var1",
@@ -194,9 +194,9 @@ exports[`parse() parse("{floor, selectordinal, =0{ground} one{#st} two{#nd} few{
 Array [
   Object {
     "offset": 0,
-    "options": Array [
-      Object {
-        "id": "=0",
+    "options": Object {
+      "=0": Object {
+        "location": undefined,
         "value": Array [
           Object {
             "type": 0,
@@ -204,36 +204,8 @@ Array [
           },
         ],
       },
-      Object {
-        "id": "one",
-        "value": Array [
-          Object {
-            "style": null,
-            "type": 2,
-            "value": "floor",
-          },
-          Object {
-            "type": 0,
-            "value": "st",
-          },
-        ],
-      },
-      Object {
-        "id": "two",
-        "value": Array [
-          Object {
-            "style": null,
-            "type": 2,
-            "value": "floor",
-          },
-          Object {
-            "type": 0,
-            "value": "nd",
-          },
-        ],
-      },
-      Object {
-        "id": "few",
+      "few": Object {
+        "location": undefined,
         "value": Array [
           Object {
             "style": null,
@@ -246,8 +218,22 @@ Array [
           },
         ],
       },
-      Object {
-        "id": "other",
+      "one": Object {
+        "location": undefined,
+        "value": Array [
+          Object {
+            "style": null,
+            "type": 2,
+            "value": "floor",
+          },
+          Object {
+            "type": 0,
+            "value": "st",
+          },
+        ],
+      },
+      "other": Object {
+        "location": undefined,
         "value": Array [
           Object {
             "style": null,
@@ -260,7 +246,21 @@ Array [
           },
         ],
       },
-    ],
+      "two": Object {
+        "location": undefined,
+        "value": Array [
+          Object {
+            "style": null,
+            "type": 2,
+            "value": "floor",
+          },
+          Object {
+            "type": 0,
+            "value": "nd",
+          },
+        ],
+      },
+    },
     "pluralType": "ordinal",
     "type": 6,
     "value": "floor",
@@ -275,9 +275,9 @@ Array [
 exports[`parse() parse("{gender, select, female {woman} male {man} other {person}}") 1`] = `
 Array [
   Object {
-    "options": Array [
-      Object {
-        "id": "female",
+    "options": Object {
+      "female": Object {
+        "location": undefined,
         "value": Array [
           Object {
             "type": 0,
@@ -285,8 +285,8 @@ Array [
           },
         ],
       },
-      Object {
-        "id": "male",
+      "male": Object {
+        "location": undefined,
         "value": Array [
           Object {
             "type": 0,
@@ -294,8 +294,8 @@ Array [
           },
         ],
       },
-      Object {
-        "id": "other",
+      "other": Object {
+        "location": undefined,
         "value": Array [
           Object {
             "type": 0,
@@ -303,7 +303,7 @@ Array [
           },
         ],
       },
-    ],
+    },
     "type": 5,
     "value": "gender",
   },
@@ -324,9 +324,9 @@ exports[`parse() parse("{numPhotos, plural, =0{no photos} =1{one photo} other{# 
 Array [
   Object {
     "offset": 0,
-    "options": Array [
-      Object {
-        "id": "=0",
+    "options": Object {
+      "=0": Object {
+        "location": undefined,
         "value": Array [
           Object {
             "type": 0,
@@ -334,8 +334,8 @@ Array [
           },
         ],
       },
-      Object {
-        "id": "=1",
+      "=1": Object {
+        "location": undefined,
         "value": Array [
           Object {
             "type": 0,
@@ -343,8 +343,8 @@ Array [
           },
         ],
       },
-      Object {
-        "id": "other",
+      "other": Object {
+        "location": undefined,
         "value": Array [
           Object {
             "style": null,
@@ -357,7 +357,7 @@ Array [
           },
         ],
       },
-    ],
+    },
     "pluralType": "cardinal",
     "type": 6,
     "value": "numPhotos",
@@ -391,6 +391,58 @@ Array [
 ]
 `;
 
+exports[`parse() simple formats 1`] = `
+Array [
+  Object {
+    "type": 0,
+    "value": "My name is ",
+  },
+  Object {
+    "type": 1,
+    "value": "FIRST",
+  },
+  Object {
+    "type": 0,
+    "value": " ",
+  },
+  Object {
+    "type": 1,
+    "value": "LAST",
+  },
+  Object {
+    "type": 0,
+    "value": ", age ",
+  },
+  Object {
+    "style": null,
+    "type": 2,
+    "value": "age",
+  },
+  Object {
+    "type": 0,
+    "value": ", time ",
+  },
+  Object {
+    "style": null,
+    "type": 4,
+    "value": "time",
+  },
+  Object {
+    "type": 0,
+    "value": ", date ",
+  },
+  Object {
+    "style": null,
+    "type": 3,
+    "value": "date",
+  },
+  Object {
+    "type": 0,
+    "value": ".",
+  },
+]
+`;
+
 exports[`parse() whitespace should allow whitespace in \`argumentElement\`s 1`] = `
 Array [
   Object {
@@ -414,9 +466,9 @@ exports[`parse() whitespace should capture whitespace in nested pattern 1`] = `
 Array [
   Object {
     "offset": 0,
-    "options": Array [
-      Object {
-        "id": "=1",
+    "options": Object {
+      "=1": Object {
+        "location": undefined,
         "value": Array [
           Object {
             "type": 0,
@@ -432,8 +484,8 @@ Array [
           },
         ],
       },
-      Object {
-        "id": "other",
+      "other": Object {
+        "location": undefined,
         "value": Array [
           Object {
             "type": 0,
@@ -449,7 +501,7 @@ Array [
           },
         ],
       },
-    ],
+    },
     "pluralType": "cardinal",
     "type": 6,
     "value": "c",
@@ -570,9 +622,9 @@ Array [
   },
   Object {
     "offset": 0,
-    "options": Array [
-      Object {
-        "id": "=0",
+    "options": Object {
+      "=0": Object {
+        "location": undefined,
         "value": Array [
           Object {
             "style": null,
@@ -585,14 +637,14 @@ Array [
           },
         ],
       },
-      Object {
-        "id": "other",
+      "other": Object {
+        "location": undefined,
         "value": Array [
           Object {
             "offset": 0,
-            "options": Array [
-              Object {
-                "id": "=0",
+            "options": Object {
+              "=0": Object {
+                "location": undefined,
                 "value": Array [
                   Object {
                     "style": null,
@@ -605,8 +657,8 @@ Array [
                   },
                 ],
               },
-              Object {
-                "id": "other",
+              "other": Object {
+                "location": undefined,
                 "value": Array [
                   Object {
                     "style": null,
@@ -619,7 +671,7 @@ Array [
                   },
                 ],
               },
-            ],
+            },
             "pluralType": "cardinal",
             "type": 6,
             "value": "var2",
@@ -639,7 +691,7 @@ Array [
           },
         ],
       },
-    ],
+    },
     "pluralType": "cardinal",
     "type": 6,
     "value": "var1",
@@ -651,9 +703,9 @@ exports[`parse({ captureLocation: true }) parse("{floor, selectordinal, =0{groun
 Array [
   Object {
     "offset": 0,
-    "options": Array [
-      Object {
-        "id": "=0",
+    "options": Object {
+      "=0": Object {
+        "location": undefined,
         "value": Array [
           Object {
             "type": 0,
@@ -661,36 +713,8 @@ Array [
           },
         ],
       },
-      Object {
-        "id": "one",
-        "value": Array [
-          Object {
-            "style": null,
-            "type": 2,
-            "value": "floor",
-          },
-          Object {
-            "type": 0,
-            "value": "st",
-          },
-        ],
-      },
-      Object {
-        "id": "two",
-        "value": Array [
-          Object {
-            "style": null,
-            "type": 2,
-            "value": "floor",
-          },
-          Object {
-            "type": 0,
-            "value": "nd",
-          },
-        ],
-      },
-      Object {
-        "id": "few",
+      "few": Object {
+        "location": undefined,
         "value": Array [
           Object {
             "style": null,
@@ -703,8 +727,22 @@ Array [
           },
         ],
       },
-      Object {
-        "id": "other",
+      "one": Object {
+        "location": undefined,
+        "value": Array [
+          Object {
+            "style": null,
+            "type": 2,
+            "value": "floor",
+          },
+          Object {
+            "type": 0,
+            "value": "st",
+          },
+        ],
+      },
+      "other": Object {
+        "location": undefined,
         "value": Array [
           Object {
             "style": null,
@@ -717,7 +755,21 @@ Array [
           },
         ],
       },
-    ],
+      "two": Object {
+        "location": undefined,
+        "value": Array [
+          Object {
+            "style": null,
+            "type": 2,
+            "value": "floor",
+          },
+          Object {
+            "type": 0,
+            "value": "nd",
+          },
+        ],
+      },
+    },
     "pluralType": "ordinal",
     "type": 6,
     "value": "floor",
@@ -732,9 +784,9 @@ Array [
 exports[`parse({ captureLocation: true }) parse("{gender, select, female {woman} male {man} other {person}}") 1`] = `
 Array [
   Object {
-    "options": Array [
-      Object {
-        "id": "female",
+    "options": Object {
+      "female": Object {
+        "location": undefined,
         "value": Array [
           Object {
             "type": 0,
@@ -742,8 +794,8 @@ Array [
           },
         ],
       },
-      Object {
-        "id": "male",
+      "male": Object {
+        "location": undefined,
         "value": Array [
           Object {
             "type": 0,
@@ -751,8 +803,8 @@ Array [
           },
         ],
       },
-      Object {
-        "id": "other",
+      "other": Object {
+        "location": undefined,
         "value": Array [
           Object {
             "type": 0,
@@ -760,7 +812,7 @@ Array [
           },
         ],
       },
-    ],
+    },
     "type": 5,
     "value": "gender",
   },
@@ -781,9 +833,9 @@ exports[`parse({ captureLocation: true }) parse("{numPhotos, plural, =0{no photo
 Array [
   Object {
     "offset": 0,
-    "options": Array [
-      Object {
-        "id": "=0",
+    "options": Object {
+      "=0": Object {
+        "location": undefined,
         "value": Array [
           Object {
             "type": 0,
@@ -791,8 +843,8 @@ Array [
           },
         ],
       },
-      Object {
-        "id": "=1",
+      "=1": Object {
+        "location": undefined,
         "value": Array [
           Object {
             "type": 0,
@@ -800,8 +852,8 @@ Array [
           },
         ],
       },
-      Object {
-        "id": "other",
+      "other": Object {
+        "location": undefined,
         "value": Array [
           Object {
             "style": null,
@@ -814,7 +866,7 @@ Array [
           },
         ],
       },
-    ],
+    },
     "pluralType": "cardinal",
     "type": 6,
     "value": "numPhotos",
@@ -848,6 +900,58 @@ Array [
 ]
 `;
 
+exports[`parse({ captureLocation: true }) simple formats 1`] = `
+Array [
+  Object {
+    "type": 0,
+    "value": "My name is ",
+  },
+  Object {
+    "type": 1,
+    "value": "FIRST",
+  },
+  Object {
+    "type": 0,
+    "value": " ",
+  },
+  Object {
+    "type": 1,
+    "value": "LAST",
+  },
+  Object {
+    "type": 0,
+    "value": ", age ",
+  },
+  Object {
+    "style": null,
+    "type": 2,
+    "value": "age",
+  },
+  Object {
+    "type": 0,
+    "value": ", time ",
+  },
+  Object {
+    "style": null,
+    "type": 4,
+    "value": "time",
+  },
+  Object {
+    "type": 0,
+    "value": ", date ",
+  },
+  Object {
+    "style": null,
+    "type": 3,
+    "value": "date",
+  },
+  Object {
+    "type": 0,
+    "value": ".",
+  },
+]
+`;
+
 exports[`parse({ captureLocation: true }) whitespace should allow whitespace in \`argumentElement\`s 1`] = `
 Array [
   Object {
@@ -871,9 +975,9 @@ exports[`parse({ captureLocation: true }) whitespace should capture whitespace i
 Array [
   Object {
     "offset": 0,
-    "options": Array [
-      Object {
-        "id": "=1",
+    "options": Object {
+      "=1": Object {
+        "location": undefined,
         "value": Array [
           Object {
             "type": 0,
@@ -889,8 +993,8 @@ Array [
           },
         ],
       },
-      Object {
-        "id": "other",
+      "other": Object {
+        "location": undefined,
         "value": Array [
           Object {
             "type": 0,
@@ -906,7 +1010,7 @@ Array [
           },
         ],
       },
-    ],
+    },
     "pluralType": "cardinal",
     "type": 6,
     "value": "c",
