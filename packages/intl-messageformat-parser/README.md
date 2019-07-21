@@ -18,9 +18,11 @@ This parser is written in [PEG.js][], a parser generator for JavaScript.
 The `dist/` folder contains the version of this package for use in the browser, and it can be loaded and used like this:
 
 ```html
-<script src="intl-messageformat-parser/dist/parser.min.js"></script>
+<script>var exports = {"__esModule": true};</script>
+<script src="intl-messageformat-parser/dist/parser.js"></script>
 <script>
-  IntlMessageFormatParser.parse('...');
+  var IntlMessageFormat = exports;
+  IntlMessageFormat.parse('...');
 </script>
 ```
 
@@ -29,8 +31,8 @@ The `dist/` folder contains the version of this package for use in the browser, 
 This package can also be `require()`-ed in Node.js:
 
 ```js
-var parser = require('intl-messageformat-parser');
-parser.parse('...');
+var IntlMessageFormat = require('intl-messageformat-parser');
+IntlMessageFormat.parse('...');
 ```
 
 ### Example
