@@ -19,7 +19,8 @@ import {
   isDateElement,
   isTimeElement,
   isNumberElement,
-  isPluralElement
+  isPluralElement,
+  TYPE
 } from './types';
 
 const ESCAPED_CHARS: Record<string, string> = {
@@ -67,7 +68,7 @@ function printArgumentElement({ value }: ArgumentElement) {
 function printSimpleFormatElement(
   el: DateElement | TimeElement | NumberElement
 ) {
-  return `{${el.value}, ${el.type}${el.style ? `, ${el.style}` : ''}}`;
+  return `{${el.value}, ${TYPE[el.type]}${el.style ? `, ${el.style}` : ''}}`;
 }
 function printSelectElement(el: SelectElement) {
   const msg = [
