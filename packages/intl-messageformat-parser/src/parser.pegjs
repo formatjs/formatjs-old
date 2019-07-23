@@ -23,10 +23,24 @@ message = messageElement*
 
 messageElement
     = literalElement
+    / tagElement
     / argumentElement
     / simpleFormatElement
     / pluralElement
     / selectElement
+
+tagElement
+    = '<x:' openingTag:chars '>' value:message '</x:' closingTag:chars '>' {
+        if (openingTag !== closingTag) {
+            throw new SyntaxError('Mismatched tag', openingTag, closingTag, location())
+        }
+        return {
+            type: TYPE.tag,
+            tag: openingTag,
+            value,
+            ...insertLocation()
+        }
+    }
 
 messageText
     = chunks:(_ chars _)+ {
@@ -153,11 +167,13 @@ escape = [ \t\n\r,.+={}#] / apostrophe
 char
     = 
     "'" sequence:apostrophe { return sequence; }
-    / [^{}\\\0-\x1F\x7f \t\n\r]
+    / [^<>{}\\\0-\x1F\x7f \t\n\r]
     / '\\\\' { return '\\'; }
     / '\\#'  { return '\\#'; }
     / '\\{'  { return '\u007B'; }
     / '\\}'  { return '\u007D'; }
+    / '\\<'  { return '\u003C'; }
+    / '\\>'  { return '\u003E'; }
     / '\\u'  digits:$(hexDigit hexDigit hexDigit hexDigit) {
         return String.fromCharCode(parseInt(digits, 16));
     }

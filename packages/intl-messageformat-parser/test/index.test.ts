@@ -99,38 +99,50 @@ function allTests(opts?: ParseOptions) {
     });
   });
 
+  describe('tag', function () {
+    it('should support regular tag', function () {
+      expect(parse('an email <x:link>link</x:link>', opts)).toMatchSnapshot()
+    })
+    it('should support simple element in regular tag', function () {
+      expect(parse('an email <x:link>{link, number}</x:link>', opts)).toMatchSnapshot()
+    })
+  })
+  
+
   describe('printer', function() {
     describe('plural', function() {
       it('should print w/o offset correctly', function() {
         const ast = parse(
-          'this is {count, plural, one {# dog} other {# dogs}}'
+          'this is {count, plural, one {# dog} other {# dogs}}',
+          opts
         );
-        expect(printAST(ast)).toEqual(
-          'this is {count,plural,one{{count, number} dog} other{{count, number} dogs}}'
-        );
+        expect(printAST(ast)).toMatchSnapshot()
       });
       it('should print w offset correctly', function() {
         const ast = parse(
-          'this is {count,plural,offset:1 one {# dog} other {# dogs}}'
+          'this is {count,plural,offset:1 one {# dog} other {# dogs}}',
+          opts
         );
-        expect(printAST(ast)).toEqual(
-          'this is {count,plural,offset:1 one{{count, number} dog} other{{count, number} dogs}}'
-        );
+        expect(printAST(ast)).toMatchSnapshot()
       });
       it('should print selectordinal correctly', function() {
         const ast = parse(
-          'this is {count, selectordinal, offset:1 one {#st dog} other {#th dogs}}'
+          'this is {count, selectordinal, offset:1 one {#st dog} other {#th dogs}}',
+          opts
         );
-        expect(printAST(ast)).toEqual(
-          'this is {count,selectordinal,offset:1 one{{count, number}st dog} other{{count, number}th dogs}}'
-        );
+        expect(printAST(ast)).toMatchSnapshot()
       });
     });
 
     it('should print simple format correctly', function() {
-      const ast = parse('this is {count, time}');
-      expect(printAST(ast)).toEqual('this is {count, time}');
+      const ast = parse('this is {count, time}', opts);
+      expect(printAST(ast)).toMatchSnapshot()
     });
+
+    it('should support tag element', function () {
+      expect(printAST(parse('an email <x:link>link</x:link>', opts))).toMatchSnapshot()
+      expect(printAST(parse('an email <x:link>{link, number}</x:link>', opts))).toMatchSnapshot()
+    })
   });
 }
 
@@ -139,5 +151,5 @@ describe('parse()', function() {
 });
 
 describe('parse({ captureLocation: true })', function() {
-  allTests();
+  allTests({ captureLocation: true });
 });

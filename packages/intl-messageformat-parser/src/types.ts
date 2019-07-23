@@ -26,7 +26,11 @@ export enum TYPE {
   /**
    * Variable w/ plural format
    */
-  plural
+  plural,
+  /**
+   * <x:foo> extension HTML tags
+   */
+  tag
 }
 
 export interface LocationDetails {
@@ -39,9 +43,9 @@ export interface Location {
   end: LocationDetails;
 }
 
-export interface BaseElement<T extends TYPE> {
+export interface BaseElement<T extends TYPE, V = string> {
   type: T;
-  value: string;
+  value: V;
   location?: Location;
 }
 
@@ -86,6 +90,10 @@ export interface PluralElement extends BaseElement<TYPE.plural> {
   pluralType: Intl.PluralRulesOptions['type'];
 }
 
+export interface TagElement extends BaseElement<TYPE.tag, MessageFormatElement[]> {
+  tag: string
+}
+
 export type MessageFormatElement =
   | LiteralElement
   | ArgumentElement
@@ -93,7 +101,8 @@ export type MessageFormatElement =
   | DateElement
   | TimeElement
   | SelectElement
-  | PluralElement;
+  | PluralElement
+  | TagElement
 
 /**
  * Type Guards
@@ -122,6 +131,10 @@ export function isSelectElement(el: MessageFormatElement): el is SelectElement {
 }
 export function isPluralElement(el: MessageFormatElement): el is PluralElement {
   return el.type === TYPE.plural;
+}
+
+export function isTagElement(el: MessageFormatElement): el is TagElement {
+  return el.type === TYPE.tag
 }
 
 export function createLiteralElement(value: string): LiteralElement {

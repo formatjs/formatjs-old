@@ -391,6 +391,18 @@ Array [
 ]
 `;
 
+exports[`parse() printer plural should print selectordinal correctly 1`] = `"this is {count,selectordinal,offset:1 one{{count, number}st dog} other{{count, number}th dogs}}"`;
+
+exports[`parse() printer plural should print w offset correctly 1`] = `"this is {count,plural,offset:1 one{{count, number} dog} other{{count, number} dogs}}"`;
+
+exports[`parse() printer plural should print w/o offset correctly 1`] = `"this is {count,plural,one{{count, number} dog} other{{count, number} dogs}}"`;
+
+exports[`parse() printer should print simple format correctly 1`] = `"this is {count, time}"`;
+
+exports[`parse() printer should support tag element 1`] = `"an email <x:link>link</x:link>"`;
+
+exports[`parse() printer should support tag element 2`] = `"an email <x:link>{link, number}</x:link>"`;
+
 exports[`parse() simple formats 1`] = `
 Array [
   Object {
@@ -439,6 +451,45 @@ Array [
   Object {
     "type": 0,
     "value": ".",
+  },
+]
+`;
+
+exports[`parse() tag should support regular tag 1`] = `
+Array [
+  Object {
+    "type": 0,
+    "value": "an email ",
+  },
+  Object {
+    "tag": "link",
+    "type": 7,
+    "value": Array [
+      Object {
+        "type": 0,
+        "value": "link",
+      },
+    ],
+  },
+]
+`;
+
+exports[`parse() tag should support simple element in regular tag 1`] = `
+Array [
+  Object {
+    "type": 0,
+    "value": "an email ",
+  },
+  Object {
+    "tag": "link",
+    "type": 7,
+    "value": Array [
+      Object {
+        "style": null,
+        "type": 2,
+        "value": "link",
+      },
+    ],
   },
 ]
 `;
@@ -512,6 +563,18 @@ Array [
 exports[`parse({ captureLocation: true }) escaping should allow backslash chars in \`literalElement\`s 1`] = `
 Array [
   Object {
+    "location": Object {
+      "end": Object {
+        "column": 7,
+        "line": 1,
+        "offset": 6,
+      },
+      "start": Object {
+        "column": 1,
+        "line": 1,
+        "offset": 0,
+      },
+    },
     "type": 0,
     "value": "\\\\",
   },
@@ -521,6 +584,18 @@ Array [
 exports[`parse({ captureLocation: true }) escaping should allow backslash chars in \`literalElement\`s 2`] = `
 Array [
   Object {
+    "location": Object {
+      "end": Object {
+        "column": 3,
+        "line": 1,
+        "offset": 2,
+      },
+      "start": Object {
+        "column": 1,
+        "line": 1,
+        "offset": 0,
+      },
+    },
     "type": 0,
     "value": "\\\\",
   },
@@ -530,6 +605,18 @@ Array [
 exports[`parse({ captureLocation: true }) escaping should allow escaping of syntax chars via \`\\\\\` 1`] = `
 Array [
   Object {
+    "location": Object {
+      "end": Object {
+        "column": 3,
+        "line": 1,
+        "offset": 2,
+      },
+      "start": Object {
+        "column": 1,
+        "line": 1,
+        "offset": 0,
+      },
+    },
     "type": 0,
     "value": "{",
   },
@@ -539,6 +626,18 @@ Array [
 exports[`parse({ captureLocation: true }) escaping should allow escaping of syntax chars via \`\\\\\` 2`] = `
 Array [
   Object {
+    "location": Object {
+      "end": Object {
+        "column": 3,
+        "line": 1,
+        "offset": 2,
+      },
+      "start": Object {
+        "column": 1,
+        "line": 1,
+        "offset": 0,
+      },
+    },
     "type": 0,
     "value": "}",
   },
@@ -548,6 +647,18 @@ Array [
 exports[`parse({ captureLocation: true }) escaping should allow escaping of syntax chars via \`\\\\\` 3`] = `
 Array [
   Object {
+    "location": Object {
+      "end": Object {
+        "column": 7,
+        "line": 1,
+        "offset": 6,
+      },
+      "start": Object {
+        "column": 1,
+        "line": 1,
+        "offset": 0,
+      },
+    },
     "type": 0,
     "value": "<",
   },
@@ -557,6 +668,18 @@ Array [
 exports[`parse({ captureLocation: true }) escaping should allow escaping of syntax chars via \`\\\\\` 4`] = `
 Array [
   Object {
+    "location": Object {
+      "end": Object {
+        "column": 3,
+        "line": 1,
+        "offset": 2,
+      },
+      "start": Object {
+        "column": 1,
+        "line": 1,
+        "offset": 0,
+      },
+    },
     "type": 0,
     "value": "\\\\#",
   },
@@ -566,14 +689,50 @@ Array [
 exports[`parse({ captureLocation: true }) escaping should escape a pair of ASCII apostrophes to represent one ASCII apostrophe 1`] = `
 Array [
   Object {
+    "location": Object {
+      "end": Object {
+        "column": 7,
+        "line": 1,
+        "offset": 6,
+      },
+      "start": Object {
+        "column": 1,
+        "line": 1,
+        "offset": 0,
+      },
+    },
     "type": 0,
     "value": "This '",
   },
   Object {
+    "location": Object {
+      "end": Object {
+        "column": 15,
+        "line": 1,
+        "offset": 14,
+      },
+      "start": Object {
+        "column": 7,
+        "line": 1,
+        "offset": 6,
+      },
+    },
     "type": 1,
     "value": "isn't",
   },
   Object {
+    "location": Object {
+      "end": Object {
+        "column": 24,
+        "line": 1,
+        "offset": 23,
+      },
+      "start": Object {
+        "column": 15,
+        "line": 1,
+        "offset": 14,
+      },
+    },
     "type": 0,
     "value": "' obvious",
   },
@@ -583,14 +742,50 @@ Array [
 exports[`parse({ captureLocation: true }) escaping should escape a pair of ASCII apostrophes to represent one ASCII apostrophe 2`] = `
 Array [
   Object {
+    "location": Object {
+      "end": Object {
+        "column": 3,
+        "line": 1,
+        "offset": 2,
+      },
+      "start": Object {
+        "column": 1,
+        "line": 1,
+        "offset": 0,
+      },
+    },
     "type": 0,
     "value": "'",
   },
   Object {
+    "location": Object {
+      "end": Object {
+        "column": 9,
+        "line": 1,
+        "offset": 8,
+      },
+      "start": Object {
+        "column": 3,
+        "line": 1,
+        "offset": 2,
+      },
+    },
     "type": 1,
     "value": "name",
   },
   Object {
+    "location": Object {
+      "end": Object {
+        "column": 11,
+        "line": 1,
+        "offset": 10,
+      },
+      "start": Object {
+        "column": 9,
+        "line": 1,
+        "offset": 8,
+      },
+    },
     "type": 0,
     "value": "'",
   },
@@ -600,14 +795,50 @@ Array [
 exports[`parse({ captureLocation: true }) escaping should escape a pair of ASCII apostrophes to represent one ASCII apostrophe 3`] = `
 Array [
   Object {
+    "location": Object {
+      "end": Object {
+        "column": 3,
+        "line": 1,
+        "offset": 2,
+      },
+      "start": Object {
+        "column": 1,
+        "line": 1,
+        "offset": 0,
+      },
+    },
     "type": 0,
     "value": "'",
   },
   Object {
+    "location": Object {
+      "end": Object {
+        "column": 9,
+        "line": 1,
+        "offset": 8,
+      },
+      "start": Object {
+        "column": 3,
+        "line": 1,
+        "offset": 2,
+      },
+    },
     "type": 1,
     "value": "name",
   },
   Object {
+    "location": Object {
+      "end": Object {
+        "column": 11,
+        "line": 1,
+        "offset": 10,
+      },
+      "start": Object {
+        "column": 9,
+        "line": 1,
+        "offset": 8,
+      },
+    },
     "type": 0,
     "value": "'",
   },
@@ -617,14 +848,49 @@ Array [
 exports[`parse({ captureLocation: true }) nested plural 1`] = `
 Array [
   Object {
+    "location": Object {
+      "end": Object {
+        "column": 5,
+        "line": 1,
+        "offset": 4,
+      },
+      "start": Object {
+        "column": 1,
+        "line": 1,
+        "offset": 0,
+      },
+    },
     "type": 0,
     "value": "Foo ",
   },
   Object {
+    "location": Object {
+      "end": Object {
+        "column": 93,
+        "line": 1,
+        "offset": 92,
+      },
+      "start": Object {
+        "column": 5,
+        "line": 1,
+        "offset": 4,
+      },
+    },
     "offset": 0,
     "options": Object {
       "=0": Object {
-        "location": undefined,
+        "location": Object {
+          "end": Object {
+            "column": 30,
+            "line": 1,
+            "offset": 29,
+          },
+          "start": Object {
+            "column": 20,
+            "line": 1,
+            "offset": 19,
+          },
+        },
         "value": Array [
           Object {
             "style": null,
@@ -638,13 +904,47 @@ Array [
         ],
       },
       "other": Object {
-        "location": undefined,
+        "location": Object {
+          "end": Object {
+            "column": 92,
+            "line": 1,
+            "offset": 91,
+          },
+          "start": Object {
+            "column": 30,
+            "line": 1,
+            "offset": 29,
+          },
+        },
         "value": Array [
           Object {
+            "location": Object {
+              "end": Object {
+                "column": 83,
+                "line": 1,
+                "offset": 82,
+              },
+              "start": Object {
+                "column": 37,
+                "line": 1,
+                "offset": 36,
+              },
+            },
             "offset": 0,
             "options": Object {
               "=0": Object {
-                "location": undefined,
+                "location": Object {
+                  "end": Object {
+                    "column": 62,
+                    "line": 1,
+                    "offset": 61,
+                  },
+                  "start": Object {
+                    "column": 52,
+                    "line": 1,
+                    "offset": 51,
+                  },
+                },
                 "value": Array [
                   Object {
                     "style": null,
@@ -658,7 +958,18 @@ Array [
                 ],
               },
               "other": Object {
-                "location": undefined,
+                "location": Object {
+                  "end": Object {
+                    "column": 82,
+                    "line": 1,
+                    "offset": 81,
+                  },
+                  "start": Object {
+                    "column": 62,
+                    "line": 1,
+                    "offset": 61,
+                  },
+                },
                 "value": Array [
                   Object {
                     "style": null,
@@ -702,19 +1013,65 @@ Array [
 exports[`parse({ captureLocation: true }) parse("{floor, selectordinal, =0{ground} one{#st} two{#nd} few{#rd} other{#th}} floor") 1`] = `
 Array [
   Object {
+    "location": Object {
+      "end": Object {
+        "column": 73,
+        "line": 1,
+        "offset": 72,
+      },
+      "start": Object {
+        "column": 1,
+        "line": 1,
+        "offset": 0,
+      },
+    },
     "offset": 0,
     "options": Object {
       "=0": Object {
-        "location": undefined,
+        "location": Object {
+          "end": Object {
+            "column": 34,
+            "line": 1,
+            "offset": 33,
+          },
+          "start": Object {
+            "column": 24,
+            "line": 1,
+            "offset": 23,
+          },
+        },
         "value": Array [
           Object {
+            "location": Object {
+              "end": Object {
+                "column": 33,
+                "line": 1,
+                "offset": 32,
+              },
+              "start": Object {
+                "column": 27,
+                "line": 1,
+                "offset": 26,
+              },
+            },
             "type": 0,
             "value": "ground",
           },
         ],
       },
       "few": Object {
-        "location": undefined,
+        "location": Object {
+          "end": Object {
+            "column": 61,
+            "line": 1,
+            "offset": 60,
+          },
+          "start": Object {
+            "column": 52,
+            "line": 1,
+            "offset": 51,
+          },
+        },
         "value": Array [
           Object {
             "style": null,
@@ -728,7 +1085,18 @@ Array [
         ],
       },
       "one": Object {
-        "location": undefined,
+        "location": Object {
+          "end": Object {
+            "column": 43,
+            "line": 1,
+            "offset": 42,
+          },
+          "start": Object {
+            "column": 34,
+            "line": 1,
+            "offset": 33,
+          },
+        },
         "value": Array [
           Object {
             "style": null,
@@ -742,7 +1110,18 @@ Array [
         ],
       },
       "other": Object {
-        "location": undefined,
+        "location": Object {
+          "end": Object {
+            "column": 72,
+            "line": 1,
+            "offset": 71,
+          },
+          "start": Object {
+            "column": 61,
+            "line": 1,
+            "offset": 60,
+          },
+        },
         "value": Array [
           Object {
             "style": null,
@@ -756,7 +1135,18 @@ Array [
         ],
       },
       "two": Object {
-        "location": undefined,
+        "location": Object {
+          "end": Object {
+            "column": 52,
+            "line": 1,
+            "offset": 51,
+          },
+          "start": Object {
+            "column": 43,
+            "line": 1,
+            "offset": 42,
+          },
+        },
         "value": Array [
           Object {
             "style": null,
@@ -775,6 +1165,18 @@ Array [
     "value": "floor",
   },
   Object {
+    "location": Object {
+      "end": Object {
+        "column": 79,
+        "line": 1,
+        "offset": 78,
+      },
+      "start": Object {
+        "column": 73,
+        "line": 1,
+        "offset": 72,
+      },
+    },
     "type": 0,
     "value": " floor",
   },
@@ -784,29 +1186,110 @@ Array [
 exports[`parse({ captureLocation: true }) parse("{gender, select, female {woman} male {man} other {person}}") 1`] = `
 Array [
   Object {
+    "location": Object {
+      "end": Object {
+        "column": 59,
+        "line": 1,
+        "offset": 58,
+      },
+      "start": Object {
+        "column": 1,
+        "line": 1,
+        "offset": 0,
+      },
+    },
     "options": Object {
       "female": Object {
-        "location": undefined,
+        "location": Object {
+          "end": Object {
+            "column": 32,
+            "line": 1,
+            "offset": 31,
+          },
+          "start": Object {
+            "column": 18,
+            "line": 1,
+            "offset": 17,
+          },
+        },
         "value": Array [
           Object {
+            "location": Object {
+              "end": Object {
+                "column": 31,
+                "line": 1,
+                "offset": 30,
+              },
+              "start": Object {
+                "column": 26,
+                "line": 1,
+                "offset": 25,
+              },
+            },
             "type": 0,
             "value": "woman",
           },
         ],
       },
       "male": Object {
-        "location": undefined,
+        "location": Object {
+          "end": Object {
+            "column": 43,
+            "line": 1,
+            "offset": 42,
+          },
+          "start": Object {
+            "column": 32,
+            "line": 1,
+            "offset": 31,
+          },
+        },
         "value": Array [
           Object {
+            "location": Object {
+              "end": Object {
+                "column": 42,
+                "line": 1,
+                "offset": 41,
+              },
+              "start": Object {
+                "column": 39,
+                "line": 1,
+                "offset": 38,
+              },
+            },
             "type": 0,
             "value": "man",
           },
         ],
       },
       "other": Object {
-        "location": undefined,
+        "location": Object {
+          "end": Object {
+            "column": 58,
+            "line": 1,
+            "offset": 57,
+          },
+          "start": Object {
+            "column": 43,
+            "line": 1,
+            "offset": 42,
+          },
+        },
         "value": Array [
           Object {
+            "location": Object {
+              "end": Object {
+                "column": 57,
+                "line": 1,
+                "offset": 56,
+              },
+              "start": Object {
+                "column": 51,
+                "line": 1,
+                "offset": 50,
+              },
+            },
             "type": 0,
             "value": "person",
           },
@@ -822,6 +1305,18 @@ Array [
 exports[`parse({ captureLocation: true }) parse("{num, number, percent}") 1`] = `
 Array [
   Object {
+    "location": Object {
+      "end": Object {
+        "column": 23,
+        "line": 1,
+        "offset": 22,
+      },
+      "start": Object {
+        "column": 1,
+        "line": 1,
+        "offset": 0,
+      },
+    },
     "style": "percent",
     "type": 2,
     "value": "num",
@@ -832,28 +1327,97 @@ Array [
 exports[`parse({ captureLocation: true }) parse("{numPhotos, plural, =0{no photos} =1{one photo} other{# photos}}") 1`] = `
 Array [
   Object {
+    "location": Object {
+      "end": Object {
+        "column": 65,
+        "line": 1,
+        "offset": 64,
+      },
+      "start": Object {
+        "column": 1,
+        "line": 1,
+        "offset": 0,
+      },
+    },
     "offset": 0,
     "options": Object {
       "=0": Object {
-        "location": undefined,
+        "location": Object {
+          "end": Object {
+            "column": 34,
+            "line": 1,
+            "offset": 33,
+          },
+          "start": Object {
+            "column": 21,
+            "line": 1,
+            "offset": 20,
+          },
+        },
         "value": Array [
           Object {
+            "location": Object {
+              "end": Object {
+                "column": 33,
+                "line": 1,
+                "offset": 32,
+              },
+              "start": Object {
+                "column": 24,
+                "line": 1,
+                "offset": 23,
+              },
+            },
             "type": 0,
             "value": "no photos",
           },
         ],
       },
       "=1": Object {
-        "location": undefined,
+        "location": Object {
+          "end": Object {
+            "column": 48,
+            "line": 1,
+            "offset": 47,
+          },
+          "start": Object {
+            "column": 34,
+            "line": 1,
+            "offset": 33,
+          },
+        },
         "value": Array [
           Object {
+            "location": Object {
+              "end": Object {
+                "column": 47,
+                "line": 1,
+                "offset": 46,
+              },
+              "start": Object {
+                "column": 38,
+                "line": 1,
+                "offset": 37,
+              },
+            },
             "type": 0,
             "value": "one photo",
           },
         ],
       },
       "other": Object {
-        "location": undefined,
+        "location": Object {
+          "end": Object {
+            "column": 64,
+            "line": 1,
+            "offset": 63,
+          },
+          "start": Object {
+            "column": 48,
+            "line": 1,
+            "offset": 47,
+          },
+        },
         "value": Array [
           Object {
             "style": null,
@@ -877,14 +1441,50 @@ Array [
 exports[`parse({ captureLocation: true }) parse("Hello, {name}!") 1`] = `
 Array [
   Object {
+    "location": Object {
+      "end": Object {
+        "column": 8,
+        "line": 1,
+        "offset": 7,
+      },
+      "start": Object {
+        "column": 1,
+        "line": 1,
+        "offset": 0,
+      },
+    },
     "type": 0,
     "value": "Hello, ",
   },
   Object {
+    "location": Object {
+      "end": Object {
+        "column": 14,
+        "line": 1,
+        "offset": 13,
+      },
+      "start": Object {
+        "column": 8,
+        "line": 1,
+        "offset": 7,
+      },
+    },
     "type": 1,
     "value": "name",
   },
   Object {
+    "location": Object {
+      "end": Object {
+        "column": 15,
+        "line": 1,
+        "offset": 14,
+      },
+      "start": Object {
+        "column": 14,
+        "line": 1,
+        "offset": 13,
+      },
+    },
     "type": 0,
     "value": "!",
   },
@@ -894,11 +1494,35 @@ Array [
 exports[`parse({ captureLocation: true }) parse("Hello, World!") 1`] = `
 Array [
   Object {
+    "location": Object {
+      "end": Object {
+        "column": 14,
+        "line": 1,
+        "offset": 13,
+      },
+      "start": Object {
+        "column": 1,
+        "line": 1,
+        "offset": 0,
+      },
+    },
     "type": 0,
     "value": "Hello, World!",
   },
 ]
 `;
+
+exports[`parse({ captureLocation: true }) printer plural should print selectordinal correctly 1`] = `"this is {count,selectordinal,offset:1 one{{count, number}st dog} other{{count, number}th dogs}}"`;
+
+exports[`parse({ captureLocation: true }) printer plural should print w offset correctly 1`] = `"this is {count,plural,offset:1 one{{count, number} dog} other{{count, number} dogs}}"`;
+
+exports[`parse({ captureLocation: true }) printer plural should print w/o offset correctly 1`] = `"this is {count,plural,one{{count, number} dog} other{{count, number} dogs}}"`;
+
+exports[`parse({ captureLocation: true }) printer should print simple format correctly 1`] = `"this is {count, time}"`;
+
+exports[`parse({ captureLocation: true }) printer should support tag element 1`] = `"an email <x:link>link</x:link>"`;
+
+exports[`parse({ captureLocation: true }) printer should support tag element 2`] = `"an email <x:link>{link, number}</x:link>"`;
 
 exports[`parse({ captureLocation: true }) simple formats 1`] = `
 Array [
@@ -952,9 +1576,132 @@ Array [
 ]
 `;
 
+exports[`parse({ captureLocation: true }) tag should support regular tag 1`] = `
+Array [
+  Object {
+    "location": Object {
+      "end": Object {
+        "column": 10,
+        "line": 1,
+        "offset": 9,
+      },
+      "start": Object {
+        "column": 1,
+        "line": 1,
+        "offset": 0,
+      },
+    },
+    "type": 0,
+    "value": "an email ",
+  },
+  Object {
+    "location": Object {
+      "end": Object {
+        "column": 31,
+        "line": 1,
+        "offset": 30,
+      },
+      "start": Object {
+        "column": 10,
+        "line": 1,
+        "offset": 9,
+      },
+    },
+    "tag": "link",
+    "type": 7,
+    "value": Array [
+      Object {
+        "location": Object {
+          "end": Object {
+            "column": 22,
+            "line": 1,
+            "offset": 21,
+          },
+          "start": Object {
+            "column": 18,
+            "line": 1,
+            "offset": 17,
+          },
+        },
+        "type": 0,
+        "value": "link",
+      },
+    ],
+  },
+]
+`;
+
+exports[`parse({ captureLocation: true }) tag should support simple element in regular tag 1`] = `
+Array [
+  Object {
+    "location": Object {
+      "end": Object {
+        "column": 10,
+        "line": 1,
+        "offset": 9,
+      },
+      "start": Object {
+        "column": 1,
+        "line": 1,
+        "offset": 0,
+      },
+    },
+    "type": 0,
+    "value": "an email ",
+  },
+  Object {
+    "location": Object {
+      "end": Object {
+        "column": 41,
+        "line": 1,
+        "offset": 40,
+      },
+      "start": Object {
+        "column": 10,
+        "line": 1,
+        "offset": 9,
+      },
+    },
+    "tag": "link",
+    "type": 7,
+    "value": Array [
+      Object {
+        "location": Object {
+          "end": Object {
+            "column": 32,
+            "line": 1,
+            "offset": 31,
+          },
+          "start": Object {
+            "column": 18,
+            "line": 1,
+            "offset": 17,
+          },
+        },
+        "style": null,
+        "type": 2,
+        "value": "link",
+      },
+    ],
+  },
+]
+`;
+
 exports[`parse({ captureLocation: true }) whitespace should allow whitespace in \`argumentElement\`s 1`] = `
 Array [
   Object {
+    "location": Object {
+      "end": Object {
+        "column": 27,
+        "line": 1,
+        "offset": 26,
+      },
+      "start": Object {
+        "column": 1,
+        "line": 1,
+        "offset": 0,
+      },
+    },
     "style": "percent",
     "type": 2,
     "value": "num",
@@ -965,6 +1712,18 @@ Array [
 exports[`parse({ captureLocation: true }) whitespace should allow whitespace in and around \`literalElement\`s 1`] = `
 Array [
   Object {
+    "location": Object {
+      "end": Object {
+        "column": 23,
+        "line": 1,
+        "offset": 22,
+      },
+      "start": Object {
+        "column": 1,
+        "line": 1,
+        "offset": 0,
+      },
+    },
     "type": 0,
     "value": "   some random test   ",
   },
@@ -974,37 +1733,143 @@ Array [
 exports[`parse({ captureLocation: true }) whitespace should capture whitespace in nested pattern 1`] = `
 Array [
   Object {
+    "location": Object {
+      "end": Object {
+        "column": 59,
+        "line": 1,
+        "offset": 58,
+      },
+      "start": Object {
+        "column": 1,
+        "line": 1,
+        "offset": 0,
+      },
+    },
     "offset": 0,
     "options": Object {
       "=1": Object {
-        "location": undefined,
+        "location": Object {
+          "end": Object {
+            "column": 33,
+            "line": 1,
+            "offset": 32,
+          },
+          "start": Object {
+            "column": 13,
+            "line": 1,
+            "offset": 12,
+          },
+        },
         "value": Array [
           Object {
+            "location": Object {
+              "end": Object {
+                "column": 18,
+                "line": 1,
+                "offset": 17,
+              },
+              "start": Object {
+                "column": 17,
+                "line": 1,
+                "offset": 16,
+              },
+            },
             "type": 0,
             "value": " ",
           },
           Object {
+            "location": Object {
+              "end": Object {
+                "column": 24,
+                "line": 1,
+                "offset": 23,
+              },
+              "start": Object {
+                "column": 18,
+                "line": 1,
+                "offset": 17,
+              },
+            },
             "type": 1,
             "value": "text",
           },
           Object {
+            "location": Object {
+              "end": Object {
+                "column": 32,
+                "line": 1,
+                "offset": 31,
+              },
+              "start": Object {
+                "column": 24,
+                "line": 1,
+                "offset": 23,
+              },
+            },
             "type": 0,
             "value": " project",
           },
         ],
       },
       "other": Object {
-        "location": undefined,
+        "location": Object {
+          "end": Object {
+            "column": 58,
+            "line": 1,
+            "offset": 57,
+          },
+          "start": Object {
+            "column": 33,
+            "line": 1,
+            "offset": 32,
+          },
+        },
         "value": Array [
           Object {
+            "location": Object {
+              "end": Object {
+                "column": 42,
+                "line": 1,
+                "offset": 41,
+              },
+              "start": Object {
+                "column": 41,
+                "line": 1,
+                "offset": 40,
+              },
+            },
             "type": 0,
             "value": " ",
           },
           Object {
+            "location": Object {
+              "end": Object {
+                "column": 48,
+                "line": 1,
+                "offset": 47,
+              },
+              "start": Object {
+                "column": 42,
+                "line": 1,
+                "offset": 41,
+              },
+            },
             "type": 1,
             "value": "text",
           },
           Object {
+            "location": Object {
+              "end": Object {
+                "column": 57,
+                "line": 1,
+                "offset": 56,
+              },
+              "start": Object {
+                "column": 48,
+                "line": 1,
+                "offset": 47,
+              },
+            },
             "type": 0,
             "value": " projects",
           },

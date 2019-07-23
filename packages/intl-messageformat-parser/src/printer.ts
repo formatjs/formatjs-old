@@ -20,7 +20,9 @@ import {
   isTimeElement,
   isNumberElement,
   isPluralElement,
-  TYPE
+  TYPE,
+  TagElement,
+  isTagElement
 } from './types';
 
 const ESCAPED_CHARS: Record<string, string> = {
@@ -51,6 +53,9 @@ export function printAST(ast: MessageFormatElement[]): string {
 
     if (isSelectElement(el)) {
       return printSelectElement(el);
+    }
+    if (isTagElement(el)) {
+      return printTagElement(el)
     }
   });
 
@@ -96,4 +101,8 @@ function printPluralElement(el: PluralElement) {
       .join(' ')
   ].join(',');
   return `{${msg}}`;
+}
+
+function printTagElement(el: TagElement): string {
+  return `<x:${el.tag}>${printAST(el.value)}</x:${el.tag}>`
 }
