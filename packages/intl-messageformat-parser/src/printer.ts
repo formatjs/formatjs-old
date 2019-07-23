@@ -55,7 +55,7 @@ export function printAST(ast: MessageFormatElement[]): string {
       return printSelectElement(el);
     }
     if (isTagElement(el)) {
-      return printTagElement(el)
+      return printTagElement(el);
     }
   });
 
@@ -104,5 +104,5 @@ function printPluralElement(el: PluralElement) {
 }
 
 function printTagElement(el: TagElement): string {
-  return `<x:${el.tag}>${printAST(el.value)}</x:${el.tag}>`
+  return `<x:${el.tag}>${printAST(el.value)}</x:${el.tag}>`;
 }

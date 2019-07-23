@@ -99,15 +99,16 @@ function allTests(opts?: ParseOptions) {
     });
   });
 
-  describe('tag', function () {
-    it('should support regular tag', function () {
-      expect(parse('an email <x:link>link</x:link>', opts)).toMatchSnapshot()
-    })
-    it('should support simple element in regular tag', function () {
-      expect(parse('an email <x:link>{link, number}</x:link>', opts)).toMatchSnapshot()
-    })
-  })
-  
+  describe('tag', function() {
+    it('should support regular tag', function() {
+      expect(parse('an email <x:link>link</x:link>', opts)).toMatchSnapshot();
+    });
+    it('should support simple element in regular tag', function() {
+      expect(
+        parse('an email <x:link>{link, number}</x:link>', opts)
+      ).toMatchSnapshot();
+    });
+  });
 
   describe('printer', function() {
     describe('plural', function() {
@@ -116,33 +117,37 @@ function allTests(opts?: ParseOptions) {
           'this is {count, plural, one {# dog} other {# dogs}}',
           opts
         );
-        expect(printAST(ast)).toMatchSnapshot()
+        expect(printAST(ast)).toMatchSnapshot();
       });
       it('should print w offset correctly', function() {
         const ast = parse(
           'this is {count,plural,offset:1 one {# dog} other {# dogs}}',
           opts
         );
-        expect(printAST(ast)).toMatchSnapshot()
+        expect(printAST(ast)).toMatchSnapshot();
       });
       it('should print selectordinal correctly', function() {
         const ast = parse(
           'this is {count, selectordinal, offset:1 one {#st dog} other {#th dogs}}',
           opts
         );
-        expect(printAST(ast)).toMatchSnapshot()
+        expect(printAST(ast)).toMatchSnapshot();
       });
     });
 
     it('should print simple format correctly', function() {
       const ast = parse('this is {count, time}', opts);
-      expect(printAST(ast)).toMatchSnapshot()
+      expect(printAST(ast)).toMatchSnapshot();
     });
 
-    it('should support tag element', function () {
-      expect(printAST(parse('an email <x:link>link</x:link>', opts))).toMatchSnapshot()
-      expect(printAST(parse('an email <x:link>{link, number}</x:link>', opts))).toMatchSnapshot()
-    })
+    it('should support tag element', function() {
+      expect(
+        printAST(parse('an email <x:link>link</x:link>', opts))
+      ).toMatchSnapshot();
+      expect(
+        printAST(parse('an email <x:link>{link, number}</x:link>', opts))
+      ).toMatchSnapshot();
+    });
   });
 }
 

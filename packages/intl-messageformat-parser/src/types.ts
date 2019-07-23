@@ -90,8 +90,9 @@ export interface PluralElement extends BaseElement<TYPE.plural> {
   pluralType: Intl.PluralRulesOptions['type'];
 }
 
-export interface TagElement extends BaseElement<TYPE.tag, MessageFormatElement[]> {
-  tag: string
+export interface TagElement
+  extends BaseElement<TYPE.tag, MessageFormatElement[]> {
+  tag: string;
 }
 
 export type MessageFormatElement =
@@ -102,7 +103,7 @@ export type MessageFormatElement =
   | TimeElement
   | SelectElement
   | PluralElement
-  | TagElement
+  | TagElement;
 
 /**
  * Type Guards
@@ -134,7 +135,7 @@ export function isPluralElement(el: MessageFormatElement): el is PluralElement {
 }
 
 export function isTagElement(el: MessageFormatElement): el is TagElement {
-  return el.type === TYPE.tag
+  return el.type === TYPE.tag;
 }
 
 export function createLiteralElement(value: string): LiteralElement {
