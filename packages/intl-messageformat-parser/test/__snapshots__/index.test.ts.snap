@@ -462,14 +462,14 @@ Array [
     "value": "an email ",
   },
   Object {
-    "tag": "link",
-    "type": 7,
-    "value": Array [
+    "elements": Array [
       Object {
         "type": 0,
         "value": "link",
       },
     ],
+    "type": 7,
+    "value": "link",
   },
 ]
 `;
@@ -481,15 +481,15 @@ Array [
     "value": "an email ",
   },
   Object {
-    "tag": "link",
-    "type": 7,
-    "value": Array [
+    "elements": Array [
       Object {
         "style": null,
         "type": 2,
         "value": "link",
       },
     ],
+    "type": 7,
+    "value": "link",
   },
 ]
 `;
@@ -1595,21 +1595,7 @@ Array [
     "value": "an email ",
   },
   Object {
-    "location": Object {
-      "end": Object {
-        "column": 31,
-        "line": 1,
-        "offset": 30,
-      },
-      "start": Object {
-        "column": 10,
-        "line": 1,
-        "offset": 9,
-      },
-    },
-    "tag": "link",
-    "type": 7,
-    "value": Array [
+    "elements": Array [
       Object {
         "location": Object {
           "end": Object {
@@ -1627,6 +1613,20 @@ Array [
         "value": "link",
       },
     ],
+    "location": Object {
+      "end": Object {
+        "column": 31,
+        "line": 1,
+        "offset": 30,
+      },
+      "start": Object {
+        "column": 10,
+        "line": 1,
+        "offset": 9,
+      },
+    },
+    "type": 7,
+    "value": "link",
   },
 ]
 `;
@@ -1650,21 +1650,7 @@ Array [
     "value": "an email ",
   },
   Object {
-    "location": Object {
-      "end": Object {
-        "column": 41,
-        "line": 1,
-        "offset": 40,
-      },
-      "start": Object {
-        "column": 10,
-        "line": 1,
-        "offset": 9,
-      },
-    },
-    "tag": "link",
-    "type": 7,
-    "value": Array [
+    "elements": Array [
       Object {
         "location": Object {
           "end": Object {
@@ -1683,6 +1669,20 @@ Array [
         "value": "link",
       },
     ],
+    "location": Object {
+      "end": Object {
+        "column": 41,
+        "line": 1,
+        "offset": 40,
+      },
+      "start": Object {
+        "column": 10,
+        "line": 1,
+        "offset": 9,
+      },
+    },
+    "type": 7,
+    "value": "link",
   },
 ]
 `;

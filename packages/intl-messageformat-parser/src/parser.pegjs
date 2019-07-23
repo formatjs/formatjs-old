@@ -30,14 +30,14 @@ messageElement
     / selectElement
 
 tagElement
-    = '<x:' openingTag:chars '>' value:message '</x:' closingTag:chars '>' {
+    = '<x:' openingTag:chars '>' elements:message '</x:' closingTag:chars '>' {
         if (openingTag !== closingTag) {
             throw new SyntaxError('Mismatched tag', openingTag, closingTag, location())
         }
         return {
             type: TYPE.tag,
-            tag: openingTag,
-            value,
+            value: openingTag,
+            elements,
             ...insertLocation()
         }
     }

@@ -104,5 +104,5 @@ function printPluralElement(el: PluralElement) {
 }
 
 function printTagElement(el: TagElement): string {
-  return `<x:${el.tag}>${printAST(el.value)}</x:${el.tag}>`;
+  return `<x:${el.value}>${printAST(el.elements)}</x:${el.value}>`;
 }

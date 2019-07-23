@@ -43,9 +43,9 @@ export interface Location {
   end: LocationDetails;
 }
 
-export interface BaseElement<T extends TYPE, V = string> {
+export interface BaseElement<T extends TYPE> {
   type: T;
-  value: V;
+  value: string;
   location?: Location;
 }
 
@@ -90,9 +90,8 @@ export interface PluralElement extends BaseElement<TYPE.plural> {
   pluralType: Intl.PluralRulesOptions['type'];
 }
 
-export interface TagElement
-  extends BaseElement<TYPE.tag, MessageFormatElement[]> {
-  tag: string;
+export interface TagElement extends BaseElement<TYPE.tag> {
+  elements: MessageFormatElement[];
 }
 
 export type MessageFormatElement =
@@ -155,6 +154,8 @@ export function createNumberElement(
     style
   };
 }
+
+export function createTagElement() {}
 
 export interface Options {
   /**
