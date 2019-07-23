@@ -23,32 +23,10 @@ message = messageElement*
 
 messageElement
     = literalElement
-    / tagElement
     / argumentElement
     / simpleFormatElement
     / pluralElement
     / selectElement
-
-tagElement
-    = 
-    '<x:' openingTag:chars '>' elements:message '</x:' closingTag:chars '>' {
-        if (openingTag !== closingTag) {
-            throw new SyntaxError('Mismatched tag', openingTag, closingTag, location())
-        }
-        return {
-            type: TYPE.tag,
-            value: openingTag,
-            elements,
-            ...insertLocation()
-        }
-    }
-    / '<' openingTag:chars '>' messageText:messageText '</' closingTag:chars '>' {
-        return {
-            type : TYPE.literal,
-            value: `<${openingTag}>${messageText}</${closingTag}>`,
-            ...insertLocation()
-        };
-    }
 
 messageText
     = chunks:(_ chars _)+ {
@@ -173,7 +151,7 @@ escape = [ \t\n\r,.+={}#] / apostrophe
 char
     = 
     "'" sequence:apostrophe { return sequence; }
-    / [^<>{}\\\0-\x1F\x7f \t\n\r]
+    / [^{}\\\0-\x1F\x7f \t\n\r]
     / '\\\\' { return '\\'; }
     / '\\#'  { return '\\#'; }
     / '\\{'  { return '\u007B'; }

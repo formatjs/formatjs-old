@@ -99,19 +99,11 @@ function allTests(opts?: ParseOptions) {
     });
   });
 
-  describe('tag', function() {
-    it('should support regular tag', function() {
-      expect(parse('an email <x:link>link</x:link>', opts)).toMatchSnapshot();
-    });
-    it('should support simple element in regular tag', function() {
-      expect(
-        parse('an email <x:link>{link, number}</x:link>', opts)
-      ).toMatchSnapshot();
-    });
-    it('should parse regular html as literal', function() {
-      expect(parse('an email <h1>link</h1>', opts)).toMatchSnapshot();
-    });
-  });
+  describe('html tag', function () {
+    it('should parse legacy html w/ token correctly', function () {
+      expect(parse('Hello, <b>{name}</b>!', opts)).toMatchSnapshot()
+    })
+  })
 
   describe('printer', function() {
     describe('plural', function() {
@@ -141,15 +133,6 @@ function allTests(opts?: ParseOptions) {
     it('should print simple format correctly', function() {
       const ast = parse('this is {count, time}', opts);
       expect(printAST(ast)).toMatchSnapshot();
-    });
-
-    it('should support tag element', function() {
-      expect(
-        printAST(parse('an email <x:link>link</x:link>', opts))
-      ).toMatchSnapshot();
-      expect(
-        printAST(parse('an email <x:link>{link, number}</x:link>', opts))
-      ).toMatchSnapshot();
     });
   });
 }

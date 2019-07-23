@@ -105,6 +105,23 @@ Array [
 ]
 `;
 
+exports[`parse() html tag should parse legacy html w/ token correctly 1`] = `
+Array [
+  Object {
+    "type": 0,
+    "value": "Hello, <b>",
+  },
+  Object {
+    "type": 1,
+    "value": "name",
+  },
+  Object {
+    "type": 0,
+    "value": "</b>!",
+  },
+]
+`;
+
 exports[`parse() nested plural 1`] = `
 Array [
   Object {
@@ -399,10 +416,6 @@ exports[`parse() printer plural should print w/o offset correctly 1`] = `"this i
 
 exports[`parse() printer should print simple format correctly 1`] = `"this is {count, time}"`;
 
-exports[`parse() printer should support tag element 1`] = `"an email <x:link>link</x:link>"`;
-
-exports[`parse() printer should support tag element 2`] = `"an email <x:link>{link, number}</x:link>"`;
-
 exports[`parse() simple formats 1`] = `
 Array [
   Object {
@@ -451,58 +464,6 @@ Array [
   Object {
     "type": 0,
     "value": ".",
-  },
-]
-`;
-
-exports[`parse() tag should parse regular html as literal 1`] = `
-Array [
-  Object {
-    "type": 0,
-    "value": "an email ",
-  },
-  Object {
-    "type": 0,
-    "value": "<h1>link</h1>",
-  },
-]
-`;
-
-exports[`parse() tag should support regular tag 1`] = `
-Array [
-  Object {
-    "type": 0,
-    "value": "an email ",
-  },
-  Object {
-    "elements": Array [
-      Object {
-        "type": 0,
-        "value": "link",
-      },
-    ],
-    "type": 7,
-    "value": "link",
-  },
-]
-`;
-
-exports[`parse() tag should support simple element in regular tag 1`] = `
-Array [
-  Object {
-    "type": 0,
-    "value": "an email ",
-  },
-  Object {
-    "elements": Array [
-      Object {
-        "style": null,
-        "type": 2,
-        "value": "link",
-      },
-    ],
-    "type": 7,
-    "value": "link",
   },
 ]
 `;
@@ -854,6 +815,59 @@ Array [
     },
     "type": 0,
     "value": "'",
+  },
+]
+`;
+
+exports[`parse({ captureLocation: true }) html tag should parse legacy html w/ token correctly 1`] = `
+Array [
+  Object {
+    "location": Object {
+      "end": Object {
+        "column": 11,
+        "line": 1,
+        "offset": 10,
+      },
+      "start": Object {
+        "column": 1,
+        "line": 1,
+        "offset": 0,
+      },
+    },
+    "type": 0,
+    "value": "Hello, <b>",
+  },
+  Object {
+    "location": Object {
+      "end": Object {
+        "column": 17,
+        "line": 1,
+        "offset": 16,
+      },
+      "start": Object {
+        "column": 11,
+        "line": 1,
+        "offset": 10,
+      },
+    },
+    "type": 1,
+    "value": "name",
+  },
+  Object {
+    "location": Object {
+      "end": Object {
+        "column": 22,
+        "line": 1,
+        "offset": 21,
+      },
+      "start": Object {
+        "column": 17,
+        "line": 1,
+        "offset": 16,
+      },
+    },
+    "type": 0,
+    "value": "</b>!",
   },
 ]
 `;
@@ -1533,10 +1547,6 @@ exports[`parse({ captureLocation: true }) printer plural should print w/o offset
 
 exports[`parse({ captureLocation: true }) printer should print simple format correctly 1`] = `"this is {count, time}"`;
 
-exports[`parse({ captureLocation: true }) printer should support tag element 1`] = `"an email <x:link>link</x:link>"`;
-
-exports[`parse({ captureLocation: true }) printer should support tag element 2`] = `"an email <x:link>{link, number}</x:link>"`;
-
 exports[`parse({ captureLocation: true }) simple formats 1`] = `
 Array [
   Object {
@@ -1585,154 +1595,6 @@ Array [
   Object {
     "type": 0,
     "value": ".",
-  },
-]
-`;
-
-exports[`parse({ captureLocation: true }) tag should parse regular html as literal 1`] = `
-Array [
-  Object {
-    "location": Object {
-      "end": Object {
-        "column": 10,
-        "line": 1,
-        "offset": 9,
-      },
-      "start": Object {
-        "column": 1,
-        "line": 1,
-        "offset": 0,
-      },
-    },
-    "type": 0,
-    "value": "an email ",
-  },
-  Object {
-    "location": Object {
-      "end": Object {
-        "column": 23,
-        "line": 1,
-        "offset": 22,
-      },
-      "start": Object {
-        "column": 10,
-        "line": 1,
-        "offset": 9,
-      },
-    },
-    "type": 0,
-    "value": "<h1>link</h1>",
-  },
-]
-`;
-
-exports[`parse({ captureLocation: true }) tag should support regular tag 1`] = `
-Array [
-  Object {
-    "location": Object {
-      "end": Object {
-        "column": 10,
-        "line": 1,
-        "offset": 9,
-      },
-      "start": Object {
-        "column": 1,
-        "line": 1,
-        "offset": 0,
-      },
-    },
-    "type": 0,
-    "value": "an email ",
-  },
-  Object {
-    "elements": Array [
-      Object {
-        "location": Object {
-          "end": Object {
-            "column": 22,
-            "line": 1,
-            "offset": 21,
-          },
-          "start": Object {
-            "column": 18,
-            "line": 1,
-            "offset": 17,
-          },
-        },
-        "type": 0,
-        "value": "link",
-      },
-    ],
-    "location": Object {
-      "end": Object {
-        "column": 31,
-        "line": 1,
-        "offset": 30,
-      },
-      "start": Object {
-        "column": 10,
-        "line": 1,
-        "offset": 9,
-      },
-    },
-    "type": 7,
-    "value": "link",
-  },
-]
-`;
-
-exports[`parse({ captureLocation: true }) tag should support simple element in regular tag 1`] = `
-Array [
-  Object {
-    "location": Object {
-      "end": Object {
-        "column": 10,
-        "line": 1,
-        "offset": 9,
-      },
-      "start": Object {
-        "column": 1,
-        "line": 1,
-        "offset": 0,
-      },
-    },
-    "type": 0,
-    "value": "an email ",
-  },
-  Object {
-    "elements": Array [
-      Object {
-        "location": Object {
-          "end": Object {
-            "column": 32,
-            "line": 1,
-            "offset": 31,
-          },
-          "start": Object {
-            "column": 18,
-            "line": 1,
-            "offset": 17,
-          },
-        },
-        "style": null,
-        "type": 2,
-        "value": "link",
-      },
-    ],
-    "location": Object {
-      "end": Object {
-        "column": 41,
-        "line": 1,
-        "offset": 40,
-      },
-      "start": Object {
-        "column": 10,
-        "line": 1,
-        "offset": 9,
-      },
-    },
-    "type": 7,
-    "value": "link",
   },
 ]
 `;
