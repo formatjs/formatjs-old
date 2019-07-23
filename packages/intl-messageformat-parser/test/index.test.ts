@@ -108,6 +108,9 @@ function allTests(opts?: ParseOptions) {
         parse('an email <x:link>{link, number}</x:link>', opts)
       ).toMatchSnapshot();
     });
+    it('should parse regular html as literal', function() {
+      expect(parse('an email <h1>link</h1>', opts)).toMatchSnapshot();
+    });
   });
 
   describe('printer', function() {

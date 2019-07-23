@@ -455,6 +455,19 @@ Array [
 ]
 `;
 
+exports[`parse() tag should parse regular html as literal 1`] = `
+Array [
+  Object {
+    "type": 0,
+    "value": "an email ",
+  },
+  Object {
+    "type": 0,
+    "value": "<h1>link</h1>",
+  },
+]
+`;
+
 exports[`parse() tag should support regular tag 1`] = `
 Array [
   Object {
@@ -1572,6 +1585,43 @@ Array [
   Object {
     "type": 0,
     "value": ".",
+  },
+]
+`;
+
+exports[`parse({ captureLocation: true }) tag should parse regular html as literal 1`] = `
+Array [
+  Object {
+    "location": Object {
+      "end": Object {
+        "column": 10,
+        "line": 1,
+        "offset": 9,
+      },
+      "start": Object {
+        "column": 1,
+        "line": 1,
+        "offset": 0,
+      },
+    },
+    "type": 0,
+    "value": "an email ",
+  },
+  Object {
+    "location": Object {
+      "end": Object {
+        "column": 23,
+        "line": 1,
+        "offset": 22,
+      },
+      "start": Object {
+        "column": 10,
+        "line": 1,
+        "offset": 9,
+      },
+    },
+    "type": 0,
+    "value": "<h1>link</h1>",
   },
 ]
 `;

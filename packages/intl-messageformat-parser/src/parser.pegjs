@@ -30,7 +30,8 @@ messageElement
     / selectElement
 
 tagElement
-    = '<x:' openingTag:chars '>' elements:message '</x:' closingTag:chars '>' {
+    = 
+    '<x:' openingTag:chars '>' elements:message '</x:' closingTag:chars '>' {
         if (openingTag !== closingTag) {
             throw new SyntaxError('Mismatched tag', openingTag, closingTag, location())
         }
@@ -41,12 +42,17 @@ tagElement
             ...insertLocation()
         }
     }
+    / '<' openingTag:chars '>' messageText:messageText '</' closingTag:chars '>' {
+        return {
+            type : TYPE.literal,
+            value: `<${openingTag}>${messageText}</${closingTag}>`,
+            ...insertLocation()
+        };
+    }
 
 messageText
     = chunks:(_ chars _)+ {
-        return chunks.reduce(function (all, chunk) {
-            return all.concat(chunk)
-        }, []).join('')
+        return chunks.reduce((all, chunk) => all.concat(chunk), []).join('')
     }
     / $(ws)
 
@@ -117,9 +123,9 @@ selectElement
     }
 
 pluralRuleSelectValue
-    = '=0'
-    / '=1'
-    / '=2'
+    = '=' n:number {
+        return `=${n}`
+    }
     / 'zero'
     / 'one'
     / 'two'
@@ -172,8 +178,6 @@ char
     / '\\#'  { return '\\#'; }
     / '\\{'  { return '\u007B'; }
     / '\\}'  { return '\u007D'; }
-    / '\\<'  { return '\u003C'; }
-    / '\\>'  { return '\u003E'; }
     / '\\u'  digits:$(hexDigit hexDigit hexDigit hexDigit) {
         return String.fromCharCode(parseInt(digits, 16));
     }

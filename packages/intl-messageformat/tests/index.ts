@@ -8,7 +8,8 @@ import IntlMessageFormat from '../src';
 import {
   IntlMessageFormat as IntlMessageFormatCore,
   createDefaultFormatters,
-  PART_TYPE
+  PART_TYPE,
+  FormatTagFn
 } from '../src/core';
 import { parse } from 'intl-messageformat-parser';
 import { expect as chaiExpect } from 'chai';
@@ -100,6 +101,14 @@ describe('IntlMessageFormat', function() {
     it('should format ast w/ placeholders w/o parser', function() {
       var mf = new IntlMessageFormatCore(parse('hello world, {name}'));
       expect(mf.format({ name: 'foo' })).to.equal('hello world, foo');
+    });
+    it('should format tag element', function() {
+      var mf = new IntlMessageFormatCore(
+        parse('hello world, <x:b>{name}</x:b>')
+      );
+      expect(mf.format({ name: 'foo', b: val => `<b>${val}</b>` })).to.equal(
+        'hello world, <b>foo</b>'
+      );
     });
   });
 
@@ -581,17 +590,18 @@ describe('IntlMessageFormat', function() {
   });
 
   describe('formatToParts', function() {
-    it('should be able to take React Element', function() {
-      const element = {};
+    it('should be able to take tag render fn', function() {
+      const EL = {};
       const parts = new IntlMessageFormat(
-        'a react {element}',
+        'a react <x:b>{element}</x:b>',
         'en'
       ).formatToParts({
-        element
+        element: 'foo',
+        b: _ => EL
       });
       expect(parts).to.deep.equal([
         { type: PART_TYPE.literal, value: 'a react ' },
-        { type: PART_TYPE.argument, value: element }
+        { type: PART_TYPE.argument, value: EL }
       ]);
     });
   });

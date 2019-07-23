@@ -13,7 +13,9 @@ import {
   isTimeElement,
   isNumberElement,
   isSelectElement,
-  isPluralElement
+  isPluralElement,
+  isTagElement,
+  TYPE
 } from 'intl-messageformat-parser';
 import memoizeIntlConstructor from 'intl-format-cache';
 
@@ -115,6 +117,16 @@ export interface ArgumentPart {
 
 export type MessageFormatPart = LiteralPart | ArgumentPart;
 
+export type PrimitiveType = string | number | null | undefined | boolean;
+
+export type FormatTagFn = (
+  ...parts: any[]
+) => PrimitiveType | object | Array<PrimitiveType | object>;
+
+export type FormatStringTagFn = (
+  ...parts: any[]
+) => PrimitiveType | Array<PrimitiveType>;
+
 function mergeLiteral(parts: MessageFormatPart[]): MessageFormatPart[] {
   if (parts.length < 2) {
     return parts;
@@ -142,7 +154,7 @@ function formatToParts(
   locales: string | string[],
   formatters: Formatters,
   formats: Formats,
-  values?: Record<string, any>,
+  values?: Record<string, PrimitiveType | FormatTagFn>,
   // For debugging
   originalMessage?: string
 ): MessageFormatPart[] {
@@ -193,9 +205,6 @@ function formatToParts(
       continue;
     }
 
-    // Recursively format plural and select parts' option — which can be a
-    // nested pattern structure. The choosing of the option to use is
-    // abstracted-by and delegated-to the part helper object.
     if (isDateElement(el)) {
       const style = el.style ? formats.date[el.style] : undefined;
       result.push({
@@ -225,6 +234,37 @@ function formatToParts(
           .format(value as number)
       });
       continue;
+    }
+    // Recursively format tag, plural and select parts' option — which can be a
+    // nested pattern structure. The choosing of the option to use is
+    // abstracted-by and delegated-to the part helper object.
+    if (isTagElement(el)) {
+      const formatFn = value as FormatTagFn;
+      const formattedTagValue = formatFn(
+        ...formatToParts(el.elements, locales, formatters, formats, values).map(
+          el => el.value
+        )
+      );
+      let formattedValues: Array<PrimitiveType | object>;
+      if (!Array.isArray(formattedTagValue)) {
+        formattedValues = [formattedTagValue];
+      } else {
+        formattedValues = formattedTagValue;
+      }
+      result.push(
+        ...formattedValues.map(val => {
+          if (val && typeof val === 'object') {
+            return {
+              type: PART_TYPE.argument,
+              value: val
+            } as ArgumentPart;
+          }
+          return {
+            type: PART_TYPE.literal,
+            value: String(val)
+          };
+        })
+      );
     }
     if (isSelectElement(el)) {
       const opt = el.options[value as string] || el.options.other;
@@ -269,7 +309,7 @@ function formatToString(
   locales: string | string[],
   formatters: Formatters,
   formats: Formats,
-  values?: Record<string, string | number | boolean | null | undefined>,
+  values?: Record<string, PrimitiveType | FormatStringTagFn>,
   // For debugging
   originalMessage?: string
 ): string {
@@ -397,9 +437,7 @@ export class IntlMessageFormat {
     prewarmFormatters(this.ast, this.locale, this.formatters, this.formats);
   }
 
-  format = (
-    values?: Record<string, string | number | boolean | null | undefined>
-  ) => {
+  format = (values?: Record<string, PrimitiveType | FormatStringTagFn>) => {
     return formatToString(
       this.ast,
       this.locale,
@@ -409,7 +447,7 @@ export class IntlMessageFormat {
       this.message
     );
   };
-  formatToParts = (values?: Record<string, any>) => {
+  formatToParts = (values?: Record<string, PrimitiveType | FormatTagFn>) => {
     return formatToParts(
       this.ast,
       this.locale,
