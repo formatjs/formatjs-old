@@ -239,6 +239,12 @@ export type FormatXMLElementFn = (str?: string) => string | object;
 
 // Singleton
 let domParser: DOMParser;
+const TOKEN_DELIMITER = '@@'
+const TOKEN_REGEX = /@@(.*)@@/
+let counter = 0
+function generateId () {
+  return `${TOKEN_DELIMITER}${Date.now()}_${++counter}${TOKEN_DELIMITER}`
+}
 
 export function formatXMLMessage(
   els: MessageFormatElement[],
@@ -257,7 +263,16 @@ export function formatXMLMessage(
     values,
     originalMessage
   );
-  const formattedMessage = parts.reduce((all, part) => (all += part.value), '');
+  const objectParts: Record<string, ArgumentPart> = {}
+  const formattedMessage = parts.reduce((all, part) => {
+    if (typeof part.value === 'string' || part.type === PART_TYPE.literal) {
+      return all += part.value
+    }
+    const id = generateId()
+    objectParts[generateId()] = part
+    return all += id
+  }, '');
+  const objectPartIds = Object.keys(objectParts)
 
   // Not designed to filter out aggressively
   if (!~formattedMessage.indexOf('<')) {
@@ -305,6 +320,7 @@ export function formatXMLMessage(
       // Regular text
       reconstructedChunks.push(node.textContent || '');
     } else if (!values[tagName]) {
+      const chunk = node.outerHTML.
       // Legacy HTML
       reconstructedChunks.push(node.outerHTML);
     } else {
