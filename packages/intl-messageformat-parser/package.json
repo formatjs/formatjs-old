@@ -10,7 +10,8 @@
     "build": "./build.js && tsc && tsc -p tsconfig.cjs.json",
     "benchmark": "node ./test/benchmark.js",
     "prepublish": "npm run build",
-    "test": "TS_NODE_PROJECT='./tsconfig.cjs.json' cross-env NODE_ENV=test jest"
+    "test": "TS_NODE_PROJECT='./tsconfig.cjs.json' cross-env NODE_ENV=test jest",
+    "watch:test": "TS_NODE_PROJECT='./tsconfig.cjs.json' cross-env NODE_ENV=test jest"
   },
   "contributors": [
     "Eric Ferraiuolo <eferraiuolo@gmail.com>",
