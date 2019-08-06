@@ -42,7 +42,7 @@ export function selectUnit(
       unit: 'year'
     };
   }
-  const { quarter } = thresholds;
+  const { quarter = true } = thresholds;
 
   if (quarter) {
     const quarters = differenceInCalendarQuarters(from, to);
