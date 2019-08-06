@@ -172,25 +172,33 @@ describe('selectUnit', function() {
   });
   it('should skip quarter caculation if turned off', function() {
     expect(
-      selectUnit(new Date(2019, 0, 10), new Date(2019, 3, 27), { quarter: false })
+      selectUnit(new Date(2019, 0, 10), new Date(2019, 3, 27), {
+        quarter: false
+      })
     ).to.deep.equal({
       value: -3,
       unit: 'month'
     });
     expect(
-      selectUnit(new Date(2019, 3, 10), new Date(2019, 0, 27), { quarter: false })
+      selectUnit(new Date(2019, 3, 10), new Date(2019, 0, 27), {
+        quarter: false
+      })
     ).to.deep.equal({
       value: 3,
       unit: 'month'
     });
     expect(
-      selectUnit(new Date(2019, 0, 10), new Date(2019, 11, 27), { quarter: false })
+      selectUnit(new Date(2019, 0, 10), new Date(2019, 11, 27), {
+        quarter: false
+      })
     ).to.deep.equal({
       value: -11,
       unit: 'month'
     });
     expect(
-      selectUnit(new Date(2019, 11, 10), new Date(2019, 0, 27), { quarter: false })
+      selectUnit(new Date(2019, 11, 10), new Date(2019, 0, 27), {
+        quarter: false
+      })
     ).to.deep.equal({
       value: 11,
       unit: 'month'

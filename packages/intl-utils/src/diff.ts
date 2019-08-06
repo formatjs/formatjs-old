@@ -42,9 +42,9 @@ export function selectUnit(
       unit: 'year'
     };
   }
-  const { quarter = true } = thresholds;
+  const shouldCheckQuarter = !!thresholds.quarter;
 
-  if (quarter) {
+  if (shouldCheckQuarter) {
     const quarters = differenceInCalendarQuarters(from, to);
     if (Math.abs(quarters) > 0) {
       return {
