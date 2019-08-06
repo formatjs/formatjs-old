@@ -76,8 +76,8 @@ export function selectUnit(
 }
 
 export const DEFAULT_THRESHOLDS: Record<
-  'second' | 'minute' | 'hour',
-  number
+  'second' | 'minute' | 'hour' | 'quarter',
+  number | boolean
 > = {
   second: 45, // seconds to minute
   minute: 45, // minutes to hour
