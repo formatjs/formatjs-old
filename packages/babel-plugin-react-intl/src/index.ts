@@ -443,7 +443,7 @@ export default declare((api: any) => {
           // be extracted only if a `defaultMessage` prop exists and
           // `enforceDefaultMessage` is `true`.
           if (
-            enforceDefaultMessage === false ||
+            enforceDefaultMessage === true ||
             descriptorPath.defaultMessage
           ) {
             // Evaluate the Message Descriptor values in a JSX
