@@ -1,9 +1,9 @@
-const {extractAllRelativeFields, processAliases } = require('formatjs-extract-cldr-data');	
+const {extractAllUnits, processAliases } = require('formatjs-extract-cldr-data');	
 const { resolve, join } = require('path');	
 const { outputFileSync } = require('fs-extra');	
 const serialize = require('serialize-javascript');	
 
- const data = extractAllRelativeFields();	
+ const data = extractAllUnits();	
 
  function extractLocales(locales) {	
   return Object.keys(data).reduce(function(files, locale) {	
@@ -57,22 +57,3 @@ outputFileSync(
 export default ${en.en};	
 `	
 );
-
-// Extract aliases
-const aliases = processAliases()
-outputFileSync(	
-  resolve(__dirname, '../dist/include-aliases.js'),	
-  `/* @generated */	
-// prettier-ignore  
-if (Intl.RelativeTimeFormat && typeof Intl.RelativeTimeFormat.__setLanguageAliases === 'function') {
-  Intl.RelativeTimeFormat.__setLanguageAliases(${serialize(aliases)})
-}
-`	
-);
-outputFileSync(	
-  resolve(__dirname, '../src/aliases.ts'),	
-  `/* @generated */	
-// prettier-ignore  
-export default ${serialize(aliases)}
-`
-)
