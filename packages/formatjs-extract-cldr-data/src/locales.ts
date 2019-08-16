@@ -19,14 +19,14 @@ export const dateFieldsLocales = globSync('*/dateFields.json', {
     dirname(require.resolve('cldr-dates-full/package.json')),
     './main'
   ),
-}).map(dirname)
+}).map(dirname);
 
 export const unitsLocales = globSync('*/units.json', {
   cwd: resolve(
     dirname(require.resolve('cldr-units-full/package.json')),
     './main'
   ),
-}).map(dirname)
+}).map(dirname);
 
 // Some locales that have a `pluralRuleFunction` don't have a `dateFields.json`
 // file, and visa versa, so this creates a unique collection of all locales in

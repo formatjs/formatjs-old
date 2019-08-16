@@ -1,7 +1,7 @@
 {
   "name": "@formatjs/intl-unified-numberformat",
-  "version": "1.0.0",
-  "description": "Polyfill for unified numberformat proposal",
+  "version": "0.1.0",
+  "description": "Ponyfill for intl unified numberformat proposal",
   "keywords": [
     "polyfill",
     "i18n",
@@ -14,7 +14,7 @@
   "main": "dist/index.js",
   "directories": {
     "lib": "lib",
-    "test": "__tests__"
+    "test": "tests"
   },
   "files": [
     "lib"
@@ -30,9 +30,9 @@
     "build": "npm run cldr && npm run compile",
     "cldr": "node scripts/cldr",
     "clean": "rimraf dist lib",
-    "compile": "tsc && tsc -p tsconfig.cjs.json && rollup -c rollup.config.js",
+    "compile": "tsc && tsc -p tsconfig.cjs.json",
     "jest": "cross-env NODE_ICU_DATA=../../node_modules/full-icu TS_NODE_PROJECT=tsconfig.cjs.json cross-env NODE_ENV=test jest",
-    "test": "npm run jest && cross-env NODE_ICU_DATA=../../node_modules/full-icu TS_NODE_PROJECT=tsconfig.cjs.json ts-node tests/runner"
+    "test": "npm run jest"
   },
   "bugs": {
     "url": "https://github.com/formatjs/formatjs/issues"

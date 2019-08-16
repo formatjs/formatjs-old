@@ -4,8 +4,8 @@
  * See the accompanying LICENSE file for terms.
  */
 'use strict';
-import { dateFieldsLocales } from './locales';
-import * as DateFields from 'cldr-dates-full/main/en/dateFields.json'
+import {dateFieldsLocales} from './locales';
+import * as DateFields from 'cldr-dates-full/main/en/dateFields.json';
 import {Locale} from './types';
 import generateFieldExtractorFn from './utils';
 
@@ -60,7 +60,8 @@ export interface FieldData {
 }
 
 function loadRelativeFields(locale: Locale): Record<string, FieldData> {
-  const fields = (require(`cldr-dates-full/main/${locale}/dateFields.json`) as typeof DateFields).main[locale as 'en'].dates.fields;
+  const fields = (require(`cldr-dates-full/main/${locale}/dateFields.json`) as typeof DateFields)
+    .main[locale as 'en'].dates.fields;
 
   // Reduce the date fields data down to whitelist of fields needed in the
   // FormatJS libs.
@@ -113,12 +114,11 @@ function transformFieldData(data: Fields['week']): FieldData {
 }
 
 function hasDateFields(locale: Locale): boolean {
-  return dateFieldsLocales.includes(locale)
+  return dateFieldsLocales.includes(locale);
 }
 
-const extractRelativeFields = generateFieldExtractorFn<Record<string, FieldData>>(
-  loadRelativeFields,
-  hasDateFields
-)
+const extractRelativeFields = generateFieldExtractorFn<
+  Record<string, FieldData>
+>(loadRelativeFields, hasDateFields);
 
-export default extractRelativeFields
+export default extractRelativeFields;
