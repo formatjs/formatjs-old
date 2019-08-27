@@ -176,6 +176,7 @@ This is not meant to be a full-fledged method to embed HTML, but rather to tag s
 2. Any attributes on the HTML tag are also ignored.
 3. Self-closing tags are not supported, please use regular ICU placeholder like `{placeholder}`.
 4. HTML tags must be all lowercased since it's case-insensitive.
+5. Self-closing tags can not be used as HTML tag placeholder. For e.g. `"Please click this <link>link</link>"` will not work because `<link/>` is a self-closing tag, and it can not be parsed correctly by browser `DOMParser`.
 
 ### User Defined Formats
 
