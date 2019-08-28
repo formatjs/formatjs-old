@@ -364,7 +364,7 @@ export function formatHTMLMessage(
       if (process.env.NODE_ENV !== 'production' && [
         'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr'
       ].includes(tagName))
-        console.warn(`${tagName} is a self-closing tag and can not be used, please use another tag name.`)
+        throw new Error(`${tagName} is a self-closing tag and can not be used, please use another tag name.`)
 
       // Legacy HTML
       if (!values[tagName]) {
