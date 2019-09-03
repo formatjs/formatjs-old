@@ -35,7 +35,7 @@ export default function areIntlLocalesSupported(
 
   const intlConstructors = constructorsToCheck.filter(Boolean);
 
-  if (intlConstructors.length === 0) {
+  if (intlConstructors.length === 0 || intlConstructors.length !== constructorsToCheck.length) {
     return false;
   }
 
