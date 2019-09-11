@@ -8,6 +8,7 @@ import {
   isSelectElement,
   isPluralElement,
 } from 'intl-messageformat-parser';
+import IntlMessageFormat from './core';
 
 export interface Formats {
   number: Record<string, Intl.NumberFormatOptions>;
@@ -147,7 +148,7 @@ export function formatToParts(
     // abstracted-by and delegated-to the part helper object.
     if (isDateElement(el)) {
       const style =
-        typeof el.style === 'string' ? formats.date[el.style] : undefined;
+        typeof el.style === 'string' ? formats.date[el.style] || IntlMessageFormat.patterns.parseDatePattern(el.style) : formats.date.default;
       result.push({
         type: PART_TYPE.literal,
         value: formatters
@@ -158,7 +159,7 @@ export function formatToParts(
     }
     if (isTimeElement(el)) {
       const style =
-        typeof el.style === 'string' ? formats.time[el.style] : undefined;
+        typeof el.style === 'string' ? formats.time[el.style] || IntlMessageFormat.patterns.parseDatePattern(el.style) : formats.time.default;
       result.push({
         type: PART_TYPE.literal,
         value: formatters
