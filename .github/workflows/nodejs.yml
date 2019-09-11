@@ -19,14 +19,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+      submodules: true
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - name: Check out test262
-      run: |
-        git submodule sync
-        git submodule update --init --recursive
     - name: npm install, build, and test
       run: |
         npm install
