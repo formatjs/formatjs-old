@@ -19,7 +19,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-      submodules: true
+      with:
+        submodules: true
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
