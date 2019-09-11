@@ -40,7 +40,12 @@ describe('IntlMessageFormat', function() {
     });
 
     expect(output).to.include('My name is Anthony Pipkin, age 8');
-    expect(output).to.include(new Intl.DateTimeFormat().format(ts));
+    expect(output).to.include(
+      new Intl.DateTimeFormat(
+        'en',
+        IntlMessageFormat.formats.date.default
+      ).format(ts)
+    );
   });
 
   // INSTANCE METHODS
