@@ -10,11 +10,14 @@ import {
 } from 'intl-messageformat-parser';
 
 export interface Formats {
-  parseNumberPattern(style: any): Intl.NumberFormatOptions;
-  parseDatePattern(style: any): Intl.DateTimeFormatOptions;
   number: Record<string, Intl.NumberFormatOptions>;
   date: Record<string, Intl.DateTimeFormatOptions>;
   time: Record<string, Intl.DateTimeFormatOptions>;
+}
+
+export interface Patterns {
+  // parseNumberPattern(style: any): Intl.NumberFormatOptions;
+  parseDatePattern(style: any): Intl.DateTimeFormatOptions;
 }
 
 export interface FormatterCache {

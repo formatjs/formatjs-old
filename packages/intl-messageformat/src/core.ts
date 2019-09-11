@@ -66,14 +66,16 @@ function prewarmFormatters(
       if (isDateElement(el)) {
         const style =
           typeof el.style === 'string'
-            ? formats.date[el.style] || formats.parseDatePattern(el.style)
+            ? formats.date[el.style] ||
+              IntlMessageFormat.patterns.parseDatePattern(el.style)
             : formats.date.default;
         formatters.getDateTimeFormat(locales, style);
       }
       if (isTimeElement(el)) {
         const style =
           typeof el.style === 'string'
-            ? formats.time[el.style] || formats.parseDatePattern(el.style)
+            ? formats.time[el.style] ||
+              IntlMessageFormat.patterns.parseDatePattern(el.style)
             : formats.time.default;
 
         formatters.getDateTimeFormat(locales, style);
@@ -81,8 +83,9 @@ function prewarmFormatters(
       if (isNumberElement(el)) {
         const style =
           typeof el.style === 'string'
-            ? formats.number[el.style] || formats.parseNumberPattern(el.style)
-            : formats.number.default;
+            ? formats.number[el.style]
+            : // || formats.parseNumberPattern(el.style)
+              formats.number.default;
         formatters.getNumberFormat(locales, style);
       }
       if (isSelectElement(el)) {
@@ -330,57 +333,60 @@ export class IntlMessageFormat {
         },
       },
     },
-    parseNumberPattern: function(
-      pattern: any /*: ?string */
-    ): Intl.NumberFormatOptions {
-      if (!pattern) return;
-      const options = {};
-      const currency = pattern.match(/\b[A-Z]{3}\b/i);
-      let syms = pattern.replace(/[^¤]/g, '').length;
-      if (!syms && currency) syms = 1;
-      if (syms) {
-        options.style = 'currency';
-        options.currencyDisplay =
-          syms === 1 ? 'symbol' : syms === 2 ? 'code' : 'name';
-        options.currency = currency ? currency[0].toUpperCase() : 'USD';
-      } else if (pattern.indexOf('%') >= 0) {
-        options.style = 'percent';
-      }
-      if (!/[@#0]/.test(pattern)) return options.style ? options : undefined;
-      options.useGrouping = pattern.indexOf(',') >= 0;
-      if (/E\+?[@#0]+/i.test(pattern) || pattern.indexOf('@') >= 0) {
-        const size = pattern.replace(/E\+?[@#0]+|[^@#0]/gi, '');
-        options.minimumSignificantDigits = Math.min(
-          Math.max(size.replace(/[^@0]/g, '').length, 1),
-          21
-        );
-        options.maximumSignificantDigits = Math.min(
-          Math.max(size.length, 1),
-          21
-        );
-      } else {
-        const parts = pattern.replace(/[^#0.]/g, '').split('.');
-        const integer = parts[0];
-        let n = integer.length - 1;
-        while (integer[n] === '0') --n;
-        options.minimumIntegerDigits = Math.min(
-          Math.max(integer.length - 1 - n, 1),
-          21
-        );
-        const fraction = parts[1] || '';
-        n = 0;
-        while (fraction[n] === '0') ++n;
-        options.minimumFractionDigits = Math.min(Math.max(n, 0), 20);
-        while (fraction[n] === '#') ++n;
-        options.maximumFractionDigits = Math.min(Math.max(n, 0), 20);
-      }
-      return options;
-    },
+  };
+  static patterns = {
+    // parseNumberPattern: function(
+    //   pattern: any /*: ?string */
+    // ): Intl.NumberFormatOptions | undefined
+    //  {
+    //   if (!pattern) return;
+    //   const options = {};
+    //   const currency = pattern.match(/\b[A-Z]{3}\b/i);
+    //   let syms = pattern.replace(/[^¤]/g, '').length;
+    //   if (!syms && currency) syms = 1;
+    //   if (syms) {
+    //     options.style = 'currency';
+    //     options.currencyDisplay =
+    //       syms === 1 ? 'symbol' : syms === 2 ? 'code' : 'name';
+    //     options.currency = currency ? currency[0].toUpperCase() : 'USD';
+    //   } else if (pattern.indexOf('%') >= 0) {
+    //     options.style = 'percent';
+    //   }
+    //   if (!/[@#0]/.test(pattern)) return options.style ? options : undefined;
+    //   options.useGrouping = pattern.indexOf(',') >= 0;
+    //   if (/E\+?[@#0]+/i.test(pattern) || pattern.indexOf('@') >= 0) {
+    //     const size = pattern.replace(/E\+?[@#0]+|[^@#0]/gi, '');
+    //     options.minimumSignificantDigits = Math.min(
+    //       Math.max(size.replace(/[^@0]/g, '').length, 1),
+    //       21
+    //     );
+    //     options.maximumSignificantDigits = Math.min(
+    //       Math.max(size.length, 1),
+    //       21
+    //     );
+    //   } else {
+    //     const parts = pattern.replace(/[^#0.]/g, '').split('.');
+    //     const integer = parts[0];
+    //     let n = integer.length - 1;
+    //     while (integer[n] === '0') --n;
+    //     options.minimumIntegerDigits = Math.min(
+    //       Math.max(integer.length - 1 - n, 1),
+    //       21
+    //     );
+    //     const fraction = parts[1] || '';
+    //     n = 0;
+    //     while (fraction[n] === '0') ++n;
+    //     options.minimumFractionDigits = Math.min(Math.max(n, 0), 20);
+    //     while (fraction[n] === '#') ++n;
+    //     options.maximumFractionDigits = Math.min(Math.max(n, 0), 20);
+    //   }
+    //   return options;
+    // },
     parseDatePattern: function(
       pattern: any /*: ?string */
-    ): Intl.DateTimeFormatOptions {
+    ): Intl.DateTimeFormatOptions | undefined {
       if (!pattern) return;
-      const options = {};
+      const options: Intl.DateTimeFormatOptions = {};
       for (let i = 0; i < pattern.length; ) {
         const current = pattern[i];
         let n = 1;
