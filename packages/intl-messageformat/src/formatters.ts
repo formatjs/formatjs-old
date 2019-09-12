@@ -68,6 +68,120 @@ class FormatError extends Error {
   }
 }
 
+export const LONG = 'long';
+export const SHORT = 'short';
+export const NARROW = 'narrow';
+export const NUMERIC = 'numeric';
+export const TWODIGIT = '2-digit';
+
+export const patterns = {
+  // parseNumberPattern: function(
+  //   pattern: any /*: ?string */
+  // ): Intl.NumberFormatOptions | undefined
+  //  {
+  //   if (!pattern) return;
+  //   const options = {};
+  //   const currency = pattern.match(/\b[A-Z]{3}\b/i);
+  //   let syms = pattern.replace(/[^¤]/g, '').length;
+  //   if (!syms && currency) syms = 1;
+  //   if (syms) {
+  //     options.style = 'currency';
+  //     options.currencyDisplay =
+  //       syms === 1 ? 'symbol' : syms === 2 ? 'code' : 'name';
+  //     options.currency = currency ? currency[0].toUpperCase() : 'USD';
+  //   } else if (pattern.indexOf('%') >= 0) {
+  //     options.style = 'percent';
+  //   }
+  //   if (!/[@#0]/.test(pattern)) return options.style ? options : undefined;
+  //   options.useGrouping = pattern.indexOf(',') >= 0;
+  //   if (/E\+?[@#0]+/i.test(pattern) || pattern.indexOf('@') >= 0) {
+  //     const size = pattern.replace(/E\+?[@#0]+|[^@#0]/gi, '');
+  //     options.minimumSignificantDigits = Math.min(
+  //       Math.max(size.replace(/[^@0]/g, '').length, 1),
+  //       21
+  //     );
+  //     options.maximumSignificantDigits = Math.min(
+  //       Math.max(size.length, 1),
+  //       21
+  //     );
+  //   } else {
+  //     const parts = pattern.replace(/[^#0.]/g, '').split('.');
+  //     const integer = parts[0];
+  //     let n = integer.length - 1;
+  //     while (integer[n] === '0') --n;
+  //     options.minimumIntegerDigits = Math.min(
+  //       Math.max(integer.length - 1 - n, 1),
+  //       21
+  //     );
+  //     const fraction = parts[1] || '';
+  //     n = 0;
+  //     while (fraction[n] === '0') ++n;
+  //     options.minimumFractionDigits = Math.min(Math.max(n, 0), 20);
+  //     while (fraction[n] === '#') ++n;
+  //     options.maximumFractionDigits = Math.min(Math.max(n, 0), 20);
+  //   }
+  //   return options;
+  // },
+  parseDatePattern: function(
+    pattern: any /*: ?string */
+  ): Intl.DateTimeFormatOptions | undefined {
+    if (!pattern) return;
+    const options: Intl.DateTimeFormatOptions = {};
+    for (let i = 0; i < pattern.length; ) {
+      const current = pattern[i];
+      let n = 1;
+      while (pattern[++i] === current) ++n;
+      switch (current) {
+        case 'G':
+          options.era = n === 5 ? NARROW : n === 4 ? LONG : SHORT;
+          break;
+        case 'y':
+        case 'Y':
+          options.year = n === 2 ? TWODIGIT : NUMERIC;
+          break;
+        case 'M':
+        case 'L':
+          n = Math.min(Math.max(n - 1, 0), 4);
+          options.month = [NUMERIC, TWODIGIT, SHORT, LONG, NARROW][n];
+          break;
+        case 'E':
+        case 'e':
+        case 'c':
+          options.weekday = n === 5 ? NARROW : n === 4 ? LONG : SHORT;
+          break;
+        case 'd':
+        case 'D':
+          options.day = n === 2 ? TWODIGIT : NUMERIC;
+          break;
+        case 'h':
+        case 'K':
+          options.hour12 = true;
+          options.hour = n === 2 ? TWODIGIT : NUMERIC;
+          break;
+        case 'H':
+        case 'k':
+          options.hour12 = false;
+          options.hour = n === 2 ? TWODIGIT : NUMERIC;
+          break;
+        case 'm':
+          options.minute = n === 2 ? TWODIGIT : NUMERIC;
+          break;
+        case 's':
+        case 'S':
+          options.second = n === 2 ? TWODIGIT : NUMERIC;
+          break;
+        case 'z':
+        case 'Z':
+        case 'v':
+        case 'V':
+          options.timeZoneName = n === 1 ? SHORT : LONG;
+          break;
+      }
+    }
+    return Object.keys(options).length ? options : undefined;
+  },
+};
+
 function mergeLiteral(parts: MessageFormatPart[]): MessageFormatPart[] {
   if (parts.length < 2) {
     return parts;
@@ -149,8 +263,7 @@ export function formatToParts(
     if (isDateElement(el)) {
       const style =
         typeof el.style === 'string'
-          ? formats.date[el.style] ||
-            IntlMessageFormat.patterns.parseDatePattern(el.style)
+          ? formats.date[el.style] || patterns.parseDatePattern(el.style)
           : formats.date.default;
       result.push({
         type: PART_TYPE.literal,
@@ -163,8 +276,7 @@ export function formatToParts(
     if (isTimeElement(el)) {
       const style =
         typeof el.style === 'string'
-          ? formats.time[el.style] ||
-            IntlMessageFormat.patterns.parseDatePattern(el.style)
+          ? formats.time[el.style] || patterns.parseDatePattern(el.style)
           : formats.time.default;
       result.push({
         type: PART_TYPE.literal,
@@ -176,7 +288,9 @@ export function formatToParts(
     }
     if (isNumberElement(el)) {
       const style =
-        typeof el.style === 'string' ? formats.number[el.style] : undefined;
+        typeof el.style === 'string'
+          ? formats.number[el.style]
+          : formats.number.default;
       result.push({
         type: PART_TYPE.literal,
         value: formatters
