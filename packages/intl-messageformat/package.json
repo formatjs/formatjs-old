@@ -31,7 +31,7 @@
   "module": "lib/index.js",
   "types": "lib/intl-messageformat.d.ts",
   "dependencies": {
-    "intl-format-cache": "^4.2.15",
+    "intl-format-cache": "^4.2.14",
     "intl-messageformat-parser": "^3.5.2"
   },
   "files": [
