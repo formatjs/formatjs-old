@@ -56,22 +56,22 @@ export function selectUnit(
   const toDate = new Date(to);
 
   const years = fromDate.getFullYear() - toDate.getFullYear();
-  if (Math.round(Math.abs(years)) > 0) {
+  const months = years * 12 + fromDate.getMonth() - toDate.getMonth();
+  if (Math.round(Math.abs(months)) > 0 && Math.round(Math.abs(months)) < 12) {
+    return {
+      value: Math.round(months),
+      unit: 'month',
+    };
+  }
+
+  if (Math.round(Math.abs(months)) >= 12 && Math.round(Math.abs(years)) > 0) {
     return {
       value: Math.round(years),
       unit: 'year',
     };
   }
 
-  const months = years * 12 + fromDate.getMonth() - toDate.getMonth();
-  if (Math.round(Math.abs(months)) > 0) {
-    return {
-      value: Math.round(months),
-      unit: 'month',
-    };
-  }
   const weeks = secs / SECS_PER_WEEK;
-
   return {
     value: Math.round(weeks),
     unit: 'week',
