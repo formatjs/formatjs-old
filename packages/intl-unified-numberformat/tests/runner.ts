@@ -1,6 +1,7 @@
 import {spawnSync} from 'child_process';
 import {resolve} from 'path';
 import {cpus} from 'os';
+import chalk from 'chalk';
 
 if (process.version.startsWith('v13')) {
   console.log(
@@ -86,10 +87,10 @@ if (!json) {
 const failedTests = json.filter(r => !r.result.pass);
 for (const t of json) {
   if (t.result.pass) {
-    console.log(`✓ ${t.attrs.description}`);
+    console.log(`${chalk.green('✓')} ${t.attrs.description}`);
   } else {
     console.log('\n\n');
-    console.log(`🗴 ${t.attrs.description}`);
+    console.log(`${chalk.red('✗')} ${t.attrs.description}`);
     console.log('\t', t.result.message);
     console.log('\t', resolve(__dirname, '..', t.file));
     console.log('\n\n');

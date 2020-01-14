@@ -188,6 +188,7 @@ interface UnifiedNumberFormatInternal extends NumberFormatDigitInternalSlots {
   useGrouping: boolean;
   patterns: NumberLocalePatternData;
   pl: Intl.PluralRules;
+  boundFormat?: Intl.NumberFormat['format'];
   // Locale-dependent formatter data
   ild: NumberILD;
   numberingSystem: string;
@@ -598,7 +599,7 @@ export class UnifiedNumberFormat
     const newTarget =
       this && this instanceof UnifiedNumberFormat ? this.constructor : void 0;
     if (!newTarget) {
-      throw new TypeError("Intl.PluralRules must be called with 'new'");
+      throw new TypeError("Intl.NumberFormat must be called with 'new'");
     }
 
     setMultiInternalSlots(__INTERNAL_SLOT_MAP__, this, {
@@ -639,15 +640,40 @@ export class UnifiedNumberFormat
         getInternalSlot(__INTERNAL_SLOT_MAP__, this, 'currencySign')
       ),
     });
-    // test262/test/intl402/NumberFormat/prototype/format/bound-to-numberformat-instance.js
-    this.format = this.format.bind(this);
+    // https://github.com/tc39/test262/blob/master/test/intl402/NumberFormat/prototype/format/format-function-name.js
+    Object.defineProperty(this.format, 'name', {
+      value: '',
+      writable: false,
+      enumerable: false,
+      configurable: true,
+    });
     this.formatToParts = this.formatToParts.bind(this);
   }
 
-  format(num: number) {
-    return this.formatToParts(num)
-      .map(x => x.value)
-      .join('');
+  // https://tc39.es/proposal-unified-intl-numberformat/section11/numberformat_diff_out.html#sec-intl.numberformat.prototype.format
+  get format() {
+    if (typeof this !== 'object' || !(this instanceof UnifiedNumberFormat)) {
+      throw TypeError(
+        'Intl.NumberFormat format property accessor called on imcompatible receiver'
+      );
+    }
+    let boundFormat = getInternalSlot(
+      __INTERNAL_SLOT_MAP__,
+      this,
+      'boundFormat'
+    );
+    if (boundFormat === undefined) {
+      // https://tc39.es/proposal-unified-intl-numberformat/section11/numberformat_diff_out.html#sec-number-format-functions
+      boundFormat = (value?: number) => {
+        // TODO: check bigint
+        const x = toNumeric(value) as number;
+        return this.formatToParts(x)
+          .map(x => x.value)
+          .join('');
+      };
+      setInternalSlot(__INTERNAL_SLOT_MAP__, this, 'boundFormat', boundFormat);
+    }
+    return boundFormat;
   }
 
   formatToParts(x: number): UnifiedNumberFormatPart[] {
@@ -725,7 +751,7 @@ interface FormatNumberResult {
 
 function setNumberFormatUnitOptions(
   nf: UnifiedNumberFormat,
-  options: UnifiedNumberFormatOptions = {}
+  options: UnifiedNumberFormatOptions = Object.create(null)
 ) {
   // https://tc39.es/proposal-unified-intl-numberformat/section11/numberformat_proposed_out.html#sec-setnumberformatunitoptions
   const style = getOption(
