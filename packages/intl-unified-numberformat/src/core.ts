@@ -135,17 +135,42 @@ export function isUnitSupported(unit: Unit) {
   return true;
 }
 
+export type UnifiedNumberFormatOptionsLocaleMatcher = 'lookup' | 'best fit';
+export type UnifiedNumberFormatOptionsStyle =
+  | 'decimal'
+  | 'percent'
+  | 'currency'
+  | 'unit';
+export type UnifiedNumberFormatOptionsCompactDisplay = 'short' | 'long';
+export type UnifiedNumberFormatOptionsCurrencyDisplay =
+  | 'symbol'
+  | 'code'
+  | 'name'
+  | 'narrowSymbol';
+export type UnifiedNumberFormatOptionsCurrencySign = 'standard' | 'accounting';
+export type UnifiedNumberFormatOptionsNotation =
+  | 'standard'
+  | 'scientific'
+  | 'engineering'
+  | 'compact';
+export type UnifiedNumberFormatOptionsSignDisplay =
+  | 'auto'
+  | 'always'
+  | 'never'
+  | 'exceptZero';
+export type UnifiedNumberFormatOptionsUnitDisplay = 'long' | 'short' | 'narrow';
+
 export type UnifiedNumberFormatOptions = Intl.NumberFormatOptions &
   NumberFormatDigitOptions & {
-    localeMatcher?: 'lookup' | 'best fit';
-    style?: 'decimal' | 'percent' | 'currency' | 'unit';
-    compactDisplay?: 'short' | 'long';
-    currencyDisplay?: 'symbol' | 'code' | 'name' | 'narrowSymbol';
-    currencySign?: 'standard' | 'accounting';
-    notation?: 'standard' | 'scientific' | 'engineering' | 'compact';
-    signDisplay?: 'auto' | 'always' | 'never' | 'exceptZero';
+    localeMatcher?: UnifiedNumberFormatOptionsLocaleMatcher;
+    style?: UnifiedNumberFormatOptionsStyle;
+    compactDisplay?: UnifiedNumberFormatOptionsCompactDisplay;
+    currencyDisplay?: UnifiedNumberFormatOptionsCurrencyDisplay;
+    currencySign?: UnifiedNumberFormatOptionsCurrencySign;
+    notation?: UnifiedNumberFormatOptionsNotation;
+    signDisplay?: UnifiedNumberFormatOptionsSignDisplay;
     unit?: Unit;
-    unitDisplay?: 'long' | 'short' | 'narrow';
+    unitDisplay?: UnifiedNumberFormatOptionsUnitDisplay;
   };
 
 export type ResolvedUnifiedNumberFormatOptions = Intl.ResolvedNumberFormatOptions &
