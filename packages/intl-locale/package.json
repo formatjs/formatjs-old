@@ -1,0 +1,34 @@
+{
+  "name": "@formatjs/intl-locale",
+  "version": "1.0.0",
+  "description": "Intl.Locale polyfill",
+  "keywords": [
+    "intl",
+    "locale",
+    "formatjs",
+    "react-intl",
+    "i18n",
+    "ecma402",
+    "tc39"
+  ],
+  "author": "Long Ho <holevietlong@gmail.com>",
+  "homepage": "https://github.com/formatjs/formatjs#readme",
+  "license": "MIT",
+  "main": "lib/intl-locale.js",
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/formatjs/formatjs.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/formatjs/formatjs/issues"
+  },
+  "dependencies": {
+    "@formatjs/intl-utils": "2.0.4"
+  }
+}
