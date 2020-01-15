@@ -1,0 +1,36 @@
+{
+  "name": "@formatjs/ldml-parser",
+  "version": "1.0.0",
+  "description": "PEG.js parser for various ldml EBNF",
+  "keywords": [
+    "intl",
+    "formatjs",
+    "i18n",
+    "ldml",
+    "unicode"
+  ],
+  "author": "Long Ho <holevietlong@gmail.com>",
+  "homepage": "https://github.com/formatjs/formatjs#readme",
+  "license": "MIT",
+  "main": "lib/ldml-parser.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/formatjs/formatjs.git"
+  },
+  "scripts": {
+    "clean": "rimraf dist lib",
+    "build": "node build-peg.js && tsc && api-extractor run --local && tsc -p tsconfig.cjs.json && rollup -c rollup.config.js",
+    "benchmark": "node ./test/benchmark.js",
+    "test": "cross-env TS_NODE_PROJECT=./tsconfig.cjs.json cross-env NODE_ENV=test jest"
+  },
+  "bugs": {
+    "url": "https://github.com/formatjs/formatjs/issues"
+  }
+}
