@@ -32,7 +32,7 @@ import {
   toRawFixed,
   toRawPrecision,
   RawNumberFormatResult,
-  logBase10,
+  getMagnitude,
   repeat,
 } from './utils';
 import {extractILD, Patterns} from './data';
@@ -673,18 +673,36 @@ export const UnifiedNumberFormat: UnifiedNumberFormatConstructor = function Numb
   });
 } as UnifiedNumberFormatConstructor;
 
-Object.defineProperty(UnifiedNumberFormat.prototype, 'formatToParts', {
-  configurable: true,
-  enumerable: false,
-  writable: true,
+/*
+  17 ECMAScript Standard Built-in Objects:
+    Every built-in Function object, including constructors, that is not
+    identified as an anonymous function has a name property whose value
+    is a String.
+
+    Unless otherwise specified, the name property of a built-in Function
+    object, if it exists, has the attributes { [[Writable]]: false,
+    [[Enumerable]]: false, [[Configurable]]: true }.
+*/
+function defineProperty<T extends object>(
+  target: T,
+  name: string | symbol,
+  {value}: {value: any} & ThisType<any>
+) {
+  Object.defineProperty(target, name, {
+    configurable: true,
+    enumerable: false,
+    writable: true,
+    value,
+  });
+}
+
+defineProperty(UnifiedNumberFormat.prototype, 'formatToParts', {
   value: function formatToParts(x: number) {
     return formatNumericToParts(this, toNumeric(x) as number);
   },
 });
-Object.defineProperty(UnifiedNumberFormat.prototype, 'resolvedOptions', {
-  configurable: true,
-  enumerable: false,
-  writable: true,
+
+defineProperty(UnifiedNumberFormat.prototype, 'resolvedOptions', {
   value: function resolvedOptions() {
     const slots = getMultiInternalSlots(
       __INTERNAL_SLOT_MAP__,
@@ -701,7 +719,8 @@ Object.defineProperty(UnifiedNumberFormat.prototype, 'resolvedOptions', {
     return ro as any;
   },
 });
-Object.defineProperty(UnifiedNumberFormat.prototype, 'format', {
+
+const formatDescriptor = {
   enumerable: false,
   configurable: true,
   get() {
@@ -727,29 +746,50 @@ Object.defineProperty(UnifiedNumberFormat.prototype, 'format', {
           .map(x => x.value)
           .join('');
       };
+      // https://github.com/tc39/test262/blob/master/test/intl402/NumberFormat/prototype/format/format-function-name.js
+      Object.defineProperty(boundFormat, 'name', {
+        configurable: true,
+        enumerable: false,
+        writable: false,
+        value: '',
+      });
       setInternalSlot(__INTERNAL_SLOT_MAP__, this, 'boundFormat', boundFormat);
     }
     return boundFormat;
   },
-});
+} as const;
 
-// Static properties
-Object.defineProperty(UnifiedNumberFormat, 'supportedLocalesOf', {
+// https://github.com/tc39/test262/blob/master/test/intl402/NumberFormat/prototype/format/name.js
+Object.defineProperty(formatDescriptor.get, 'name', {
   configurable: true,
   enumerable: false,
-  writable: true,
-  value: function(
+  writable: false,
+  value: 'get format',
+});
+
+Object.defineProperty(
+  UnifiedNumberFormat.prototype,
+  'format',
+  formatDescriptor
+);
+
+// Static properties
+defineProperty(UnifiedNumberFormat, 'supportedLocalesOf', {
+  value: function supportedLocalesOf(
     locales: string | string[],
     options?: Pick<UnifiedNumberFormatOptions, 'localeMatcher'>
   ) {
     return supportedLocales(
       UnifiedNumberFormat.availableLocales,
       getCanonicalLocales(locales),
-      options as {localeMatcher: 'best fit' | 'lookup'}
+      options
     );
   },
 });
-UnifiedNumberFormat.__addLocaleData = function(...data: RawNumberLocaleData[]) {
+
+UnifiedNumberFormat.__addLocaleData = function __addLocaleData(
+  ...data: RawNumberLocaleData[]
+) {
   for (const datum of data) {
     const availableLocales: string[] = Object.keys(
       [
@@ -930,14 +970,14 @@ function computeExponent(numberFormat: UnifiedNumberFormat, x: number) {
   if (x < 0) {
     x = -x;
   }
-  const magnitude = logBase10(x);
+  const magnitude = getMagnitude(x);
   const exponent = computeExponentForMagnitude(numberFormat, magnitude);
   x = x / 10 ** exponent; // potential IEEE floating point error
   const formatNumberResult = formatNumberToString(numberFormat, x);
   if (formatNumberResult.roundedNumber === 0) {
     return exponent;
   }
-  const newMagnitude = logBase10(x);
+  const newMagnitude = getMagnitude(x);
   if (newMagnitude === magnitude - exponent) {
     return exponent;
   }
@@ -1002,7 +1042,7 @@ function computeExponentForMagnitude(
         return 0;
       }
       if (num > thresholds[thresholds.length - 1]) {
-        return logBase10(+thresholds[thresholds.length - 1]);
+        return getMagnitude(+thresholds[thresholds.length - 1]);
       }
       let i = thresholds.indexOf(num);
       for (
@@ -1011,7 +1051,7 @@ function computeExponentForMagnitude(
         thresholdMap[thresholds[i - 1]].other === thresholdMap[num].other;
         i--
       );
-      return logBase10(+thresholds[i]);
+      return getMagnitude(+thresholds[i]);
     }
   }
 }
@@ -1171,32 +1211,32 @@ try {
   // IE11 does not have Symbol
   if (typeof Symbol !== 'undefined') {
     Object.defineProperty(UnifiedNumberFormat.prototype, Symbol.toStringTag, {
-      value: 'Object',
-      writable: false,
-      enumerable: false,
       configurable: true,
+      enumerable: false,
+      writable: false,
+      value: 'Object',
     });
   }
 
-  // https://github.com/tc39/test262/blob/master/test/intl402/NumberFormat/constructor/length.js
+  // https://github.com/tc39/test262/blob/master/test/intl402/NumberFormat/length.js
   Object.defineProperty(UnifiedNumberFormat.prototype.constructor, 'length', {
+    configurable: true,
+    enumerable: false,
+    writable: false,
     value: 0,
-    writable: false,
-    enumerable: false,
-    configurable: true,
   });
-  // https://github.com/tc39/test262/blob/master/test/intl402/NumberFormat/constructor/supportedLocalesOf/length.js
+  // https://github.com/tc39/test262/blob/master/test/intl402/NumberFormat/supportedLocalesOf/length.js
   Object.defineProperty(UnifiedNumberFormat.supportedLocalesOf, 'length', {
-    value: 1,
-    writable: false,
-    enumerable: false,
     configurable: true,
+    enumerable: false,
+    writable: false,
+    value: 1,
   });
 
   Object.defineProperty(UnifiedNumberFormat, 'prototype', {
+    configurable: false,
     enumerable: false,
     writable: false,
-    configurable: false,
     value: UnifiedNumberFormat.prototype,
   });
 } catch (e) {
