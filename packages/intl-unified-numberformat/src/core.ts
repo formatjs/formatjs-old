@@ -27,6 +27,14 @@ import {
   NumberLocaleInternalData,
   SignPattern,
   partitionPattern,
+  UnifiedNumberFormatOptionsLocaleMatcher,
+  UnifiedNumberFormatOptionsStyle,
+  UnifiedNumberFormatOptionsCompactDisplay,
+  UnifiedNumberFormatOptionsCurrencyDisplay,
+  UnifiedNumberFormatOptionsCurrencySign,
+  UnifiedNumberFormatOptionsNotation,
+  UnifiedNumberFormatOptionsSignDisplay,
+  UnifiedNumberFormatOptionsUnitDisplay,
 } from '@formatjs/intl-utils';
 import {
   toRawFixed,
@@ -134,31 +142,6 @@ export function isUnitSupported(unit: Unit) {
   }
   return true;
 }
-
-export type UnifiedNumberFormatOptionsLocaleMatcher = 'lookup' | 'best fit';
-export type UnifiedNumberFormatOptionsStyle =
-  | 'decimal'
-  | 'percent'
-  | 'currency'
-  | 'unit';
-export type UnifiedNumberFormatOptionsCompactDisplay = 'short' | 'long';
-export type UnifiedNumberFormatOptionsCurrencyDisplay =
-  | 'symbol'
-  | 'code'
-  | 'name'
-  | 'narrowSymbol';
-export type UnifiedNumberFormatOptionsCurrencySign = 'standard' | 'accounting';
-export type UnifiedNumberFormatOptionsNotation =
-  | 'standard'
-  | 'scientific'
-  | 'engineering'
-  | 'compact';
-export type UnifiedNumberFormatOptionsSignDisplay =
-  | 'auto'
-  | 'always'
-  | 'never'
-  | 'exceptZero';
-export type UnifiedNumberFormatOptionsUnitDisplay = 'long' | 'short' | 'narrow';
 
 export type UnifiedNumberFormatOptions = Intl.NumberFormatOptions &
   NumberFormatDigitOptions & {
