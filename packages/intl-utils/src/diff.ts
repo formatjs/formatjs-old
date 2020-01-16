@@ -52,37 +52,44 @@ export function selectUnit(
       unit: 'day',
     };
   }
+
+  const weeks = secs / SECS_PER_WEEK;
+  if (Math.abs(weeks) < resolvedThresholds.week) {
+    return {
+      value: Math.round(weeks),
+      unit: 'week',
+    };
+  }
+
   const fromDate = new Date(from);
   const toDate = new Date(to);
 
   const years = fromDate.getFullYear() - toDate.getFullYear();
-  if (Math.round(Math.abs(years)) > 0) {
-    return {
-      value: Math.round(years),
-      unit: 'year',
-    };
-  }
 
   const months = years * 12 + fromDate.getMonth() - toDate.getMonth();
-  if (Math.round(Math.abs(months)) > 0) {
+  if (Math.abs(months) < resolvedThresholds.month) {
     return {
       value: Math.round(months),
       unit: 'month',
     };
   }
-  const weeks = secs / SECS_PER_WEEK;
 
   return {
-    value: Math.round(weeks),
-    unit: 'week',
+    value: Math.round(years),
+    unit: 'year',
   };
 }
 
-type Thresholds = Record<'second' | 'minute' | 'hour' | 'day', number>;
+type Thresholds = Record<
+  'second' | 'minute' | 'hour' | 'day' | 'week' | 'month',
+  number
+>;
 
 export const DEFAULT_THRESHOLDS: Thresholds = {
   second: 45, // seconds to minute
   minute: 45, // minutes to hour
-  hour: 22, // hour to day
-  day: 5, // day to week
+  hour: 22, // hours to day
+  day: 5, // days to week
+  week: 4, // weeks to month
+  month: 12, // months to year
 };

@@ -141,4 +141,18 @@ describe('selectUnit', function() {
       unit: 'month',
     });
   });
+  it('should work for year', function() {
+    expect(
+      selectUnit(new Date(2019, 11, 31), new Date(2020, 0, 1))
+    ).to.deep.equal({
+      value: -1,
+      unit: 'day',
+    });
+    expect(
+      selectUnit(new Date(2019, 2, 10), new Date(2020, 2, 10))
+    ).to.deep.equal({
+      value: -1,
+      unit: 'year',
+    });
+  });
 });
