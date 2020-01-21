@@ -24,7 +24,7 @@ interface TestResult {
   };
 }
 const excludedTests = [
-  'prototype/resolvedOptions/return-object', // We need to fix default content support.
+  'return-object', // We need to fix default content support.
   'proto-from-ctor-realm', // Bc of Realm support
 ];
 const PATTERN = resolve(
