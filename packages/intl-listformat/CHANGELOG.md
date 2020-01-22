@@ -3,6 +3,29 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.4.0 (2020-01-22)
+
+
+### Bug Fixes
+
+* **@formatjs/intl-listformat:** don’t treat en-US-POSIX as en-US because they are different ([a37b091](https://github.com/formatjs/formatjs/commit/a37b091830ddc0ac9fd5771eb402f2b5c23c45f7))
+* **@formatjs/intl-listformat:** fix CreatePartsFromList to behave like spec ([e4e7b17](https://github.com/formatjs/formatjs/commit/e4e7b1747d87e3ea5937d6d6911a500b6b00e394))
+* **@formatjs/intl-listformat:** fix locale lookup regression for en-US ([21e8219](https://github.com/formatjs/formatjs/commit/21e8219c443ccfd36f1acd17303b0e6480edba23))
+* **@formatjs/intl-listformat:** use api-extractor to combine d.ts ([e8af68d](https://github.com/formatjs/formatjs/commit/e8af68dfb1e0783615446123c147057a025b3f27))
+* **@formatjs/intl-unified-numberformat:** move currency processing to lazy ([6e1d621](https://github.com/formatjs/formatjs/commit/6e1d62189373dc4fdf71614c78a353f96e28c8ed))
+
+
+### Features
+
+* **@formatjs/intl-displaynames:** initial commit ([#469](https://github.com/formatjs/formatjs/issues/469)) ([0558c7b](https://github.com/formatjs/formatjs/commit/0558c7b633249e40ded05915dc11c181fc3cb5cb))
+* **@formatjs/intl-listformat:** add Intl.ListFormat polyfill ([6e5d476](https://github.com/formatjs/formatjs/commit/6e5d476251adca453cdc43c8a41a8b06123fec05))
+* **@formatjs/intl-utils:** add IE11-safe getCanonicalLocales, ([b5f37c4](https://github.com/formatjs/formatjs/commit/b5f37c41bf0248bf8b8046407aa3ba232744ee5b)), closes [#200](https://github.com/formatjs/formatjs/issues/200)
+* **@formatjs/intl-utils:** add PartitionPattern abstract operation ([#317](https://github.com/formatjs/formatjs/issues/317)) ([5731fcf](https://github.com/formatjs/formatjs/commit/5731fcfeaaba65322f904e863faead8d1f177a98))
+
+
+
+
+
 ## [1.3.7](https://github.com/formatjs/formatjs/compare/@formatjs/intl-listformat@1.3.6...@formatjs/intl-listformat@1.3.7) (2020-01-09)
 
 

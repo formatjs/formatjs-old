@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 2.0.0 (2020-01-22)
+
+
+### Bug Fixes
+
+* **@formatjs/cli:** add preset-env so we can parse latest syntax ([6495011](https://github.com/formatjs/formatjs/commit/64950113027da769a83d2e43e71ceccac1af2184))
+* **@formatjs/cli:** Add support for parsing class properties ([1714bf9](https://github.com/formatjs/formatjs/commit/1714bf9d9abfc31458222e0922ef57baa1f38787))
+* **@formatjs/cli:** allow optionalChaining parser, fix [#404](https://github.com/formatjs/formatjs/issues/404) ([1af4607](https://github.com/formatjs/formatjs/commit/1af460783db71bfc7bf0e3f935a020473fcb093d))
+* **@formatjs/cli:** glob files instead of relying on shell, fix [#383](https://github.com/formatjs/formatjs/issues/383) ([c7e1a6a](https://github.com/formatjs/formatjs/commit/c7e1a6af5f6334c6fdf18fd3cd29b81c411cbfd2))
+* **@formatjs/cli:** remove Node engines restrictions ([e55efe9](https://github.com/formatjs/formatjs/commit/e55efe90edc8859b89978b2b8bd99c41c17c291f))
+* **lint:** fix lint config and rerun ([041eb99](https://github.com/formatjs/formatjs/commit/041eb99706164048b5b8ce7079955897ce27ed70))
+
+
+### Features
+
+* **@formatjs/cli:** add --outFile & --idInterpolationPattern ([0c5e675](https://github.com/formatjs/formatjs/commit/0c5e675ed38f18987674a875fa6ed908ce907fc9))
+* **babel-plugin-react-intl:** remove enforceDescription and enforceDefaultMessage ([72ff434](https://github.com/formatjs/formatjs/commit/72ff4345170f9b240f7331aa6fa36df96a8c823b))
+
+
+### BREAKING CHANGES
+
+* **babel-plugin-react-intl:** We want to move things like `enforceDescription` and
+`enforceDefaultMessage` to the new eslint-plugin-formatjs instead of
+using this babel plugin for linting.
+feat(@formatjs/cli): Remove enforceDescription and enforceDefaultMessage
+
+
+
+
+
 ## [1.1.18](https://github.com/formatjs/formatjs/compare/@formatjs/cli@1.1.17...@formatjs/cli@1.1.18) (2020-01-09)
 
 **Note:** Version bump only for package @formatjs/cli
