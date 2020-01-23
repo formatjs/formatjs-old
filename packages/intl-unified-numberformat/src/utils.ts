@@ -8,14 +8,10 @@ export interface RawNumberFormatResult {
  * Cannot do Math.log(x) / Math.log(10) bc if IEEE floating point issue
  * @param x number
  */
-export function logBase10(x: number): number {
-  if (x < 1) {
-    const fraction = String(x).split('.')[1];
-    let exponent = 0;
-    for (; fraction[exponent] === '0'; exponent++);
-    return -exponent - 1;
-  }
-  return String(Math.floor(x)).length - 1;
+export function getMagnitude(x: number): number {
+  // Cannot count string length via Number.toString because it may use scientific notation
+  // for very small or very large numbers.
+  return Math.floor(Math.log(x) * Math.LOG10E);
 }
 
 // TODO: dedup with intl-pluralrules
@@ -34,7 +30,23 @@ export function toRawFixed(
     n = exactSolve - roundDown < roundUp - exactSolve ? roundDown : roundUp;
   }
   const xFinal = n / 10 ** f;
-  let m = n === 0 ? '0' : n.toString();
+
+  // n is a positive integer, but it is possible to be greater than 1e21.
+  // In such case we will go the slow path.
+  // See also: https://tc39.es/ecma262/#sec-numeric-types-number-tostring
+  let m: string;
+  if (n < 1e21) {
+    m = n.toString();
+  } else {
+    m = n.toString();
+    const idx1 = m.indexOf('.');
+    const idx2 = m.indexOf('e+');
+    const exponent = parseInt(m.substring(idx2 + 2), 10);
+    m =
+      m.substring(0, idx1) +
+      m.substring(idx1 + 1, idx2) +
+      repeat('0', exponent - (idx2 - idx1 - 1));
+  }
   let int: number;
   if (f !== 0) {
     let k = m.length;
@@ -76,14 +88,21 @@ export function toRawPrecision(
     e = 0;
     xFinal = 0;
   } else {
-    e = Math.floor(logBase10(x));
+    e = getMagnitude(x);
     let n: number;
     {
-      const exactSolve = x / 10 ** (e - p + 1);
+      const magnitude = e - p + 1;
+      const exactSolve =
+        // Preserve floating point precision as much as possible with multiplication.
+        magnitude < 0 ? x * 10 ** -magnitude : x / 10 ** magnitude;
       const roundDown = Math.floor(exactSolve);
       const roundUp = Math.ceil(exactSolve);
       n = exactSolve - roundDown < roundUp - exactSolve ? roundDown : roundUp;
     }
+    // See: https://tc39.es/ecma262/#sec-numeric-types-number-tostring
+    // No need to worry about scientific notation because it only happens for values >= 1e21,
+    // which has 22 significant digits. So it will at least be divided by 10 here to bring the
+    // value back into non-scientific-notation range.
     m = n.toString();
     xFinal = n * 10 ** (e - p + 1);
   }
