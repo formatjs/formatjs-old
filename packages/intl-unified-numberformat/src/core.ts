@@ -35,12 +35,13 @@ import {
   UnifiedNumberFormatOptionsNotation,
   UnifiedNumberFormatOptionsSignDisplay,
   UnifiedNumberFormatOptionsUnitDisplay,
+  isWellFormedCurrencyCode,
 } from '@formatjs/intl-utils';
 import {
   toRawFixed,
   toRawPrecision,
   RawNumberFormatResult,
-  logBase10,
+  getMagnitude,
   repeat,
 } from './utils';
 import {extractILD, Patterns} from './data';
@@ -71,37 +72,12 @@ const SHORTENED_SACTION_UNITS = SANCTIONED_UNITS.map(unit =>
   unit.replace(/^(.*?)-/, '')
 );
 
-const NOT_A_Z_REGEX = /[^A-Z]/;
-
-/**
- * This follows https://tc39.es/ecma402/#sec-case-sensitivity-and-case-mapping
- * @param str string to convert
- */
-function toUpperCase(str: string): string {
-  return str.replace(/([a-z])/g, (_, c) => c.toUpperCase());
-}
-
 /**
  * This follows https://tc39.es/ecma402/#sec-case-sensitivity-and-case-mapping
  * @param str string to convert
  */
 function toLowerCase(str: string): string {
   return str.replace(/([A-Z])/g, (_, c) => c.toLowerCase());
-}
-
-/**
- * https://tc39.es/proposal-unified-intl-numberformat/section6/locales-currencies-tz_proposed_out.html#sec-iswellformedcurrencycode
- * @param currency
- */
-function isWellFormedCurrencyCode(currency: string): boolean {
-  currency = toUpperCase(currency);
-  if (currency.length !== 3) {
-    return false;
-  }
-  if (NOT_A_Z_REGEX.test(currency)) {
-    return false;
-  }
-  return true;
 }
 
 /**
@@ -141,6 +117,16 @@ export function isUnitSupported(unit: Unit) {
     return false;
   }
   return true;
+}
+
+/**
+ * Chop off the unicode extension from the locale string.
+ */
+function removeUnicodeExtensionFromLocale(canonicalLocale: string): string {
+  const extensionIndex = canonicalLocale.indexOf('-u-');
+  return extensionIndex >= 0
+    ? canonicalLocale.slice(0, extensionIndex)
+    : canonicalLocale;
 }
 
 export type UnifiedNumberFormatOptions = Intl.NumberFormatOptions &
@@ -196,11 +182,10 @@ interface UnifiedNumberFormatInternal extends NumberFormatDigitInternalSlots {
   useGrouping: boolean;
   patterns: NumberLocalePatternData;
   pl: Intl.PluralRules;
+  boundFormat?: Intl.NumberFormat['format'];
   // Locale-dependent formatter data
   ild: NumberILD;
   numberingSystem: string;
-  relevantExtensionKeys: string[];
-  availableLocales: string[];
 }
 
 const __INTERNAL_SLOT_MAP__ = new WeakMap<
@@ -230,13 +215,14 @@ function initializeNumberFormat(
   opt.localeMatcher = matcher;
   const {localeData} = UnifiedNumberFormat;
   const r = createResolveLocale(UnifiedNumberFormat.getDefaultLocale)(
-    getInternalSlot(__INTERNAL_SLOT_MAP__, nf, 'availableLocales'),
+    UnifiedNumberFormat.availableLocales,
     requestedLocales,
     opt,
-    getInternalSlot(__INTERNAL_SLOT_MAP__, nf, 'relevantExtensionKeys'),
+    // [[RelevantExtensionKeys]] slot, which is a constant
+    ['nu'],
     localeData
   );
-  const ildData = localeData[r.locale];
+  const ildData = localeData[removeUnicodeExtensionFromLocale(r.locale)];
   const numberingSystem = r.nu;
   setMultiInternalSlots(__INTERNAL_SLOT_MAP__, nf, {
     locale: r.locale,
@@ -596,73 +582,112 @@ function formatNumericToParts(numberFormat: UnifiedNumberFormat, x: number) {
   return partitionNumberPattern(numberFormat, x);
 }
 
-export class UnifiedNumberFormat
-  implements Omit<Intl.NumberFormat, 'formatToParts'> {
-  constructor(
+export interface UnifiedNumberFormat {
+  resolvedOptions(): ResolvedUnifiedNumberFormatOptions;
+  formatToParts(x: number): UnifiedNumberFormatPart[];
+  format(x: number): string;
+}
+
+export interface UnifiedNumberFormatConstructor {
+  new (
     locales?: string | string[],
     options?: UnifiedNumberFormatOptions
-  ) {
-    // Cannot use `new.target` bc of IE11 & TS transpiles it to something else
-    const newTarget =
-      this && this instanceof UnifiedNumberFormat ? this.constructor : void 0;
-    if (!newTarget) {
-      throw new TypeError("Intl.PluralRules must be called with 'new'");
-    }
+  ): UnifiedNumberFormat;
+  (
+    locales?: string | string[],
+    options?: UnifiedNumberFormatOptions
+  ): UnifiedNumberFormat;
 
-    setMultiInternalSlots(__INTERNAL_SLOT_MAP__, this, {
-      relevantExtensionKeys: ['nu'],
-      availableLocales: UnifiedNumberFormat.availableLocales,
-    });
+  __addLocaleData(...data: RawNumberLocaleData[]): void;
+  supportedLocalesOf(
+    locales: string | string[],
+    options?: Pick<UnifiedNumberFormatOptions, 'localeMatcher'>
+  ): string[];
+  getDefaultLocale(): string;
 
-    initializeNumberFormat(this, locales, options);
+  __defaultLocale: string;
+  localeData: Record<string, NumberLocaleInternalData>;
+  availableLocales: string[];
+  polyfilled: boolean;
+}
 
-    const {
-      localeData: {
-        [getInternalSlot(__INTERNAL_SLOT_MAP__, this, 'locale')]: ildData,
-      },
-    } = UnifiedNumberFormat;
-
-    setMultiInternalSlots(__INTERNAL_SLOT_MAP__, this, {
-      pl: new Intl.PluralRules(
-        locales,
-        getMultiInternalSlots(
-          __INTERNAL_SLOT_MAP__,
-          this,
-          'minimumFractionDigits',
-          'maximumFractionDigits',
-          'minimumIntegerDigits',
-          'minimumSignificantDigits',
-          'maximumSignificantDigits',
-          'roundingType',
-          'notation'
-        ) as any
-      ),
-      patterns: new Patterns(
-        ildData.units,
-        ildData.currencies,
-        ildData.numbers,
-        getInternalSlot(__INTERNAL_SLOT_MAP__, this, 'numberingSystem'),
-        getInternalSlot(__INTERNAL_SLOT_MAP__, this, 'unit'),
-        getInternalSlot(__INTERNAL_SLOT_MAP__, this, 'currency'),
-        getInternalSlot(__INTERNAL_SLOT_MAP__, this, 'currencySign')
-      ),
-    });
-    // test262/test/intl402/NumberFormat/prototype/format/bound-to-numberformat-instance.js
-    this.format = this.format.bind(this);
-    this.formatToParts = this.formatToParts.bind(this);
+export const UnifiedNumberFormat: UnifiedNumberFormatConstructor = function NumberFormat(
+  this: UnifiedNumberFormat,
+  locales?: string | string[],
+  options?: UnifiedNumberFormatOptions
+) {
+  // Cannot use `new.target` bc of IE11 & TS transpiles it to something else
+  if (!this || !(this instanceof UnifiedNumberFormat)) {
+    return new UnifiedNumberFormat(locales, options);
   }
 
-  format(num: number) {
-    return this.formatToParts(num)
-      .map(x => x.value)
-      .join('');
-  }
+  initializeNumberFormat(this, locales, options);
 
-  formatToParts(x: number): UnifiedNumberFormatPart[] {
+  const ildData =
+    UnifiedNumberFormat.localeData[
+      removeUnicodeExtensionFromLocale(
+        getInternalSlot(__INTERNAL_SLOT_MAP__, this, 'locale')
+      )
+    ];
+
+  setMultiInternalSlots(__INTERNAL_SLOT_MAP__, this, {
+    pl: new Intl.PluralRules(
+      locales,
+      getMultiInternalSlots(
+        __INTERNAL_SLOT_MAP__,
+        this,
+        'minimumFractionDigits',
+        'maximumFractionDigits',
+        'minimumIntegerDigits',
+        'minimumSignificantDigits',
+        'maximumSignificantDigits',
+        'roundingType',
+        'notation'
+      ) as any
+    ),
+    patterns: new Patterns(
+      ildData.units,
+      ildData.currencies,
+      ildData.numbers,
+      getInternalSlot(__INTERNAL_SLOT_MAP__, this, 'numberingSystem'),
+      getInternalSlot(__INTERNAL_SLOT_MAP__, this, 'unit'),
+      getInternalSlot(__INTERNAL_SLOT_MAP__, this, 'currency'),
+      getInternalSlot(__INTERNAL_SLOT_MAP__, this, 'currencySign')
+    ),
+  });
+} as UnifiedNumberFormatConstructor;
+
+/*
+  17 ECMAScript Standard Built-in Objects:
+    Every built-in Function object, including constructors, that is not
+    identified as an anonymous function has a name property whose value
+    is a String.
+
+    Unless otherwise specified, the name property of a built-in Function
+    object, if it exists, has the attributes { [[Writable]]: false,
+    [[Enumerable]]: false, [[Configurable]]: true }.
+*/
+function defineProperty<T extends object>(
+  target: T,
+  name: string | symbol,
+  {value}: {value: any} & ThisType<any>
+) {
+  Object.defineProperty(target, name, {
+    configurable: true,
+    enumerable: false,
+    writable: true,
+    value,
+  });
+}
+
+defineProperty(UnifiedNumberFormat.prototype, 'formatToParts', {
+  value: function formatToParts(x: number) {
     return formatNumericToParts(this, toNumeric(x) as number);
-  }
+  },
+});
 
-  resolvedOptions(): ResolvedUnifiedNumberFormatOptions {
+defineProperty(UnifiedNumberFormat.prototype, 'resolvedOptions', {
+  value: function resolvedOptions() {
     const slots = getMultiInternalSlots(
       __INTERNAL_SLOT_MAP__,
       this,
@@ -676,55 +701,113 @@ export class UnifiedNumberFormat
       }
     }
     return ro as any;
-  }
+  },
+});
 
-  public static supportedLocalesOf(
+const formatDescriptor = {
+  enumerable: false,
+  configurable: true,
+  get() {
+    if (typeof this !== 'object' || !(this instanceof UnifiedNumberFormat)) {
+      throw TypeError(
+        'Intl.NumberFormat format property accessor called on imcompatible receiver'
+      );
+    }
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const numberFormat = this;
+    let boundFormat = getInternalSlot(
+      __INTERNAL_SLOT_MAP__,
+      this,
+      'boundFormat'
+    );
+    if (boundFormat === undefined) {
+      // https://tc39.es/proposal-unified-intl-numberformat/section11/numberformat_diff_out.html#sec-number-format-functions
+      boundFormat = (value?: number) => {
+        // TODO: check bigint
+        const x = toNumeric(value) as number;
+        return numberFormat
+          .formatToParts(x)
+          .map(x => x.value)
+          .join('');
+      };
+      // https://github.com/tc39/test262/blob/master/test/intl402/NumberFormat/prototype/format/format-function-name.js
+      Object.defineProperty(boundFormat, 'name', {
+        configurable: true,
+        enumerable: false,
+        writable: false,
+        value: '',
+      });
+      setInternalSlot(__INTERNAL_SLOT_MAP__, this, 'boundFormat', boundFormat);
+    }
+    return boundFormat;
+  },
+} as const;
+
+// https://github.com/tc39/test262/blob/master/test/intl402/NumberFormat/prototype/format/name.js
+Object.defineProperty(formatDescriptor.get, 'name', {
+  configurable: true,
+  enumerable: false,
+  writable: false,
+  value: 'get format',
+});
+
+Object.defineProperty(
+  UnifiedNumberFormat.prototype,
+  'format',
+  formatDescriptor
+);
+
+// Static properties
+defineProperty(UnifiedNumberFormat, 'supportedLocalesOf', {
+  value: function supportedLocalesOf(
     locales: string | string[],
     options?: Pick<UnifiedNumberFormatOptions, 'localeMatcher'>
   ) {
     return supportedLocales(
       UnifiedNumberFormat.availableLocales,
       getCanonicalLocales(locales),
-      options as {localeMatcher: 'best fit' | 'lookup'}
+      options
     );
-  }
+  },
+});
 
-  public static __addLocaleData(...data: RawNumberLocaleData[]) {
-    for (const datum of data) {
-      const availableLocales: string[] = Object.keys(
-        [
-          ...datum.availableLocales,
-          ...Object.keys(datum.aliases),
-          ...Object.keys(datum.parentLocales),
-        ].reduce((all: Record<string, true>, k) => {
-          all[k] = true;
-          return all;
-        }, {})
-      );
-      for (const locale of availableLocales) {
-        try {
-          UnifiedNumberFormat.localeData[locale] = unpackData(locale, datum);
-        } catch (e) {
-          // Ignore if we got no data
-        }
+UnifiedNumberFormat.__addLocaleData = function __addLocaleData(
+  ...data: RawNumberLocaleData[]
+) {
+  for (const datum of data) {
+    const availableLocales: string[] = Object.keys(
+      [
+        ...datum.availableLocales,
+        ...Object.keys(datum.aliases),
+        ...Object.keys(datum.parentLocales),
+      ].reduce((all: Record<string, true>, k) => {
+        all[k] = true;
+        return all;
+      }, {})
+    );
+    for (const locale of availableLocales) {
+      try {
+        UnifiedNumberFormat.localeData[locale] = unpackData(locale, datum);
+      } catch (e) {
+        // Ignore if we got no data
       }
     }
-    UnifiedNumberFormat.availableLocales = Object.keys(
-      UnifiedNumberFormat.localeData
-    );
-    if (!UnifiedNumberFormat.__defaultLocale) {
-      UnifiedNumberFormat.__defaultLocale =
-        UnifiedNumberFormat.availableLocales[0];
-    }
   }
-  static localeData: Record<string, NumberLocaleInternalData> = {};
-  private static availableLocales: string[] = [];
-  private static __defaultLocale = 'en';
-  public static getDefaultLocale() {
-    return UnifiedNumberFormat.__defaultLocale;
+  UnifiedNumberFormat.availableLocales = Object.keys(
+    UnifiedNumberFormat.localeData
+  );
+  if (!UnifiedNumberFormat.__defaultLocale) {
+    UnifiedNumberFormat.__defaultLocale =
+      UnifiedNumberFormat.availableLocales[0];
   }
-  public static polyfilled = true;
-}
+};
+UnifiedNumberFormat.__defaultLocale = 'en';
+UnifiedNumberFormat.localeData = {};
+UnifiedNumberFormat.availableLocales = [];
+UnifiedNumberFormat.getDefaultLocale = () => {
+  return UnifiedNumberFormat.__defaultLocale;
+};
+UnifiedNumberFormat.polyfilled = true;
 
 interface FormatNumberResult {
   roundedNumber: number;
@@ -733,7 +816,7 @@ interface FormatNumberResult {
 
 function setNumberFormatUnitOptions(
   nf: UnifiedNumberFormat,
-  options: UnifiedNumberFormatOptions = {}
+  options: UnifiedNumberFormatOptions = Object.create(null)
 ) {
   // https://tc39.es/proposal-unified-intl-numberformat/section11/numberformat_proposed_out.html#sec-setnumberformatunitoptions
   const style = getOption(
@@ -871,14 +954,14 @@ function computeExponent(numberFormat: UnifiedNumberFormat, x: number) {
   if (x < 0) {
     x = -x;
   }
-  const magnitude = logBase10(x);
+  const magnitude = getMagnitude(x);
   const exponent = computeExponentForMagnitude(numberFormat, magnitude);
   x = x / 10 ** exponent; // potential IEEE floating point error
   const formatNumberResult = formatNumberToString(numberFormat, x);
   if (formatNumberResult.roundedNumber === 0) {
     return exponent;
   }
-  const newMagnitude = logBase10(x);
+  const newMagnitude = getMagnitude(x);
   if (newMagnitude === magnitude - exponent) {
     return exponent;
   }
@@ -943,7 +1026,7 @@ function computeExponentForMagnitude(
         return 0;
       }
       if (num > thresholds[thresholds.length - 1]) {
-        return logBase10(+thresholds[thresholds.length - 1]);
+        return getMagnitude(+thresholds[thresholds.length - 1]);
       }
       let i = thresholds.indexOf(num);
       for (
@@ -952,7 +1035,7 @@ function computeExponentForMagnitude(
         thresholdMap[thresholds[i - 1]].other === thresholdMap[num].other;
         i--
       );
-      return logBase10(+thresholds[i]);
+      return getMagnitude(+thresholds[i]);
     }
   }
 }
@@ -1112,34 +1195,33 @@ try {
   // IE11 does not have Symbol
   if (typeof Symbol !== 'undefined') {
     Object.defineProperty(UnifiedNumberFormat.prototype, Symbol.toStringTag, {
-      value: 'Object',
-      writable: false,
-      enumerable: false,
       configurable: true,
+      enumerable: false,
+      writable: false,
+      value: 'Object',
     });
   }
 
-  // test262/test/intl402/NumberFormat/name.js
-  Object.defineProperty(UnifiedNumberFormat, 'name', {
-    value: 'NumberFormat',
-    writable: false,
-    enumerable: false,
+  // https://github.com/tc39/test262/blob/master/test/intl402/NumberFormat/length.js
+  Object.defineProperty(UnifiedNumberFormat.prototype.constructor, 'length', {
     configurable: true,
+    enumerable: false,
+    writable: false,
+    value: 0,
+  });
+  // https://github.com/tc39/test262/blob/master/test/intl402/NumberFormat/supportedLocalesOf/length.js
+  Object.defineProperty(UnifiedNumberFormat.supportedLocalesOf, 'length', {
+    configurable: true,
+    enumerable: false,
+    writable: false,
+    value: 1,
   });
 
-  // https://github.com/tc39/test262/blob/master/test/intl402/NumberFormat/constructor/length.js
-  Object.defineProperty(UnifiedNumberFormat.prototype.constructor, 'length', {
-    value: 0,
-    writable: false,
+  Object.defineProperty(UnifiedNumberFormat, 'prototype', {
+    configurable: false,
     enumerable: false,
-    configurable: true,
-  });
-  // https://github.com/tc39/test262/blob/master/test/intl402/NumberFormat/constructor/supportedLocalesOf/length.js
-  Object.defineProperty(UnifiedNumberFormat.supportedLocalesOf, 'length', {
-    value: 1,
     writable: false,
-    enumerable: false,
-    configurable: true,
+    value: UnifiedNumberFormat.prototype,
   });
 } catch (e) {
   // Meta fix so we're test262-compliant, not important
