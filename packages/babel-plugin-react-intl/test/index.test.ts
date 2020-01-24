@@ -69,9 +69,10 @@ describe('options', () => {
       overrideIdFn: (
         id: string,
         defaultMessage: string,
-        description: string
+        description: string,
+        file: string
       ) => {
-        return `HELLO.${id}.${defaultMessage.length}.${typeof description}`;
+        return `${file}.${id}.${defaultMessage.length}.${typeof description}`;
       },
     })!.code;
 

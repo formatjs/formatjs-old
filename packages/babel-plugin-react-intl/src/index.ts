@@ -182,6 +182,7 @@ function createMessageDescriptor(
 function evaluateMessageDescriptor(
   descriptorPath: MessageDescriptorPath,
   isJSXSource = false,
+  filename: string,
   overrideIdFn?: OptionsSchema['overrideIdFn']
 ) {
   let id = getMessageDescriptorValue(descriptorPath.id);
@@ -191,7 +192,12 @@ function evaluateMessageDescriptor(
   const description = getMessageDescriptorValue(descriptorPath.description);
 
   if (overrideIdFn) {
-    id = overrideIdFn(id, defaultMessage, description);
+    id = overrideIdFn(
+      id,
+      defaultMessage,
+      description,
+      p.relative(process.cwd(), filename)
+    );
   }
   const descriptor: MessageDescriptor = {
     id,
@@ -433,6 +439,7 @@ export default declare((api: any, options: OptionsSchema) => {
             const descriptor = evaluateMessageDescriptor(
               descriptorPath,
               true,
+              filename,
               overrideIdFn
             );
 
@@ -517,6 +524,7 @@ export default declare((api: any, options: OptionsSchema) => {
           const descriptor = evaluateMessageDescriptor(
             descriptorPath,
             false,
+            filename,
             overrideIdFn
           );
           storeMessage(descriptor, messageDescriptor, opts, filename, messages);
