@@ -33,13 +33,34 @@
 
 // https://unicode.org/reports/tr35/#unicode_locale_id
 // This does not contain unicode_subdivision_id, unicode_subdivision_suffix & unicode_measure_unit
-unicode_locale_id = lang:unicode_language_id extensions:extensions* puExtensions:pu_extensions? {
+unicode_locale_id = lang:unicode_language_id extensions:extensions* puExtension:pu_extensions? {
+    let unicodeExtension
+    let transformedExtension
+    const otherExtensions = {}
+    for (const ext of extensions) {
+        if (ext.type === 'unicode') {
+            if (unicodeExtension) {
+                throw new RangeError('There can only be 1 -u- extension')
+            }
+            unicodeExtension = ext
+        } else if (ext.type === 'transformed') {
+            if (transformedExtension) {
+                throw new RangeError('There can only be 1 -t- extension')
+            }
+            transformedExtension = ext
+        } else {
+            if (otherExtensions[ext.type]) {
+                throw new RangeError(`There can only be 1 -${ext.type}- extension`)   
+            }
+            otherExtensions[ext.type] = ext.value
+        }
+    }
     return {
         lang,
-        extensions: [
-            ...(Array.isArray(extensions) ? extensions : []),
-            ...(Array.isArray(puExtensions) ? puExtensions : [])
-        ]
+        otherExtensions,
+        unicodeExtension,
+        transformedExtension,
+        puExtension
     }
 };
 extensions = unicode_locale_extensions
@@ -57,7 +78,7 @@ unicode_locale_extensions = sep [uU]
             return { keywords: keywords.map(ignoreSep) }
         }
     ) {
-        return {...extension, type: 'unicode'}
+        return {...extension, type: 'u'}
     };
 transformed_extensions = sep [tT]
    extension:(
@@ -71,21 +92,23 @@ transformed_extensions = sep [tT]
             return {fields: fields.map(ignoreSep) }
         }
     ) {
-        return {...extension, type: 'transformed'}
+        return {...extension, type: 't'}
     };
 pu_extensions = sep [xX] extensions:(sep anum_1_8)+ {
-    return { type: 'pu', values: extensions.map(ignoreSep) }
+    return { type: 'x', values: extensions.map(ignoreSep).join('-') }
 };
 // alphanum-[tTuUxX] but there's no exclusion in pegjs
-other_extensions = sep k:[0-9a-sA-SyzYZ] values:(sep anum_2_8)+ {
-    return { values: values.map(ignoreSep).map(value => [k, value]), type: 'other' }
-};
-keyword = k:key v:(sep type)? {
-    if (Array.isArray(v) && v[1]) {
-        return {[k]: v[1]}
+other_extensions = sep type:[0-9a-sA-SvwyzVWYZ] values:(sep anum_2_8)+ {
+    return { 
+        type,
+        value: values.map(ignoreSep).join('-') 
     }
-    // TODO: Figure out how to handle key w/o value
-    return
+};
+keyword = key:key value:(sep type)? {
+    if (Array.isArray(value) && value[1]) {
+        return {key, value: value[1]}
+    }
+    return {key, value: ''}
 };
 key = $(anum alpha);
 

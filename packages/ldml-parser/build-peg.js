@@ -17,7 +17,7 @@ import {
   UnicodeLanguageId,
   UnicodeExtension,
   TransformedExtension,
-  OtherExtension,
+  OtherExtensions,
   PuExtension
 } from './unicode-locale-id-types'`
   },
@@ -27,7 +27,7 @@ import {
     tlang: 'UnicodeLanguageId',
     unicode_locale_extensions: 'UnicodeExtension',
     transformed_extensions: 'TransformedExtension',
-    other_extensions: 'OtherExtension',
+    other_extensions: 'OtherExtensions',
     pu_extensions: 'PuExtension',
     sep: 'string',
     anum: 'string',
@@ -41,6 +41,6 @@ const PARSE_EXPORT = /export const parse:/g;
 outputFileSync(
   resolve(__dirname, 'src/unicode-locale-id.ts'),
   srcString
-    .replace(REGEX, 'ParseFunction = ($1) => UnicodeLocaleId[];')
+    .replace(REGEX, 'ParseFunction = ($1) => UnicodeLocaleId;')
     .replace(PARSE_EXPORT, 'export const pegParse:')
 );

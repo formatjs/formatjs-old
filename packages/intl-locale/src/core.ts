@@ -6,6 +6,7 @@ import {
   setMultiInternalSlots,
   objectIs,
 } from '@formatjs/intl-utils';
+import {parseUnicodeLocaleId} from '@formatjs/ldml-parser'
 export interface IntlLocaleOptions {
   calendar?: string;
   collation?: string;
@@ -24,7 +25,74 @@ const __INTERNAL_SLOT_MAP__ = new WeakMap<IntlLocale, IntlLocaleInternal>();
 
 const NUMBERING_SYSTEM_REGEX = /[a-z0-9]{3,8}(-[a-z0-9]{3,8})*/gi;
 
+interface KeywordPart {
+  key: string
+  value: string
+}
+
+function unicodeExtensionComponents(extension: string) {
+  const attributes = []
+  const keywords: KeywordPart[] = []
+  let isKeyword = false
+  const size = extension.length
+  let k = 3
+  let key = ''
+  let value = ''
+  while (k < size) {
+    const e = extension.indexOf('-', k)
+    let len = 0
+    if (e === -1) {
+      len = size - k
+    } else {
+      len = e - k
+    }
+    const subtag = extension.substring(k, k + len)
+    
+    if (!isKeyword) {
+      if (len !== 2 && attributes.indexOf(subtag) === -1) {
+        attributes.push(subtag)
+      }
+    } else {
+      if (len === 2) {
+        if (!keywords.find(el => el.key === key)) {
+          keywords.push({
+            key,
+            value
+          })
+        }
+      } else {
+        if (value !== '') {
+          value += '-'
+        }
+        value += subtag
+      }
+    }
+    if (len === 2) {
+      isKeyword = true
+      key = subtag
+      value = ''
+    }
+    k += len + 1
+  }
+  if (isKeyword) {
+    if (!keywords.find(el => el.key === key)) {
+      keywords.push({
+        key,
+        value
+      })
+    }
+  }
+  return {
+    attributes,
+    keywords
+  }
+}
+
 function applyOptionsToTag(tag: string, options: IntlLocaleOptions): string {
+  const ast = parseUnicodeLocaleId(tag)
+  if (Array.isArray(ast.extensions) && ast.extensions.length) {
+    const extension = ast.extensions.filter()
+  }
   return tag;
 }
 
@@ -173,7 +241,21 @@ export class IntlLocale {
     return getInternalSlot(__INTERNAL_SLOT_MAP__, this, 'locale');
   }
 
-  public get baseName() {}
+  public get baseName() {
+    const locale = getInternalSlot(__INTERNAL_SLOT_MAP__, this, 'locale')
+    let ast
+    try {
+      ast = parseUnicodeLocaleId(locale)
+    } catch (e) {
+      return locale
+    }
+    return [
+      ast.lang.lang,
+      ast.lang.script,
+      ast.lang.region,
+      ...(ast.lang.variants || [])
+    ].filter(Boolean).join('-')
+  }
 
   public get calendar() {
     return getInternalSlot(__INTERNAL_SLOT_MAP__, this, 'calendar');
@@ -197,9 +279,21 @@ export class IntlLocale {
   public get numberingSystem() {
     return getInternalSlot(__INTERNAL_SLOT_MAP__, this, 'numberingSystem');
   }
-  public get language() {}
-  public get script() {}
-  public get region() {}
+  public get language() {
+    const locale = getInternalSlot(__INTERNAL_SLOT_MAP__, this, 'locale')
+    const ast = parseUnicodeLocaleId(locale)
+    return ast.lang.lang
+  }
+  public get script() {
+    const locale = getInternalSlot(__INTERNAL_SLOT_MAP__, this, 'locale')
+    const ast = parseUnicodeLocaleId(locale)
+    return ast.lang.script
+  }
+  public get region() {
+    const locale = getInternalSlot(__INTERNAL_SLOT_MAP__, this, 'locale')
+    const ast = parseUnicodeLocaleId(locale)
+    return ast.lang.region
+  }
 
   static relevantExtensionKeys = ['ca', 'co', 'hc', 'kf', 'kn', 'nu'];
 }

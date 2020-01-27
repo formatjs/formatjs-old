@@ -1,8 +1,9 @@
 export interface UnicodeLocaleId {
   lang: UnicodeLanguageId;
-  extensions: Array<
-    UnicodeExtension | TransformedExtension | OtherExtension | PuExtension
-  >;
+  unicodeExtension: UnicodeExtension
+  transformedExtension: TransformedExtension
+  puExtension: PuExtension
+  otherExtensions: OtherExtensions 
 }
 
 export interface UnicodeLanguageId {
@@ -12,30 +13,25 @@ export interface UnicodeLanguageId {
   variants?: string[];
 }
 
-export const enum ExtensionType {
-  unicode = 'unicode',
-  transformed = 'transformed',
-  other = 'other',
-  pu = 'pu',
+export interface Keyword {
+  key: string
+  value: string
 }
 
-export interface Extension<T extends ExtensionType> {
-  type: T;
-}
-
-export interface UnicodeExtension extends Extension<ExtensionType.unicode> {
-  keywords: Array<Record<string, string>>;
+export interface UnicodeExtension {
+  type: 'u'
+  keywords: Keyword[];
   attributes?: string[];
 }
 
-export interface TransformedExtension
-  extends Extension<ExtensionType.transformed> {
+export interface TransformedExtension {
+  type: 't',
   fields: string[];
   lang?: UnicodeLanguageId;
 }
-export interface OtherExtension extends Extension<ExtensionType.other> {
-  values: [string, string];
+export interface PuExtension {
+  type: 'x',
+  value: string;
 }
-export interface PuExtension extends Extension<ExtensionType.pu> {
-  values: string[];
-}
+
+export type OtherExtensions = Record<string, string>
