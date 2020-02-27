@@ -425,9 +425,8 @@ export default declare((api: any, options: OptionsSchema) => {
           // declaring a JSX element, it must be done with standard
           // `key=value` attributes. But it's completely valid to
           // write `<FormattedMessage {...descriptor} />`, because it will be
-          // skipped here and extracted elsewhere. The descriptor will
-          // be extracted only (storeMessage) if a `defaultMessage` prop.
-          if (descriptorPath.id && descriptorPath.defaultMessage) {
+          // skipped here and extracted elsewhere.
+          if (descriptorPath.id) {
             // Evaluate the Message Descriptor values in a JSX
             // context, then store it.
             const descriptor = evaluateMessageDescriptor(
