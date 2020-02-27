@@ -278,6 +278,11 @@ Object {
       "description": undefined,
       "id": "TRANSLATION_KEY",
     },
+    Object {
+      "defaultMessage": undefined,
+      "description": undefined,
+      "id": "foo.bar.baz",
+    },
   ],
 }
 `;
@@ -323,6 +328,9 @@ exports[`emit asserts for:  output match: enforceDefaultMessage 3`] = `
 Array [
   Object {
     "id": "TRANSLATION_KEY",
+  },
+  Object {
+    "id": "foo.bar.baz",
   },
 ]
 `;
