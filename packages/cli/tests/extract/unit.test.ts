@@ -1,5 +1,6 @@
 import cliMain from '../../src/cli';
 import {OptionsSchema} from 'babel-plugin-react-intl/dist/options';
+import {sync} from 'glob';
 
 jest.mock('@babel/core', () => {
   const mockBabelResult = {
@@ -19,7 +20,7 @@ const babel = require('@babel/core');
 jest.spyOn(process, 'exit').mockImplementation((() => null) as any);
 
 jest.mock('glob', () => ({
-  sync: (p: string) => [p],
+  sync: jest.fn((p: string) => [p]),
 }));
 
 beforeEach(() => {
@@ -38,6 +39,7 @@ test('it passes camelCase-converted arguments to babel API', () => {
     '--extract-from-format-message-call',
     '--additional-component-names',
     'Foo,Bar',
+    '--ignore=file3.ts',
     'file1.js',
     'file2.tsx',
   ]);
@@ -80,4 +82,17 @@ test('it passes camelCase-converted arguments to babel API', () => {
       ],
     })
   );
+});
+
+test('it passes ignore argument to glob sync', () => {
+  cliMain([
+    'node',
+    'path/to/formatjs-cli',
+    'extract',
+    '--ignore=file2.ts',
+    'file1.js',
+  ]);
+
+  expect(sync).toHaveBeenCalledTimes(1);
+  expect(sync).toHaveBeenCalledWith('file1.js', {cwd: '', ignore: 'file2.ts'});
 });

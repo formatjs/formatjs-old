@@ -98,12 +98,17 @@ async function main(argv: string[]) {
       ].join(''),
       false
     )
+    .option(
+      '--ignore <files>',
+      'List of glob paths to **not** extract translations from.'
+    )
     .action(async (files: readonly string[], cmdObj: ExtractCLIOptions) => {
       files = files.reduce(
         (all: string[], f) =>
           all.concat(
             globSync(f, {
               cwd: process.cwd(),
+              ignore: cmdObj.ignore,
             })
           ),
         []
