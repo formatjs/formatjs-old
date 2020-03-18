@@ -1,6 +1,7 @@
 import cliMain from '../../src/cli';
 import {OptionsSchema} from 'babel-plugin-react-intl/dist/options';
-import {sync} from 'glob';
+const glob = require('glob');
+const babel = require('@babel/core');
 
 jest.mock('@babel/core', () => {
   const mockBabelResult = {
@@ -14,7 +15,6 @@ jest.mock('@babel/core', () => {
     transformFileSync: jest.fn().mockReturnValue(mockBabelResult),
   };
 });
-const babel = require('@babel/core');
 
 // Commander.js will call this.
 jest.spyOn(process, 'exit').mockImplementation((() => null) as any);
@@ -89,10 +89,14 @@ test('it passes ignore argument to glob sync', () => {
     'node',
     'path/to/formatjs-cli',
     'extract',
-    '--ignore=file2.ts',
-    'file1.js',
+    '--ignore=ignore-1.ts',
+    'include-1.js',
   ]);
 
-  expect(sync).toHaveBeenCalledTimes(1);
-  expect(sync).toHaveBeenCalledWith('file1.js', {cwd: '', ignore: 'file2.ts'});
+  expect(glob.sync).toHaveBeenCalled();
+  expect(glob.sync).toHaveBeenNthCalledWith(
+    1,
+    'include-1.js',
+    expect.objectContaining({ignore: 'ignore-1.ts'})
+  );
 });
