@@ -37,7 +37,7 @@
     "@types/benchmark": "^1.0.31",
     "@types/chai": "^4.2.11",
     "@types/eslint": "^6.1.8",
-    "@types/estree": "0.0.42",
+    "@types/estree": "0.0.43",
     "@types/estree-jsx": "0.0.0",
     "@types/fs-extra": "^8.1.0",
     "@types/jest": "^25.1.4",
