@@ -34,12 +34,14 @@ Options:
                                                         (default: false)
   --additional-component-names <comma-separated-names>  Additional component names to extract messages from, e.g:
                                                         `['FormattedFooBarMessage']`. **NOTE**: By default we check for
-                                                        the fact that `FormattedMessage` & `FormattedHTMLMessage` are
+                                                        the fact that `FormattedMessage` are
                                                         imported from `moduleSourceName` to make sure variable alias
                                                         works. This option does not do that so it's less safe.
   --extract-from-format-message-call                    Opt-in to extract from `intl.formatMessage` call with the same
                                                         restrictions, e.g: has to be called with object literal such as
                                                         `intl.formatMessage({ id: 'foo', defaultMessage: 'bar',
                                                         description: 'baz'})` (default: false)
+  --ignore                                              List of glob paths to **not** extract translations from.
+  --output-empty-json                                   Output file with empty [] if src has no messages. For build systems like bazel that relies on specific output mapping, not writing out a file can cause issues.
   -h, --help                                            output usage information
 ```

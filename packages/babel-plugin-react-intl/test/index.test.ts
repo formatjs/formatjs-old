@@ -1,8 +1,7 @@
+import {join, basename} from 'path';
 import * as fs from 'fs';
-
-import {join} from 'path';
-import plugin from '../src';
 import {transformFileSync} from '@babel/core';
+import plugin from '../src';
 
 function trim(str?: string | null) {
   return String(str).replace(/^\s+|\s+$/, '');
@@ -20,6 +19,8 @@ const skipOutputTests = [
   'overrideIdFn',
   'removeDefaultMessage',
   'additionalComponentNames',
+  'outputEmptyJson',
+  'empty',
 ];
 
 const fixturesDir = join(__dirname, 'fixtures');
@@ -63,6 +64,30 @@ describe('options', () => {
     // Check message output
     expect(require(join(fixtureDir, 'actual.json'))).toMatchSnapshot();
   });
+  it('outputEmptyJson should output empty files', function() {
+    const fixtureDir = join(fixturesDir, 'outputEmptyJson');
+
+    const actual = transform(join(fixtureDir, 'actual.js'), {
+      outputEmptyJson: true,
+    })!.code;
+
+    // Check code output
+    expect(trim(actual)).toMatchSnapshot();
+
+    // Check message output
+    expect(require(join(fixtureDir, 'actual.json'))).toMatchSnapshot();
+  });
+  it('without outputEmptyJson should output empty files', function() {
+    const fixtureDir = join(fixturesDir, 'empty');
+
+    const actual = transform(join(fixtureDir, 'actual.js'), {})!.code;
+
+    // Check code output
+    expect(trim(actual)).toMatchSnapshot();
+
+    // Check message output
+    expect(fs.existsSync(join(fixtureDir, 'actual.json'))).toBeFalsy();
+  });
   it('correctly overrides the id when overrideIdFn is provided', () => {
     const fixtureDir = join(fixturesDir, 'overrideIdFn');
 
@@ -70,9 +95,13 @@ describe('options', () => {
       overrideIdFn: (
         id: string,
         defaultMessage: string,
-        description: string
+        description: string,
+        filePath: string
       ) => {
-        return `HELLO.${id}.${defaultMessage.length}.${typeof description}`;
+        const filename = basename(filePath);
+        return `${filename}.${id}.${
+          defaultMessage.length
+        }.${typeof description}`;
       },
     })!.code;
 

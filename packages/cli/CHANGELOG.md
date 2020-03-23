@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.1](https://github.com/formatjs/formatjs/compare/@formatjs/cli@1.3.0...@formatjs/cli@1.3.1) (2020-03-22)
+
+**Note:** Version bump only for package @formatjs/cli
+
+
+
+
+
+# [1.3.0](https://github.com/formatjs/formatjs/compare/@formatjs/cli@1.2.0...@formatjs/cli@1.3.0) (2020-03-18)
+
+
+### Features
+
+* **@formatjs/cli:** add --output-empty-json option ([3106618](https://github.com/formatjs/formatjs/commit/3106618cbcb14eb7b1c63084b47b16a80737092d))
+
+
+
+
+
+# [1.2.0](https://github.com/formatjs/formatjs/compare/@formatjs/cli@1.1.22...@formatjs/cli@1.2.0) (2020-03-18)
+
+
+### Features
+
+* **@formatjs/cli:** Add option to ignore a glob of files ([#564](https://github.com/formatjs/formatjs/issues/564)) ([843d82b](https://github.com/formatjs/formatjs/commit/843d82b2190458deab2f4393cb854cc4d36f6dfc))
+
+
+
+
+
 ## [1.1.22](https://github.com/formatjs/formatjs/compare/@formatjs/cli@1.1.21...@formatjs/cli@1.1.22) (2020-03-05)
 
 **Note:** Version bump only for package @formatjs/cli

@@ -83,8 +83,8 @@ async function main(argv: string[]) {
       '--additional-component-names <comma-separated-names>',
       [
         "Additional component names to extract messages from, e.g: `['FormattedFooBarMessage']`. ",
-        '**NOTE**: By default we check for the fact that `FormattedMessage` & ',
-        '`FormattedHTMLMessage` are imported from `moduleSourceName` to make sure variable alias ',
+        '**NOTE**: By default we check for the fact that `FormattedMessage` ',
+        'is imported from `moduleSourceName` to make sure variable alias ',
         "works. This option does not do that so it's less safe.",
       ].join(''),
       (val: string) => val.split(',')
@@ -98,17 +98,26 @@ async function main(argv: string[]) {
       ].join(''),
       false
     )
+    .option(
+      '--output-empty-json',
+      'Output file with empty [] if src has no messages. For build systems like bazel that relies on specific output mapping, not writing out a file can cause issues.',
+      false
+    )
+    .option(
+      '--ignore <files>',
+      'List of glob paths to **not** extract translations from.'
+    )
     .action(async (files: readonly string[], cmdObj: ExtractCLIOptions) => {
-      files = files.reduce(
-        (all: string[], f) =>
-          all.concat(
-            globSync(f, {
-              cwd: process.cwd(),
-            })
-          ),
-        []
-      );
-      await extract(files, {
+      const processedFiles = [];
+      for (const f of files) {
+        processedFiles.push(
+          ...globSync(f, {
+            cwd: process.cwd(),
+            ignore: cmdObj.ignore,
+          })
+        );
+      }
+      await extract(processedFiles, {
         outFile: cmdObj.outFile,
         idInterpolationPattern:
           cmdObj.idInterpolationPattern || '[contenthash:5]',
@@ -118,6 +127,7 @@ async function main(argv: string[]) {
         removeDefaultMessage: cmdObj.removeDefaultMessage,
         additionalComponentNames: cmdObj.additionalComponentNames,
         extractFromFormatMessageCall: cmdObj.extractFromFormatMessageCall,
+        outputEmptyJson: cmdObj.outputEmptyJson,
       });
       process.exit(0);
     });

@@ -3,6 +3,51 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.0.0](https://github.com/formatjs/formatjs/compare/babel-plugin-react-intl@6.2.0...babel-plugin-react-intl@7.0.0) (2020-03-22)
+
+
+### Features
+
+* **babel-plugin-react-intl:** remove FormattedHTMLMessage extraction ([f962fdf](https://github.com/formatjs/formatjs/commit/f962fdf06118bda5bfb7f239962defced5597920))
+
+
+### BREAKING CHANGES
+
+* **babel-plugin-react-intl:** As of react-intl@4.x, `FormattedHTMLMessage` is no longer supported so
+we're removing this from our babel plugin as well
+
+
+
+
+
+# [6.2.0](https://github.com/formatjs/formatjs/compare/babel-plugin-react-intl@6.1.0...babel-plugin-react-intl@6.2.0) (2020-03-18)
+
+
+### Features
+
+* **babel-plugin-react-intl:** add outputEmptyJson option ([a4f85ab](https://github.com/formatjs/formatjs/commit/a4f85ab47af4c2f2500363c3d5cc053ec126644c))
+
+
+
+
+
+# [6.1.0](https://github.com/formatjs/formatjs/compare/babel-plugin-react-intl@6.0.1...babel-plugin-react-intl@6.1.0) (2020-03-18)
+
+
+### Bug Fixes
+
+* **babel-plugin-react-intl:** extract messages without defaultMessage, fix [#536](https://github.com/formatjs/formatjs/issues/536) ([dafa46b](https://github.com/formatjs/formatjs/commit/dafa46b2bd5a8f22f2d57e2adf7a33c51095f18b))
+
+
+### Features
+
+* **babel-plugin-react-intl:** add filename as param to overrideIdFn ([30b9de9](https://github.com/formatjs/formatjs/commit/30b9de9e631928d3f543ee2b8094a1b608ee95d0)), closes [#495](https://github.com/formatjs/formatjs/issues/495) [#496](https://github.com/formatjs/formatjs/issues/496)
+* **babel-plugin-react-intl:** output file with empty [] if src has no messages ([43dae5b](https://github.com/formatjs/formatjs/commit/43dae5b2a1554de8d40d4248a9c4a3622904406b)), closes [#553](https://github.com/formatjs/formatjs/issues/553)
+
+
+
+
+
 ## [6.0.1](https://github.com/formatjs/formatjs/compare/babel-plugin-react-intl@6.0.0...babel-plugin-react-intl@6.0.1) (2020-03-05)
 
 **Note:** Version bump only for package babel-plugin-react-intl

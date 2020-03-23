@@ -5,8 +5,7 @@
  */
 
 import * as p from 'path';
-import {writeFileSync} from 'fs';
-import {mkdirpSync} from 'fs-extra';
+import {outputJSONSync} from 'fs-extra';
 import {parse} from 'intl-messageformat-parser/dist';
 const {declare} = require('@babel/helper-plugin-utils') as any;
 import {PluginObj, types as t} from '@babel/core';
@@ -32,7 +31,7 @@ import validate from 'schema-utils';
 import OPTIONS_SCHEMA from './options.schema.json';
 import {OptionsSchema} from './options.js';
 
-const DEFAULT_COMPONENT_NAMES = ['FormattedMessage', 'FormattedHTMLMessage'];
+const DEFAULT_COMPONENT_NAMES = ['FormattedMessage'];
 
 const EXTRACTED = Symbol('ReactIntlExtracted');
 const DESCRIPTOR_PROPS = new Set(['id', 'description', 'defaultMessage']);
@@ -184,6 +183,7 @@ function createMessageDescriptor(
 function evaluateMessageDescriptor(
   descriptorPath: MessageDescriptorPath,
   isJSXSource = false,
+  filename: string,
   overrideIdFn?: OptionsSchema['overrideIdFn']
 ) {
   let id = getMessageDescriptorValue(descriptorPath.id);
@@ -193,7 +193,7 @@ function evaluateMessageDescriptor(
   const description = getMessageDescriptorValue(descriptorPath.description);
 
   if (overrideIdFn) {
-    id = overrideIdFn(id, defaultMessage, description);
+    id = overrideIdFn(id, defaultMessage, description, filename);
   }
   const descriptor: MessageDescriptor = {
     id,
@@ -335,7 +335,7 @@ export default declare((api: any, options: OptionsSchema) => {
     name: 'babel-plugin-react-intl',
     baseDataPath: 'options',
   });
-  const {messagesDir} = options;
+  const {messagesDir, outputEmptyJson} = options;
 
   /**
    * Store this in the node itself so that multiple passes work. Specifically
@@ -374,7 +374,7 @@ export default declare((api: any, options: OptionsSchema) => {
       const descriptors = Array.from(messages.values());
       state.metadata['react-intl'] = {messages: descriptors};
 
-      if (basename && messagesDir && descriptors.length > 0) {
+      if (basename && messagesDir && (outputEmptyJson || descriptors.length)) {
         // Make sure the relative path is "absolute" before
         // joining it with the `messagesDir`.
         let relativePath = p.join(p.sep, p.relative(process.cwd(), filename));
@@ -396,10 +396,7 @@ export default declare((api: any, options: OptionsSchema) => {
           basename + '.json'
         );
 
-        const messagesFile = JSON.stringify(descriptors, null, 2);
-
-        mkdirpSync(p.dirname(messagesFilename));
-        writeFileSync(messagesFilename, messagesFile);
+        outputJSONSync(messagesFilename, descriptors);
       }
     },
 
@@ -460,12 +457,13 @@ export default declare((api: any, options: OptionsSchema) => {
           // write `<FormattedMessage {...descriptor} />`, because it will be
           // skipped here and extracted elsewhere. The descriptor will
           // be extracted only (storeMessage) if a `defaultMessage` prop.
-          if (descriptorPath.id && descriptorPath.defaultMessage) {
+          if (descriptorPath.id || descriptorPath.defaultMessage) {
             // Evaluate the Message Descriptor values in a JSX
             // context, then store it.
             const descriptor = evaluateMessageDescriptor(
               descriptorPath,
               true,
+              filename,
               overrideIdFn
             );
 
@@ -477,23 +475,43 @@ export default declare((api: any, options: OptionsSchema) => {
               this.ReactIntlMessages
             );
 
-            attributes.forEach(attr => {
-              const ketPath = attr.get('name');
-              const msgDescriptorKey = getMessageDescriptorKey(ketPath);
-              if (
-                // Remove description since it's not used at runtime.
-                msgDescriptorKey === 'description' ||
-                // Remove defaultMessage if opts says so.
-                (removeDefaultMessage && msgDescriptorKey === 'defaultMessage')
-              ) {
-                attr.remove();
-              } else if (
-                overrideIdFn &&
-                getMessageDescriptorKey(ketPath) === 'id'
-              ) {
-                attr.get('value').replaceWith(t.stringLiteral(descriptor.id));
+            let idAttr: NodePath<t.JSXAttribute> | undefined;
+            let descriptionAttr: NodePath<t.JSXAttribute> | undefined;
+            let defaultMessageAttr: NodePath<t.JSXAttribute> | undefined;
+            for (const attr of attributes) {
+              switch (getMessageDescriptorKey(attr.get('name'))) {
+                case 'description':
+                  descriptionAttr = attr;
+                  break;
+                case 'defaultMessage':
+                  defaultMessageAttr = attr;
+                  break;
+                case 'id':
+                  idAttr = attr;
+                  break;
               }
-            });
+            }
+
+            if (descriptionAttr) {
+              descriptionAttr.remove();
+            }
+
+            if (removeDefaultMessage && defaultMessageAttr) {
+              defaultMessageAttr.remove();
+            }
+
+            if (overrideIdFn) {
+              if (idAttr) {
+                idAttr.get('value').replaceWith(t.stringLiteral(descriptor.id));
+              } else if (defaultMessageAttr) {
+                defaultMessageAttr.insertBefore(
+                  t.jsxAttribute(
+                    t.jsxIdentifier('id'),
+                    t.stringLiteral(descriptor.id)
+                  )
+                );
+              }
+            }
 
             // Tag the AST node so we don't try to extract it twice.
             tagAsExtracted(path);
@@ -550,6 +568,7 @@ export default declare((api: any, options: OptionsSchema) => {
           const descriptor = evaluateMessageDescriptor(
             descriptorPath,
             false,
+            filename,
             overrideIdFn
           );
           storeMessage(descriptor, messageDescriptor, opts, filename, messages);
