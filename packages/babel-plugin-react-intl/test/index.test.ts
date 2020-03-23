@@ -1,7 +1,8 @@
-import {join} from 'path';
 import * as fs from 'fs';
-import {transformFileSync} from '@babel/core';
+
+import {join} from 'path';
 import plugin from '../src';
+import {transformFileSync} from '@babel/core';
 
 function trim(str?: string | null) {
   return String(str).replace(/^\s+|\s+$/, '');
@@ -133,6 +134,21 @@ describe('options', () => {
 
   it('respects extractFromFormatMessageCall', () => {
     const fixtureDir = join(fixturesDir, 'extractFromFormatMessageCall');
+    expect(() =>
+      transform(join(fixtureDir, 'actual.js'), {
+        extractFromFormatMessageCall: true,
+      })
+    ).not.toThrow();
+
+    // Check message output
+    expect(require(join(fixtureDir, 'actual.json'))).toMatchSnapshot();
+  });
+
+  it('respects extractFromFormatMessageCall from stateless components', () => {
+    const fixtureDir = join(
+      fixturesDir,
+      'extractFromFormatMessageCallStateless'
+    );
     expect(() =>
       transform(join(fixtureDir, 'actual.js'), {
         extractFromFormatMessageCall: true,
