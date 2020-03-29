@@ -19,6 +19,7 @@ import {
   InvalidValueError,
   ErrorCode,
   FormatError,
+  InvalidValueTypeError,
 } from './error';
 
 export interface Formats {
@@ -203,7 +204,7 @@ export function formatToParts<T>(
       const {children, value} = el;
       const formatFn = values[value];
       if (!isFormatXMLElementFn<T>(formatFn)) {
-        throw new TypeError(`Value for "${value}" must be a function`);
+        throw new InvalidValueTypeError(value, 'function', originalMessage);
       }
       const parts = formatToParts<T>(
         children,
@@ -231,7 +232,12 @@ export function formatToParts<T>(
     if (isSelectElement(el)) {
       const opt = el.options[value as string] || el.options.other;
       if (!opt) {
-        throw new InvalidValueError(el.value, value, Object.keys(el.options));
+        throw new InvalidValueError(
+          el.value,
+          value,
+          Object.keys(el.options),
+          originalMessage
+        );
       }
       result.push(
         ...formatToParts(opt.value, locales, formatters, formats, values)
@@ -246,7 +252,8 @@ export function formatToParts<T>(
             `Intl.PluralRules is not available in this environment.
 Try polyfilling it using "@formatjs/intl-pluralrules"
 `,
-            ErrorCode.MISSING_INTL_API
+            ErrorCode.MISSING_INTL_API,
+            originalMessage
           );
         }
         const rule = formatters
@@ -255,7 +262,12 @@ Try polyfilling it using "@formatjs/intl-pluralrules"
         opt = el.options[rule] || el.options.other;
       }
       if (!opt) {
-        throw new InvalidValueError(el.value, value, Object.keys(el.options));
+        throw new InvalidValueError(
+          el.value,
+          value,
+          Object.keys(el.options),
+          originalMessage
+        );
       }
       result.push(
         ...formatToParts(
@@ -273,6 +285,6 @@ Try polyfilling it using "@formatjs/intl-pluralrules"
   return mergeLiteral(result);
 }
 
-export type FormatXMLElementFn<T> = (
+export type FormatXMLElementFn<T, R = string | Array<string | T>> = (
   ...args: Array<string | T>
-) => string | Array<string | T>;
+) => R;
