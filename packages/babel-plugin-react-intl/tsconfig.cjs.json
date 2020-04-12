@@ -9,7 +9,6 @@
   },
   "include": ["src/**/*.ts", "src/**/*.json"],
   "references": [
-    {"path": "../intl-pluralrules/tsconfig.cjs.json"},
-    {"path": "../intl-relativetimeformat/tsconfig.cjs.json"},
+    {"path": "../intl-messageformat-parser/tsconfig.cjs.json"},
   ]
 }

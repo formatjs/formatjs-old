@@ -6,7 +6,7 @@
 
 import * as p from 'path';
 import {outputJSONSync} from 'fs-extra';
-import {parse} from 'intl-messageformat-parser/dist';
+import {parse} from 'intl-messageformat-parser';
 const {declare} = require('@babel/helper-plugin-utils') as any;
 import {PluginObj, types as t} from '@babel/core';
 

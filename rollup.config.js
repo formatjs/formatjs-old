@@ -8,28 +8,31 @@ const resolveConfig = resolve({
     '@formatjs/intl-relativetimeformat': './packages/intl-relativetimeformat',
     '@formatjs/intl-utils': './packages/intl-utils',
     'intl-messageformat': './packages/intl-messageformat',
-  }
-})
+  },
+});
 export default [
   {
     input: './tests/index.ts',
     output: {
       sourcemap: true,
       file: 'tests/browser.js',
-      format: 'umd'
+      format: 'umd',
     },
     plugins: [
       replace({
         'process.env.NODE_ENV': JSON.stringify('test'),
-        'process.version': JSON.stringify('')
+        'process.version': JSON.stringify(''),
       }),
-      resolveConfig, 
+      resolveConfig,
       typescript({
-      tsconfigDefaults: {
-        compilerOptions: {
-          declaration: false
-        }
-      }
-    }) , commonjs()]
-  }
+        tsconfigDefaults: {
+          compilerOptions: {
+            module: 'esnext',
+            declaration: false,
+          },
+        },
+      }),
+      commonjs(),
+    ],
+  },
 ];

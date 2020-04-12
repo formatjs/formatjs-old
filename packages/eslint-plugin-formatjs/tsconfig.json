@@ -2,11 +2,7 @@
     "extends": "../../tsconfig.json",
     "compilerOptions": {
         "target": "es6",
-        "outDir": "dist",
-        "rootDir": ".",
         "module": "commonjs",
-        "noUnusedLocals": true,
-        "sourceMap": true,
         "types": [
             "eslint",
             "estree",
@@ -29,5 +25,5 @@
             "stack-utils",
             "yargs"
         ]
-    }
+    },
 }

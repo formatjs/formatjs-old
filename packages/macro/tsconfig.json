@@ -2,11 +2,7 @@
     "extends": "../../tsconfig.json",
     "compilerOptions": {
         "target": "esnext",
-        "outDir": "dist",
-        "rootDir": ".",
         "module": "commonjs",
-        "noUnusedLocals": true,
-        "sourceMap": true,
         "types": [
             "babel__core",
             "babel__generator",

@@ -1,7 +1,7 @@
 import {getAllLanguages} from 'formatjs-extract-cldr-data';
 import {resolve} from 'path';
 import {outputFileSync} from 'fs-extra';
-import * as serialize from 'serialize-javascript';
+import serialize from 'serialize-javascript';
 import {
   PluralRulesLocaleData,
   getAliasesByLang,

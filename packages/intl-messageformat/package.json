@@ -29,7 +29,7 @@
   },
   "main": "dist/index.js",
   "module": "lib/index.js",
-  "types": "lib/intl-messageformat.d.ts",
+  "types": "dist/index.d.ts",
   "dependencies": {
     "intl-format-cache": "^4.2.23",
     "intl-messageformat-parser": "^4.1.3"
@@ -44,14 +44,15 @@
   },
   "sideEffects": false,
   "scripts": {
-    "benchmark": "ts-node --project ./tsconfig.cjs.json tests/benchmark",
-    "build": "npm run tsc && npm run rollup",
-    "clean": "rimraf dist lib",
+    "benchmark": "ts-node --project ./tsconfig.json tests/benchmark",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build:additional": "tsc -p tsconfig.esm.json && api-extractor run --local && npm run rollup",
+    "build": "npm run build:cjs && npm run build:additional",
+    "clean": "rimraf dist lib *.tsbuildinfo",
     "karma:ci": "karma start karma.conf-ci.js",
     "karma:local": "karma start karma.conf.js",
     "rollup": "rollup -c rollup.config.js",
-    "test": "cross-env TZ=UTC NODE_ICU_DATA=../../node_modules/full-icu TS_NODE_PROJECT=tsconfig.cjs.json mocha --opts ../../mocha.opts -r tests/setup.js tests/index.ts",
-    "tsc": "tsc -p src/tsconfig.json && tsc -p src/tsconfig.cjs.json && api-extractor run --local"
+    "test": "cross-env TZ=UTC NODE_ICU_DATA=../../node_modules/full-icu mocha --opts ../../mocha.opts -r tests/setup.js tests/index.ts"
   },
   "homepage": "https://github.com/formatjs/formatjs",
   "directories": {

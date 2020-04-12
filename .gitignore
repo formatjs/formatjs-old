@@ -13,3 +13,4 @@ test262
 temp
 dist-es6
 polyfill-locales.js
+*.tsbuildinfo

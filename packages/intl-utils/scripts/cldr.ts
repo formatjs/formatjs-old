@@ -1,6 +1,6 @@
 import {resolve} from 'path';
 import {outputFileSync} from 'fs-extra';
-import * as serialize from 'serialize-javascript';
+import serialize from 'serialize-javascript';
 import * as aliases from 'cldr-core/supplemental/aliases.json';
 import * as PARENT_LOCALES from 'cldr-core/supplemental/parentLocales.json';
 
@@ -30,16 +30,16 @@ const parentLocaleMap = Object.keys(parentLocales).reduce(
 
 outputFileSync(
   resolve(__dirname, '../src/aliases.ts'),
-  `/* @generated */	
-// prettier-ignore  
+  `/* @generated */
+// prettier-ignore
 export default ${serialize(localeAliases)}
 `
 );
 
 outputFileSync(
   resolve(__dirname, '../src/parentLocales.ts'),
-  `/* @generated */	
-// prettier-ignore  
+  `/* @generated */
+// prettier-ignore
 export default ${serialize(parentLocaleMap)}
 `
 );

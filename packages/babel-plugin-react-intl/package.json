@@ -25,10 +25,11 @@
     "schema-utils": "^2.2.0"
   },
   "scripts": {
-    "clean": "rimraf lib test/fixtures/**/actual.json",
-    "test": "cross-env TS_NODE_PROJECT=./tsconfig.json cross-env NODE_ENV=test jest",
+    "clean": "rimraf coverage dist lib test/fixtures/**/actual.json *.tsbuildinfo",
+    "test": "cross-env NODE_ENV=test jest",
     "cover": "npm t -- --coverage",
-    "build": "json2ts -i src/options.schema.json -o src/options.ts && tsc"
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build": "json2ts -i src/options.schema.json -o src/options.ts && npm run build:cjs"
   },
   "keywords": [
     "babel-plugin",

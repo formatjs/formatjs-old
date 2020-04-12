@@ -4,17 +4,19 @@
   "description": "Parses ICU Message strings into an AST via JavaScript.",
   "main": "dist/index.js",
   "module": "lib/index.js",
-  "types": "lib/intl-messageformat-parser.d.ts",
+  "types": "dist/index.d.ts",
   "files": [
     "dist",
     "lib",
     "src"
   ],
   "scripts": {
-    "clean": "rimraf dist lib",
-    "build": "node build.js && tsc && api-extractor run --local && tsc -p tsconfig.cjs.json && rollup -c rollup.config.js",
+    "clean": "rimraf dist lib *.tsbuildinfo src/parser.ts",
+    "build:cjs": "node build.js && tsc -p tsconfig.cjs.json",
+    "build:additional": "tsc -p tsconfig.esm.json && rollup -c rollup.config.js && api-extractor run --local",
+    "build": "npm run build:cjs && npm run build:additional",
     "benchmark": "node ./test/benchmark.js",
-    "test": "cross-env TS_NODE_PROJECT=./tsconfig.cjs.json cross-env NODE_ENV=test jest"
+    "test": "cross-env TS_NODE_PROJECT=./tsconfig.json cross-env NODE_ENV=test jest"
   },
   "contributors": [
     "Eric Ferraiuolo <eferraiuolo@gmail.com>",

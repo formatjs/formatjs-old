@@ -3,5 +3,7 @@
     "compilerOptions": {
         "target": "es6",
         "outDir": "dist-es6",
-    }
+        "rootDir": "src",
+    },
+    "include": ["src/**/*.ts", "src/**/*.json"],
 }

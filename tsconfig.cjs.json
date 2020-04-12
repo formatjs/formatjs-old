@@ -1,6 +1,26 @@
+// Dummy project to build CommonJS distribution for all
 {
-    "extends": "./tsconfig.json",
-    "compilerOptions": {
-        "module": "commonjs"
-    }
+  "files": [],
+  "compilerOptions": {
+    "composite": true,
+    "incremental": true,
+  },
+  "references": [
+    {"path": "./packages/babel-plugin-react-intl/tsconfig.cjs.json"},
+    {"path": "./packages/cli/tsconfig.cjs.json"},
+    {"path": "./packages/eslint-plugin-formatjs/tsconfig.cjs.json"},
+    {"path": "./packages/formatjs-extract-cldr-data/tsconfig.cjs.json"},
+    {"path": "./packages/intl-displaynames/tsconfig.cjs.json"},
+    {"path": "./packages/intl-format-cache/tsconfig.cjs.json"},
+    {"path": "./packages/intl-listformat/tsconfig.cjs.json"},
+    {"path": "./packages/intl-locales-supported/tsconfig.cjs.json"},
+    {"path": "./packages/intl-messageformat/tsconfig.cjs.json"},
+    {"path": "./packages/intl-messageformat-parser/tsconfig.cjs.json"},
+    {"path": "./packages/intl-pluralrules/tsconfig.cjs.json"},
+    {"path": "./packages/intl-relativetimeformat/tsconfig.cjs.json"},
+    {"path": "./packages/intl-unified-numberformat/tsconfig.cjs.json"},
+    {"path": "./packages/intl-utils/tsconfig.cjs.json"},
+    {"path": "./packages/macro/tsconfig.cjs.json"},
+    {"path": "./packages/ts-transformer/tsconfig.cjs.json"},
+  ]
 }

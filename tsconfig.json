@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "module": "es6",
+        "module": "commonjs",
         "moduleResolution": "node",
         "target": "es5",
         "lib": ["es6", "dom", "es2018.intl"],
@@ -9,9 +9,12 @@
         "resolveJsonModule": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
+        "noFallthroughCasesInSwitch": true,
         "preserveConstEnums": true,
         "declarationMap": true,
         "sourceMap": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
         "types": [
             "babel__core",
             "babel__generator",
@@ -30,6 +33,6 @@
             "resolve",
             "stack-utils",
             "yargs"
-        ]
-    }
+        ],
+    },
 }

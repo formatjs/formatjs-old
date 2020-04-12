@@ -1,7 +1,15 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-      "outDir": "dist",
-      "module": "commonjs"
+    "composite": true,
+    "incremental": true,
+    "outDir": "dist",
+    "rootDir": "src",
+    "module": "commonjs",
   },
+  "include": ["src/**/*.ts", "src/**/*.json"],
+  "references": [
+    {"path": "../intl-utils/tsconfig.cjs.json"},
+    {"path": "../formatjs-extract-cldr-data/tsconfig.cjs.json"},
+  ]
 }

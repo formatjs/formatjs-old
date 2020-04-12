@@ -29,8 +29,9 @@
     "url": "git+ssh://git@github.com/formatjs/formatjs.git"
   },
   "scripts": {
-    "clean": "rimraf lib",
-    "build": "tsc -p tsconfig.build.json"
+    "clean": "rimraf dist *.tsbuildinfo",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build": "npm run build:cjs"
   },
   "files": [
     "dist",

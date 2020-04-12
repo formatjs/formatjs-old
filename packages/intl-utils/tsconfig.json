@@ -1,13 +1,6 @@
 {
     "extends": "../../tsconfig.json",
     "compilerOptions": {
-        "outDir": "lib",
-        "rootDir": "src",
-        "baseUrl": ".",
-        "paths": {
-            "@formatjs/intl-relativetimeformat": ["../intl-relativetimeformat"]
-        },
-        "allowSyntheticDefaultImports": true
+        "module": "commonjs",
     },
-    "include": ["src/*.ts"]
 }

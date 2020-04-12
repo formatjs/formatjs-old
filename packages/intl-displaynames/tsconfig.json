@@ -1,11 +1,8 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+      "module": "commonjs",
       "lib": ["dom", "es5", "esnext.intl", "es2017.intl", "es2018.intl"],
-      "outDir": "lib",
-      "rootDir": "src",
-      "allowSyntheticDefaultImports": true,
-      "noFallthroughCasesInSwitch": true,
       "types": [
           "babel__core",
           "babel__generator",
@@ -27,5 +24,4 @@
           "yargs"
       ]
   },
-  "include": ["src/**/*.ts"],
 }

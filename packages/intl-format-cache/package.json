@@ -11,9 +11,11 @@
     "src"
   ],
   "scripts": {
-    "clean": "rimraf dist lib",
-    "benchmark": "ts-node --project tsconfig.cjs.json tests/benchmark",
-    "build": "tsc && tsc -p tsconfig.cjs.json && rollup -c rollup.config.js",
+    "clean": "rimraf dist lib *.tsbuildinfo",
+    "benchmark": "ts-node tests/benchmark",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build:additional": "tsc -p tsconfig.esm.json && rollup -c rollup.config.js",
+    "build": "npm run build:cjs && npm run build:additional",
     "test": "mocha --opts ../../mocha.opts tests/index.ts"
   },
   "devDependencies": {

@@ -2,6 +2,9 @@
     "extends": "./tsconfig.json",
     "compilerOptions": {
         "target": "es6",
+        "module": "esnext",
         "outDir": "dist-es6",
-    }
+        "rootDir": "src",
+    },
+    "include": ["src/**/*.ts", "src/**/*.json"],
 }

@@ -29,10 +29,12 @@
     "src"
   ],
   "scripts": {
-    "clean": "rimraf dist lib",
-    "cldr": "ts-node --project tsconfig.cjs.json scripts/cldr",
-    "build": "npm run cldr && tsc && api-extractor run --local && tsc -p tsconfig.es6.json && tsc -p tsconfig.cjs.json",
-    "test": "cross-env TS_NODE_PROJECT=tsconfig.cjs.json mocha --opts ../../mocha.opts tests/*"
+    "clean": "rimraf dist lib dist-es6 *.tsbuildinfo",
+    "cldr": "ts-node --project tsconfig.json scripts/cldr",
+    "build:cjs": "npm run cldr && tsc -p tsconfig.cjs.json",
+    "build:additional": "tsc -p tsconfig.es6.json && tsc -p tsconfig.esm.json && api-extractor run --local",
+    "build": "npm run build:cjs && npm run build:additional",
+    "test": "cross-env mocha --opts ../../mocha.opts tests/*"
   },
   "homepage": "https://github.com/formatjs/formatjs",
   "license": "MIT",

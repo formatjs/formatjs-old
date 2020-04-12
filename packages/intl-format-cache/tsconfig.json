@@ -1,13 +1,7 @@
 {
     "extends": "../../tsconfig.json",
     "compilerOptions": {
-        "outDir": "lib",
-        "rootDir": "src",
-        "baseUrl": ".",
-        "paths": {
-            "@formatjs/intl-relativetimeformat": ["../intl-relativetimeformat"],
-            "intl-messageformat": ["../intl-messageformat"]
-        }
+        // For rollup to work properly
+        "module": "esnext",
     },
-    "include": ["src/*.ts"]
 }

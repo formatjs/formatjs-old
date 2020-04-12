@@ -3,34 +3,12 @@
     "compilerOptions": {
         // Targeting node >= 8
         "target": "es2017",
-        "outDir": "lib",
-        "rootDir": ".",
-        "module": "esnext",
-        "esModuleInterop": true,
-        "noUnusedLocals": true,
-        "sourceMap": true,
-        "allowSyntheticDefaultImports": true,
+        "module": "commonjs",
         "types": [
-            "babel__core",
-            "babel__generator",
-            "babel__template",
-            "babel__traverse",
-            "benchmark",
-            "chai",
-            "estree",
-            "fs-extra",
-            "istanbul-lib-coverage",
-            "istanbul-lib-report",
-            "istanbul-reports",
             // Don't include mocha here
             "jest",
             "node",
-            "resolve",
-            "stack-utils",
-            "yargs"
         ]
     },
-    // Also include tests in the default tsconfig.json for better editor integration.
-    "include": ["src/**/*.ts", "tests/**/*.ts"],
     "exclude": ["tests/extract/integration_tests/typescript/**/*.tsx"],
 }

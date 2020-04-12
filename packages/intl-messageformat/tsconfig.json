@@ -1,9 +1,7 @@
 {
     "extends": "../../tsconfig.json",
     "compilerOptions": {
-        "baseUrl": ".",
-        "paths": {
-            "intl-format-cache": ["../intl-format-cache"]
-        }
-    }
+        // For rollup
+        "module": "esnext",
+    },
 }

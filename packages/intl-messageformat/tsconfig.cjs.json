@@ -1,6 +1,16 @@
 {
-    "extends": "./tsconfig.json",
-    "compilerOptions": {
-        "module": "commonjs"
-    }
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "incremental": true,
+    "outDir": "dist",
+    "rootDir": "src",
+    "module": "commonjs",
+  },
+  "include": ["src/**/*.ts", "src/**/*.json"],
+  "references": [
+    {"path": "../intl-pluralrules/tsconfig.cjs.json"},
+    {"path": "../intl-format-cache/tsconfig.cjs.json"},
+    {"path": "../intl-messageformat-parser/tsconfig.cjs.json"},
+  ],
 }
