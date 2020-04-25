@@ -16,21 +16,23 @@
 <link rel="stylesheet" href="/styles.fa5c9207.css">
 
 
-<link rel="preload" href="/styles.94413ec3.js" as="script">
+<link rel="preload" href="/styles.e1e511d7.js" as="script">
 
-<link rel="preload" href="/runtime~main.9d80d62a.js" as="script">
+<link rel="preload" href="/runtime~main.c78c5623.js" as="script">
 
-<link rel="preload" href="/main.a884992e.js" as="script">
+<link rel="preload" href="/main.cde062a9.js" as="script">
 
-<link rel="preload" href="/1.4ac75812.js" as="script">
+<link rel="preload" href="/1.75bd15c8.js" as="script">
 
-<link rel="preload" href="/33.77c552f0.js" as="script">
+<link rel="preload" href="/2.f9ebe40a.js" as="script">
 
-<link rel="preload" href="/20ac7829.ef19a717.js" as="script">
+<link rel="preload" href="/33.ea146861.js" as="script">
 
-<link rel="preload" href="/17896441.9a4f2bc3.js" as="script">
+<link rel="preload" href="/20ac7829.81b80494.js" as="script">
 
-<link rel="preload" href="/baa6bb7e.f25944d1.js" as="script">
+<link rel="preload" href="/17896441.e8dd4632.js" as="script">
+
+<link rel="preload" href="/baa6bb7e.6244f2a6.js" as="script">
 
 </head>
 <body>
@@ -50,21 +52,23 @@ minified, bundled dependencies (except <code>react</code>), browser or Node, no 
 </span></div><div class="token-line" style="color:#bfc7d5"><span class="token plain"></span><span class="token tag punctuation" style="color:rgb(199, 146, 234)">&lt;</span><span class="token tag class-name" style="color:rgb(255, 203, 107)">FormattedMessage</span><span class="token tag" style="color:rgb(255, 85, 114)"> </span><span class="token tag attr-name" style="color:rgb(255, 203, 107)">id</span><span class="token tag attr-value punctuation" style="color:rgb(199, 146, 234)">=</span><span class="token tag attr-value punctuation" style="color:rgb(199, 146, 234)">&quot;</span><span class="token tag attr-value" style="color:rgb(255, 85, 114)">foo</span><span class="token tag attr-value punctuation" style="color:rgb(199, 146, 234)">&quot;</span><span class="token tag" style="color:rgb(255, 85, 114)"> </span><span class="token tag attr-name" style="color:rgb(255, 203, 107)">defaultMessage</span><span class="token tag attr-value punctuation" style="color:rgb(199, 146, 234)">=</span><span class="token tag attr-value punctuation" style="color:rgb(199, 146, 234)">&quot;</span><span class="token tag attr-value" style="color:rgb(255, 85, 114)">foo</span><span class="token tag attr-value punctuation" style="color:rgb(199, 146, 234)">&quot;</span><span class="token tag" style="color:rgb(255, 85, 114)"> </span><span class="token tag attr-name" style="color:rgb(255, 203, 107)">description</span><span class="token tag attr-value punctuation" style="color:rgb(199, 146, 234)">=</span><span class="token tag attr-value punctuation" style="color:rgb(199, 146, 234)">&quot;</span><span class="token tag attr-value" style="color:rgb(255, 85, 114)">bar</span><span class="token tag attr-value punctuation" style="color:rgb(199, 146, 234)">&quot;</span><span class="token tag" style="color:rgb(255, 85, 114)"> </span><span class="token tag punctuation" style="color:rgb(199, 146, 234)">/&gt;</span><span class="token punctuation" style="color:rgb(199, 146, 234)">;</span></div></code></pre></div><div class="mdxCodeBlock_iHAB"><pre class="prism-code language-tsx codeBlock_19pQ"><button type="button" aria-label="Copy code to clipboard" class="copyButton_1BYj">Copy</button><code class="codeBlockLines_2n9r" style="color:#bfc7d5;background-color:#292d3e"><div class="token-line" style="color:#bfc7d5"><span class="token keyword" style="font-style:italic">function</span><span class="token plain"> </span><span class="token function maybe-class-name" style="color:rgb(130, 170, 255)">Comp</span><span class="token punctuation" style="color:rgb(199, 146, 234)">(</span><span class="token parameter">props</span><span class="token punctuation" style="color:rgb(199, 146, 234)">)</span><span class="token plain"> </span><span class="token punctuation" style="color:rgb(199, 146, 234)">{</span><span class="token plain"></span></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token keyword" style="font-style:italic">const</span><span class="token plain"> </span><span class="token punctuation" style="color:rgb(199, 146, 234)">{</span><span class="token plain">intl</span><span class="token punctuation" style="color:rgb(199, 146, 234)">}</span><span class="token plain"> </span><span class="token operator" style="color:rgb(137, 221, 255)">=</span><span class="token plain"> props</span><span class="token punctuation" style="color:rgb(199, 146, 234)">;</span><span class="token plain"></span></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token keyword" style="font-style:italic">return</span><span class="token plain"> intl</span><span class="token punctuation" style="color:rgb(199, 146, 234)">.</span><span class="token function" style="color:rgb(130, 170, 255)">formatMessage</span><span class="token punctuation" style="color:rgb(199, 146, 234)">(</span><span class="token punctuation" style="color:rgb(199, 146, 234)">{</span><span class="token plain"></span></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">    </span><span class="token comment" style="color:rgb(105, 112, 152);font-style:italic">// The whole `intl.formatMessage` is required so we can extract</span><span class="token plain"></span></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">    id</span><span class="token punctuation" style="color:rgb(199, 146, 234)">:</span><span class="token plain"> </span><span class="token string" style="color:rgb(195, 232, 141)">&#x27;foo&#x27;</span><span class="token punctuation" style="color:rgb(199, 146, 234)">,</span><span class="token plain"></span></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">    defaultMessage</span><span class="token punctuation" style="color:rgb(199, 146, 234)">:</span><span class="token plain"> </span><span class="token string" style="color:rgb(195, 232, 141)">&#x27;foo&#x27;</span><span class="token punctuation" style="color:rgb(199, 146, 234)">,</span><span class="token plain"></span></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">    description</span><span class="token punctuation" style="color:rgb(199, 146, 234)">:</span><span class="token plain"> </span><span class="token string" style="color:rgb(195, 232, 141)">&#x27;bar&#x27;</span><span class="token punctuation" style="color:rgb(199, 146, 234)">,</span><span class="token plain"></span></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token punctuation" style="color:rgb(199, 146, 234)">}</span><span class="token punctuation" style="color:rgb(199, 146, 234)">)</span><span class="token punctuation" style="color:rgb(199, 146, 234)">;</span><span class="token plain"></span></div><div class="token-line" style="color:#bfc7d5"><span class="token plain"></span><span class="token punctuation" style="color:rgb(199, 146, 234)">}</span></div></code></pre></div><h2><a aria-hidden="true" tabindex="-1" class="anchor enhancedAnchor_ZqCz" id="eslint-plugin"></a><a aria-hidden="true" tabindex="-1" class="hash-link" href="#eslint-plugin" title="Direct link to heading">#</a>ESLint Plugin</h2><p>We&#x27;ve also built <a href="https://www.npmjs.com/package/eslint-plugin-formatjs">https://www.npmjs.com/package/eslint-plugin-formatjs</a> that helps enforcing specific rules on your messages if your translation vendor has restrictions.</p></div></article><div class="margin-vert--xl"><div class="row"><div class="col"><a href="https://github.com/formatjs/formatjs/edit/master/website/docs/react-intl.md" target="_blank" rel="noreferrer noopener"><svg fill="currentColor" height="1.2em" width="1.2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 40 40" style="margin-right:0.3em;vertical-align:sub"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div></div></div><div class="margin-vert--lg"><nav class="pagination-nav"><div class="pagination-nav__item"><a class="pagination-nav__link" href="/docs/intl-messageformat"><h5 class="pagination-nav__link--sublabel">Previous</h5><h4 class="pagination-nav__link--label">« Introduction</h4></a></div><div class="pagination-nav__item pagination-nav__item--next"><a class="pagination-nav__link" href="/docs/react-intl/components"><h5 class="pagination-nav__link--sublabel">Next</h5><h4 class="pagination-nav__link--label">Components »</h4></a></div></nav></div></div></div><div class="col col--3"><div class="tableOfContents_TbNY"><ul class="contents contents__left-border"><li><a href="#runtime-requirements" class="contents__link">Runtime Requirements</a><ul><li><a href="#browser" class="contents__link">Browser</a></li><li><a href="#nodejs" class="contents__link">Node.js</a></li><li><a href="#react-native" class="contents__link">React Native</a></li></ul></li><li><a href="#stage-3-intl-features" class="contents__link">Stage-3 Intl Features</a></li><li><a href="#the-react-intl-package" class="contents__link">The <code>react-intl</code> Package</a><ul><li><a href="#module-bundlers" class="contents__link">Module Bundlers</a></li></ul></li><li><a href="#the-react-intl-module" class="contents__link">The React Intl Module</a></li><li><a href="#creating-an-i18n-context" class="contents__link">Creating an I18n Context</a></li><li><a href="#formatting-data" class="contents__link">Formatting Data</a><ul><li><a href="#jest" class="contents__link">Jest</a></li><li><a href="#webpack" class="contents__link">webpack</a></li></ul></li><li><a href="#message-extraction" class="contents__link">Message extraction</a></li><li><a href="#eslint-plugin" class="contents__link">ESLint Plugin</a></li></ul></div></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container"><div class="row footer__links"><div class="col footer__col"><h4 class="footer__title">Docs</h4><ul class="footer__items"><li class="footer__item"><a class="footer__link-item" href="/docs/basic-internationalization-principles">Getting Started</a></li><li class="footer__item"><a class="footer__link-item" href="/docs/polyfills">Polyfills</a></li><li class="footer__item"><a class="footer__link-item" href="/docs/intl-messageformat">Libraries</a></li><li class="footer__item"><a class="footer__link-item" href="/docs/tooling/cli">Tooling</a></li></ul></div><div class="col footer__col"><h4 class="footer__title">Community</h4><ul class="footer__items"><li class="footer__item"><a class="footer__link-item" target="_blank" rel="noopener noreferrer" href="https://stackoverflow.com/questions/tagged/formatjs">Stack Overflow</a></li><li class="footer__item"><a class="footer__link-item" target="_blank" rel="noopener noreferrer" href="https://formatjs.slack.com/">Slack</a></li></ul></div><div class="col footer__col"><h4 class="footer__title">Social</h4><ul class="footer__items"><li class="footer__item"><a class="footer__link-item" target="_blank" rel="noopener noreferrer" href="https://github.com/formatjs/formatjs">GitHub</a></li></ul></div></div><div class="text--center"><div>Copyright © 2020 FormatJS. Built with Docusaurus.</div></div></div></footer>
 </div>
 
-<script src="/styles.94413ec3.js"></script>
+<script src="/styles.e1e511d7.js"></script>
 
-<script src="/runtime~main.9d80d62a.js"></script>
+<script src="/runtime~main.c78c5623.js"></script>
 
-<script src="/main.a884992e.js"></script>
+<script src="/main.cde062a9.js"></script>
 
-<script src="/1.4ac75812.js"></script>
+<script src="/1.75bd15c8.js"></script>
 
-<script src="/33.77c552f0.js"></script>
+<script src="/2.f9ebe40a.js"></script>
 
-<script src="/20ac7829.ef19a717.js"></script>
+<script src="/33.ea146861.js"></script>
 
-<script src="/17896441.9a4f2bc3.js"></script>
+<script src="/20ac7829.81b80494.js"></script>
 
-<script src="/baa6bb7e.f25944d1.js"></script>
+<script src="/17896441.e8dd4632.js"></script>
+
+<script src="/baa6bb7e.6244f2a6.js"></script>
 
 
 </body>

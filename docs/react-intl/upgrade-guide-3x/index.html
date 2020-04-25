@@ -16,21 +16,23 @@
 <link rel="stylesheet" href="/styles.fa5c9207.css">
 
 
-<link rel="preload" href="/styles.94413ec3.js" as="script">
+<link rel="preload" href="/styles.e1e511d7.js" as="script">
 
-<link rel="preload" href="/runtime~main.9d80d62a.js" as="script">
+<link rel="preload" href="/runtime~main.c78c5623.js" as="script">
 
-<link rel="preload" href="/main.a884992e.js" as="script">
+<link rel="preload" href="/main.cde062a9.js" as="script">
 
-<link rel="preload" href="/1.4ac75812.js" as="script">
+<link rel="preload" href="/1.75bd15c8.js" as="script">
 
-<link rel="preload" href="/33.77c552f0.js" as="script">
+<link rel="preload" href="/2.f9ebe40a.js" as="script">
 
-<link rel="preload" href="/20ac7829.ef19a717.js" as="script">
+<link rel="preload" href="/33.ea146861.js" as="script">
 
-<link rel="preload" href="/17896441.9a4f2bc3.js" as="script">
+<link rel="preload" href="/20ac7829.81b80494.js" as="script">
 
-<link rel="preload" href="/3e7d6f89.408405cb.js" as="script">
+<link rel="preload" href="/17896441.e8dd4632.js" as="script">
+
+<link rel="preload" href="/3e7d6f89.b2057e06.js" as="script">
 
 </head>
 <body>
@@ -65,21 +67,23 @@ When <code>forwardRef</code> is set to true, you can now simply pretend the HOC 
 </span></div><div class="token-line" style="color:#bfc7d5"><span class="token plain"></span><span class="token comment" style="color:rgb(105, 112, 152);font-style:italic">// After</span><span class="token plain"></span></div><div class="token-line" style="color:#bfc7d5"><span class="token plain"></span><span class="token tag punctuation" style="color:rgb(199, 146, 234)">&lt;</span><span class="token tag class-name" style="color:rgb(255, 203, 107)">FormattedMessage</span><span class="token tag" style="color:rgb(255, 85, 114)"> </span><span class="token tag attr-name" style="color:rgb(255, 203, 107)">defaultMessage</span><span class="token tag attr-value punctuation" style="color:rgb(199, 146, 234)">=</span><span class="token tag attr-value punctuation" style="color:rgb(199, 146, 234)">&quot;</span><span class="token tag attr-value punctuation" style="color:rgb(199, 146, 234)">&#x27;</span><span class="token tag attr-value" style="color:rgb(255, 85, 114)">{foo}&#x27;</span><span class="token tag attr-value punctuation" style="color:rgb(199, 146, 234)">&quot;</span><span class="token tag" style="color:rgb(255, 85, 114)"> </span><span class="token tag punctuation" style="color:rgb(199, 146, 234)">/&gt;</span><span class="token plain"> </span><span class="token comment" style="color:rgb(105, 112, 152);font-style:italic">//prints out &quot;{foo}&quot;</span></div></code></pre></div><p>We highly recommend reading the spec to learn more about how quote/escaping works <a href="http://userguide.icu-project.org/formatparse/messages">here</a> under <strong>Quoting/Escaping</strong> section.</p><h3><a aria-hidden="true" tabindex="-1" class="anchor enhancedAnchor_ZqCz" id="placeholder-argument-syntax-change"></a><a aria-hidden="true" tabindex="-1" class="hash-link" href="#placeholder-argument-syntax-change" title="Direct link to heading">#</a>Placeholder argument syntax change</h3><p>Placeholder argument can no longer have <code>-</code> (e.g: <code>this is a {placeholder-var}</code> is invalid but <code>this is a {placeholder_var}</code> is).</p><h2><a aria-hidden="true" tabindex="-1" class="anchor enhancedAnchor_ZqCz" id="testing"></a><a aria-hidden="true" tabindex="-1" class="hash-link" href="#testing" title="Direct link to heading">#</a>Testing</h2><p>We&#x27;ve removed <code>IntlProvider.getChildContext</code> for testing and now you can use <code>createIntl</code> to create a standalone <code>intl</code> object outside of React and use that for testing purposes. See <a href="/docs/react-intl/testing#testing-with-react-intl">Testing with React Intl</a> for more details.</p></div></article><div class="margin-vert--xl"><div class="row"><div class="col"><a href="https://github.com/formatjs/formatjs/edit/master/website/docs/react-intl/Upgrade-Guide-3.x.md" target="_blank" rel="noreferrer noopener"><svg fill="currentColor" height="1.2em" width="1.2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 40 40" style="margin-right:0.3em;vertical-align:sub"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div></div></div><div class="margin-vert--lg"><nav class="pagination-nav"><div class="pagination-nav__item"><a class="pagination-nav__link" href="/docs/react-intl/advanced-usage"><h5 class="pagination-nav__link--sublabel">Previous</h5><h4 class="pagination-nav__link--label">« Advanced Usage</h4></a></div><div class="pagination-nav__item pagination-nav__item--next"><a class="pagination-nav__link" href="/docs/react-intl/upgrade-guide-2x"><h5 class="pagination-nav__link--sublabel">Next</h5><h4 class="pagination-nav__link--label">Upgrade Guide (v1 -&gt; v2) »</h4></a></div></nav></div></div></div><div class="col col--3"><div class="tableOfContents_TbNY"><ul class="contents contents__left-border"><li><a href="#breaking-api-changes" class="contents__link">Breaking API Changes</a></li><li><a href="#use-react-163-and-upwards" class="contents__link">Use React 16.3 and upwards</a></li><li><a href="#migrate-withref-to-forwardref" class="contents__link">Migrate withRef to forwardRef</a></li><li><a href="#new-useintl-hook-as-an-alternative-of-injectintl-hoc" class="contents__link">New useIntl hook as an alternative of injectIntl HOC</a></li><li><a href="#migrate-to-using-native-intl-apis" class="contents__link">Migrate to using native Intl APIs</a></li><li><a href="#typescript-support" class="contents__link">TypeScript Support</a></li><li><a href="#formattedrelativetime" class="contents__link">FormattedRelativeTime</a></li><li><a href="#enhanced-formattedmessage--formatmessage-rich-text-formatting" class="contents__link">Enhanced <code>FormattedMessage</code> &amp; <code>formatMessage</code> rich text formatting</a><ul><li><a href="#before" class="contents__link">Before</a></li><li><a href="#after" class="contents__link">After</a></li></ul></li><li><a href="#esm-build" class="contents__link">ESM Build</a><ul><li><a href="#jest" class="contents__link">Jest</a></li><li><a href="#webpack" class="contents__link">webpack</a></li></ul></li><li><a href="#creating-intl-without-using-provider" class="contents__link">Creating intl without using Provider</a></li><li><a href="#message-format-syntax-changes" class="contents__link">Message Format Syntax Changes</a><ul><li><a href="#escape-character-has-been-changed-to-apostrophe-" class="contents__link">Escape character has been changed to apostrophe (<code>&#39;</code>).</a></li><li><a href="#placeholder-argument-syntax-change" class="contents__link">Placeholder argument syntax change</a></li></ul></li><li><a href="#testing" class="contents__link">Testing</a></li></ul></div></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container"><div class="row footer__links"><div class="col footer__col"><h4 class="footer__title">Docs</h4><ul class="footer__items"><li class="footer__item"><a class="footer__link-item" href="/docs/basic-internationalization-principles">Getting Started</a></li><li class="footer__item"><a class="footer__link-item" href="/docs/polyfills">Polyfills</a></li><li class="footer__item"><a class="footer__link-item" href="/docs/intl-messageformat">Libraries</a></li><li class="footer__item"><a class="footer__link-item" href="/docs/tooling/cli">Tooling</a></li></ul></div><div class="col footer__col"><h4 class="footer__title">Community</h4><ul class="footer__items"><li class="footer__item"><a class="footer__link-item" target="_blank" rel="noopener noreferrer" href="https://stackoverflow.com/questions/tagged/formatjs">Stack Overflow</a></li><li class="footer__item"><a class="footer__link-item" target="_blank" rel="noopener noreferrer" href="https://formatjs.slack.com/">Slack</a></li></ul></div><div class="col footer__col"><h4 class="footer__title">Social</h4><ul class="footer__items"><li class="footer__item"><a class="footer__link-item" target="_blank" rel="noopener noreferrer" href="https://github.com/formatjs/formatjs">GitHub</a></li></ul></div></div><div class="text--center"><div>Copyright © 2020 FormatJS. Built with Docusaurus.</div></div></div></footer>
 </div>
 
-<script src="/styles.94413ec3.js"></script>
+<script src="/styles.e1e511d7.js"></script>
 
-<script src="/runtime~main.9d80d62a.js"></script>
+<script src="/runtime~main.c78c5623.js"></script>
 
-<script src="/main.a884992e.js"></script>
+<script src="/main.cde062a9.js"></script>
 
-<script src="/1.4ac75812.js"></script>
+<script src="/1.75bd15c8.js"></script>
 
-<script src="/33.77c552f0.js"></script>
+<script src="/2.f9ebe40a.js"></script>
 
-<script src="/20ac7829.ef19a717.js"></script>
+<script src="/33.ea146861.js"></script>
 
-<script src="/17896441.9a4f2bc3.js"></script>
+<script src="/20ac7829.81b80494.js"></script>
 
-<script src="/3e7d6f89.408405cb.js"></script>
+<script src="/17896441.e8dd4632.js"></script>
+
+<script src="/3e7d6f89.b2057e06.js"></script>
 
 
 </body>

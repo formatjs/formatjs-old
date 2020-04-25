@@ -16,21 +16,23 @@
 <link rel="stylesheet" href="/styles.fa5c9207.css">
 
 
-<link rel="preload" href="/styles.94413ec3.js" as="script">
+<link rel="preload" href="/styles.e1e511d7.js" as="script">
 
-<link rel="preload" href="/runtime~main.9d80d62a.js" as="script">
+<link rel="preload" href="/runtime~main.c78c5623.js" as="script">
 
-<link rel="preload" href="/main.a884992e.js" as="script">
+<link rel="preload" href="/main.cde062a9.js" as="script">
 
-<link rel="preload" href="/1.4ac75812.js" as="script">
+<link rel="preload" href="/1.75bd15c8.js" as="script">
 
-<link rel="preload" href="/33.77c552f0.js" as="script">
+<link rel="preload" href="/2.f9ebe40a.js" as="script">
 
-<link rel="preload" href="/20ac7829.ef19a717.js" as="script">
+<link rel="preload" href="/33.ea146861.js" as="script">
 
-<link rel="preload" href="/17896441.9a4f2bc3.js" as="script">
+<link rel="preload" href="/20ac7829.81b80494.js" as="script">
 
-<link rel="preload" href="/7efdde0b.42390e43.js" as="script">
+<link rel="preload" href="/17896441.e8dd4632.js" as="script">
+
+<link rel="preload" href="/7efdde0b.3393bdb4.js" as="script">
 
 </head>
 <body>
@@ -50,21 +52,23 @@ error if it&#x27;s missing, e.g: <code>new IntlMessageFormat(&quot;a&lt;b&gt;str
 </span></div><div class="token-line" style="color:#bfc7d5"><span class="token plain"></span><span class="token builtin" style="color:rgb(130, 170, 255)">console</span><span class="token punctuation" style="color:rgb(199, 146, 234)">.</span><span class="token function" style="color:rgb(130, 170, 255)">log</span><span class="token punctuation" style="color:rgb(199, 146, 234)">(</span><span class="token plain">msg</span><span class="token punctuation" style="color:rgb(199, 146, 234)">.</span><span class="token function" style="color:rgb(130, 170, 255)">format</span><span class="token punctuation" style="color:rgb(199, 146, 234)">(</span><span class="token punctuation" style="color:rgb(199, 146, 234)">{</span><span class="token plain">numPhotos</span><span class="token punctuation" style="color:rgb(199, 146, 234)">:</span><span class="token plain"> </span><span class="token number" style="color:rgb(247, 140, 108)">0</span><span class="token punctuation" style="color:rgb(199, 146, 234)">}</span><span class="token punctuation" style="color:rgb(199, 146, 234)">)</span><span class="token punctuation" style="color:rgb(199, 146, 234)">)</span><span class="token punctuation" style="color:rgb(199, 146, 234)">;</span><span class="token plain">    </span><span class="token comment" style="color:rgb(105, 112, 152);font-style:italic">// =&gt; &quot;You have no photos.&quot;</span><span class="token plain"></span></div><div class="token-line" style="color:#bfc7d5"><span class="token plain"></span><span class="token builtin" style="color:rgb(130, 170, 255)">console</span><span class="token punctuation" style="color:rgb(199, 146, 234)">.</span><span class="token function" style="color:rgb(130, 170, 255)">log</span><span class="token punctuation" style="color:rgb(199, 146, 234)">(</span><span class="token plain">msg</span><span class="token punctuation" style="color:rgb(199, 146, 234)">.</span><span class="token function" style="color:rgb(130, 170, 255)">format</span><span class="token punctuation" style="color:rgb(199, 146, 234)">(</span><span class="token punctuation" style="color:rgb(199, 146, 234)">{</span><span class="token plain">numPhotos</span><span class="token punctuation" style="color:rgb(199, 146, 234)">:</span><span class="token plain"> </span><span class="token number" style="color:rgb(247, 140, 108)">1</span><span class="token punctuation" style="color:rgb(199, 146, 234)">}</span><span class="token punctuation" style="color:rgb(199, 146, 234)">)</span><span class="token punctuation" style="color:rgb(199, 146, 234)">)</span><span class="token punctuation" style="color:rgb(199, 146, 234)">;</span><span class="token plain">    </span><span class="token comment" style="color:rgb(105, 112, 152);font-style:italic">// =&gt; &quot;You have one photo.&quot;</span><span class="token plain"></span></div><div class="token-line" style="color:#bfc7d5"><span class="token plain"></span><span class="token builtin" style="color:rgb(130, 170, 255)">console</span><span class="token punctuation" style="color:rgb(199, 146, 234)">.</span><span class="token function" style="color:rgb(130, 170, 255)">log</span><span class="token punctuation" style="color:rgb(199, 146, 234)">(</span><span class="token plain">msg</span><span class="token punctuation" style="color:rgb(199, 146, 234)">.</span><span class="token function" style="color:rgb(130, 170, 255)">format</span><span class="token punctuation" style="color:rgb(199, 146, 234)">(</span><span class="token punctuation" style="color:rgb(199, 146, 234)">{</span><span class="token plain">numPhotos</span><span class="token punctuation" style="color:rgb(199, 146, 234)">:</span><span class="token plain"> </span><span class="token number" style="color:rgb(247, 140, 108)">1000</span><span class="token punctuation" style="color:rgb(199, 146, 234)">}</span><span class="token punctuation" style="color:rgb(199, 146, 234)">)</span><span class="token punctuation" style="color:rgb(199, 146, 234)">)</span><span class="token punctuation" style="color:rgb(199, 146, 234)">;</span><span class="token plain"> </span><span class="token comment" style="color:rgb(105, 112, 152);font-style:italic">// =&gt; &quot;You have 1,000 photos.&quot;</span></div></code></pre></div><p><em>Note: how when <code>numPhotos</code> was <code>1000</code>, the number is formatted with the correct thousands separator.</em></p><h2><a aria-hidden="true" tabindex="-1" class="anchor enhancedAnchor_ZqCz" id="benchmark"></a><a aria-hidden="true" tabindex="-1" class="hash-link" href="#benchmark" title="Direct link to heading">#</a>Benchmark</h2><div class="mdxCodeBlock_iHAB"><pre class="prism-code language-undefined codeBlock_19pQ"><button type="button" aria-label="Copy code to clipboard" class="copyButton_1BYj">Copy</button><code class="codeBlockLines_2n9r" style="color:#bfc7d5;background-color:#292d3e"><div class="token-line" style="color:#bfc7d5"><span class="token plain">format_cached_complex_msg x 539,674 ops/sec ±1.87% (87 runs sampled)</span></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">format_cached_string_msg x 99,311,640 ops/sec ±2.15% (87 runs sampled)</span></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">new_complex_msg_preparsed x 1,490 ops/sec ±8.37% (54 runs sampled)</span></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">new_complex_msg x 836 ops/sec ±31.96% (67 runs sampled)</span></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">new_string_msg x 27,752 ops/sec ±8.25% (65 runs sampled)</span></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">complex msg format x 799 ops/sec ±9.38% (55 runs sampled)</span></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">complex msg w/ formatters format x 1,878 ops/sec ±16.63% (64 runs sampled)</span></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">complex preparsed msg w/ formatters format x 26,482 ops/sec ±2.55% (84 runs sampled)</span></div></code></pre></div></div></article><div class="margin-vert--xl"><div class="row"><div class="col"><a href="https://github.com/formatjs/formatjs/edit/master/website/docs/intl-messageformat.md" target="_blank" rel="noreferrer noopener"><svg fill="currentColor" height="1.2em" width="1.2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 40 40" style="margin-right:0.3em;vertical-align:sub"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div></div></div><div class="margin-vert--lg"><nav class="pagination-nav"><div class="pagination-nav__item"></div><div class="pagination-nav__item pagination-nav__item--next"><a class="pagination-nav__link" href="/docs/react-intl"><h5 class="pagination-nav__link--sublabel">Next</h5><h4 class="pagination-nav__link--label">react-intl »</h4></a></div></nav></div></div></div><div class="col col--3"><div class="tableOfContents_TbNY"><ul class="contents contents__left-border"><li><a href="#overview" class="contents__link">Overview</a><ul><li><a href="#goals" class="contents__link">Goals</a></li><li><a href="#how-it-works" class="contents__link">How It Works</a></li><li><a href="#common-usage-example" class="contents__link">Common Usage Example</a></li><li><a href="#message-syntax" class="contents__link">Message Syntax</a></li><li><a href="#features" class="contents__link">Features</a></li></ul></li><li><a href="#usage" class="contents__link">Usage</a><ul><li><a href="#modern-intl-dependency" class="contents__link">Modern <code>Intl</code> Dependency</a></li><li><a href="#loading-intl-messageformat-in-a-browser" class="contents__link">Loading Intl MessageFormat in a browser</a></li><li><a href="#loading-intl-messageformat-in-nodejs" class="contents__link">Loading Intl MessageFormat in Node.js</a></li></ul></li><li><a href="#public-api" class="contents__link">Public API</a><ul><li><a href="#intlmessageformat-constructor" class="contents__link"><code>IntlMessageFormat</code> Constructor</a></li><li><a href="#locale-resolution" class="contents__link">Locale Resolution</a></li><li><a href="#resolvedoptions-method" class="contents__link"><code>resolvedOptions()</code> Method</a></li><li><a href="#formatvalues-method" class="contents__link"><code>format(values)</code> Method</a></li><li><a href="#getast-method" class="contents__link"><code>getAst</code> Method</a></li><li><a href="#user-defined-formats" class="contents__link">User Defined Formats</a></li></ul></li><li><a href="#advanced-usage" class="contents__link">Advanced Usage</a><ul><li><a href="#passing-in-ast" class="contents__link">Passing in AST</a></li><li><a href="#formatters" class="contents__link">Formatters</a></li></ul></li><li><a href="#examples" class="contents__link">Examples</a><ul><li><a href="#plural-label" class="contents__link">Plural Label</a></li></ul></li><li><a href="#benchmark" class="contents__link">Benchmark</a></li></ul></div></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container"><div class="row footer__links"><div class="col footer__col"><h4 class="footer__title">Docs</h4><ul class="footer__items"><li class="footer__item"><a class="footer__link-item" href="/docs/basic-internationalization-principles">Getting Started</a></li><li class="footer__item"><a class="footer__link-item" href="/docs/polyfills">Polyfills</a></li><li class="footer__item"><a aria-current="page" class="footer__link-item active" href="/docs/intl-messageformat">Libraries</a></li><li class="footer__item"><a class="footer__link-item" href="/docs/tooling/cli">Tooling</a></li></ul></div><div class="col footer__col"><h4 class="footer__title">Community</h4><ul class="footer__items"><li class="footer__item"><a class="footer__link-item" target="_blank" rel="noopener noreferrer" href="https://stackoverflow.com/questions/tagged/formatjs">Stack Overflow</a></li><li class="footer__item"><a class="footer__link-item" target="_blank" rel="noopener noreferrer" href="https://formatjs.slack.com/">Slack</a></li></ul></div><div class="col footer__col"><h4 class="footer__title">Social</h4><ul class="footer__items"><li class="footer__item"><a class="footer__link-item" target="_blank" rel="noopener noreferrer" href="https://github.com/formatjs/formatjs">GitHub</a></li></ul></div></div><div class="text--center"><div>Copyright © 2020 FormatJS. Built with Docusaurus.</div></div></div></footer>
 </div>
 
-<script src="/styles.94413ec3.js"></script>
+<script src="/styles.e1e511d7.js"></script>
 
-<script src="/runtime~main.9d80d62a.js"></script>
+<script src="/runtime~main.c78c5623.js"></script>
 
-<script src="/main.a884992e.js"></script>
+<script src="/main.cde062a9.js"></script>
 
-<script src="/1.4ac75812.js"></script>
+<script src="/1.75bd15c8.js"></script>
 
-<script src="/33.77c552f0.js"></script>
+<script src="/2.f9ebe40a.js"></script>
 
-<script src="/20ac7829.ef19a717.js"></script>
+<script src="/33.ea146861.js"></script>
 
-<script src="/17896441.9a4f2bc3.js"></script>
+<script src="/20ac7829.81b80494.js"></script>
 
-<script src="/7efdde0b.42390e43.js"></script>
+<script src="/17896441.e8dd4632.js"></script>
+
+<script src="/7efdde0b.3393bdb4.js"></script>
 
 
 </body>
